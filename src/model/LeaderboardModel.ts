@@ -7,7 +7,6 @@ import { makeObservable, observable } from "mobx";
 const model = {
     matches: [] as Match[],
     currentMatchId: undefined as Date | undefined,
-
     
     addNewMatch(match: Match) {
         this.matches.push(match);
