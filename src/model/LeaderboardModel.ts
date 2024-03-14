@@ -7,6 +7,7 @@ const model = {
     matchesShown: 0,
     matches: [] as Match[],
     currentMatchId: undefined as number | undefined,
+    dailyWeatherLocation: 0,
 }
 
 export {model}
