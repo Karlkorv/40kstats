@@ -1,5 +1,5 @@
 export interface Match {
-    id: number;
+    
     date: Date;
 
     players: string[];

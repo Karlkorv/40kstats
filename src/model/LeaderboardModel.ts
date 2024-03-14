@@ -1,13 +1,32 @@
-import { Match } from "./match";
+import { Match } from "./Match";
 import { FACTIONS } from "./factions";
-import { addMatch, readMatches } from "../firebase";
+import { addMatch, getMatches } from "../firebase";
 import { DocumentSnapshot, DocumentData } from "firebase/firestore";
+import { makeObservable, observable } from "mobx";
 
 const model = {
-    matchesShown: 0,
     matches: [] as Match[],
-    currentMatchId: undefined as number | undefined,
-    dailyWeatherLocation: 0,
+    currentMatchId: undefined as Date | undefined,
+    
+    addNewMatch(match: Match) {
+        this.matches.push(match);
+        addMatch(match);
+    },
 }
+
+export function initializeModel() {
+    console.log("Initializing local model");
+    getMatches(10).then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            model.matches.push(doc.data() as Match);
+        })   
+        console.log("Matches fetched");
+     });
+    
+    console.log(model);
+
+    return model;
+}
+
 
 export {model}

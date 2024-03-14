@@ -5,6 +5,6 @@ import React from "react";
 import { createElement } from "react"
 import {observable, configure, reaction} from "mobx"
 
-const reactiveModel = observable(model)
+const reactiveModel = observable()
 createRoot(document.getElementById("root")!).render(<App model={reactiveModel}/>); // root element always 100% exists, no need to null check
 
