@@ -1,6 +1,6 @@
 import React from "react";
 
-export function App({ addToFirestore }) {
+export function App({model : LeaderboardModel}) {
     function addCallbackACB(event) {
         addToFirestore(event.target.value);
     }
