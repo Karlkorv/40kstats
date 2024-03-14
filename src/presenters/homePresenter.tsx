@@ -10,8 +10,7 @@ const HomeScreen = observer(
 
 		return (
 			<div>
-				hyello {model.dailyWeatherLocation}
-
+				Homescreen
 				<button onClick={createMatchClick}>Create a match</button>
 			</div>
 		);
