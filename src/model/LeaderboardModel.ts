@@ -1,32 +1,29 @@
 import { Match } from "./Match";
 import { FACTIONS } from "./factions";
 import { addMatch, getMatches } from "../firebase";
-import { DocumentSnapshot, DocumentData } from "firebase/firestore";
-import { makeObservable, observable } from "mobx";
+import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 
-const model = {
-    matches: [] as Match[],
-    currentMatchId: undefined as Date | undefined,
-    
-    addNewMatch(match: Match) {
+export class LeaderBoardModel {
+    @observable matches: Match[] = [];
+    currentMatchId: Date | undefined = undefined;
+
+    constructor() {
+        makeAutoObservable(this);
+    }
+
+    @action addMatchToModel(match: Match) {
         this.matches.push(match);
-        addMatch(match);
-    },
+    }
+
+    syncModel() {
+        console.log("model syncing with firestore")
+        getMatches(10).then((querySnapshot) => {
+            runInAction(() => {
+                querySnapshot.forEach((doc) => {
+                    this.addMatchToModel(doc.data() as Match);
+                })
+                console.log("Matches synced, new match amount: ", this.matches.length);
+            })
+        });
+    }
 }
-
-export function initializeModel() {
-    console.log("Initializing local model");
-    getMatches(10).then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            model.matches.push(doc.data() as Match);
-        })   
-        console.log("Matches fetched");
-     });
-    
-    console.log(model);
-
-    return model;
-}
-
-
-export {model}

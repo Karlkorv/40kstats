@@ -1,10 +1,9 @@
 import { createRoot } from "react-dom/client";
 import { App } from "./App.tsx";
-import { model } from "./model/LeaderboardModel.ts"
 import React from "react";
-import { createElement } from "react"
-import {observable, configure, reaction} from "mobx"
+import { LeaderBoardModel } from "./model/LeaderboardModel.ts";
 
-const reactiveModel = observable()
-createRoot(document.getElementById("root")!).render(<App model={reactiveModel}/>); // root element always 100% exists, no need to null check
+const model = new LeaderBoardModel()
+
+createRoot(document.getElementById("root")!).render(<App model={model} />); // root element always 100% exists, no need to null check
 
