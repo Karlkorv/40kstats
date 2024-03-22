@@ -1,6 +1,6 @@
-import { Match } from "./Match";
+import { Match } from "./match.ts";
 import { FACTIONS } from "./factions";
-import { addMatch, getMatches } from "../firebase";
+import { addMatch, getMatches } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 
 export class LeaderBoardModel {
