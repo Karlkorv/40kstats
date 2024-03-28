@@ -14,10 +14,6 @@ export function getLatestMatches(amount: number) {
     return getDocs(q);
 }
 
-export function connectToFirestore(model: LeaderBoardModel) {
-    model.resolvePromise(getLatestMatches(10), model)
-}
-
 export function addMatchToFirestore(match: Match) {
     const matchToAdd = {
         date: match.date,

@@ -16,9 +16,9 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => { // 
         );
     }
 
-    const promiseState = model.fireStorePromiseState
 
-    if (!promiseState.promise) {
+
+    if (model.loading) {
         return (
             <div>
                 Loading...
@@ -26,21 +26,27 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => { // 
         )
     }
 
-    if (promiseState.error) {
+    if (model.error) {
         return (
             <div>
-                Error: {promiseState.error}
+                Error: {model.error}
             </div>
         )
     }
 
-    if (promiseState.matches) {
+    if (!(model.matches.length == 0)) {
         return (
             <div>
-                <LastestMatchesView addDummyMatch={addDummyMatch} matches={model.getMatches()} />
+                <LastestMatchesView addDummyMatch={addDummyMatch} matches={model.getMatches().slice()} />
             </div>
         )
     }
+
+    return (
+        <div>
+            No data
+        </div>
+    )
 })
 
 export { LatestMatches }

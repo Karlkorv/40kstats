@@ -2,6 +2,7 @@ import React from "react"
 import { Match } from "../model/match.ts"
 
 export function LastestMatchesView({ addDummyMatch, matches }: { addDummyMatch: () => void, matches: Match[] }) {
+
     function dummyMatchClickedACB() {
         addDummyMatch();
     }
@@ -22,7 +23,7 @@ export function LastestMatchesView({ addDummyMatch, matches }: { addDummyMatch: 
     return (
         <div>
             <h1>Latest Matches</h1>
-            <button onClick={addDummyMatch}>Add dummy match</button>
+            <button onClick={dummyMatchClickedACB}>Add dummy match</button>
             <table>
                 <thead>
                     <tr>

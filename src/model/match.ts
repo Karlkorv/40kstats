@@ -1,10 +1,10 @@
 export class Match {
-    constructor(players: string[], factions: string[], winners: string[], p_points: number[], s_points: number[]) {
+    constructor(players: string[], factions: string[], winners: string[], p_points: number[], s_points: number[], date: Date = new Date()) {
         if (players.length != factions.length || players.length != p_points.length || players.length != s_points.length) {
             throw new Error('The length of the arrays must be the same');
         }
 
-        this.date = new Date();
+        this.date = date;
         this.players = players;
         this.factions = factions;
         this.winners = winners;
@@ -24,6 +24,6 @@ export class Match {
     points_total: number[];
 
     public getDateString(): string {
-        return this.date.toISOString();
+        return this.date.toDateString();
     }
 }
