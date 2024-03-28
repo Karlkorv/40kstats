@@ -1,29 +1,52 @@
-import { Match } from "./Match";
-import { FACTIONS } from "./factions";
-import { addMatch, getMatches } from "../firebase";
+import { Match } from "./match.ts";
+import { addMatchToFirestore, connectToFirestore } from "../firebase";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 
 export class LeaderBoardModel {
-    @observable matches: Match[] = [];
-    currentMatchId: Date | undefined = undefined;
+    @observable currentMatchId: Date | undefined = undefined;
+    ready: boolean = false;
+
+    @observable fireStorePromiseState = {
+        promise: undefined as Promise<any> | undefined,
+        matches: undefined as Match[] | undefined,
+        error: undefined,
+    }
 
     constructor() {
-        makeAutoObservable(this);
+        makeObservable(this);
+        connectToFirestore(this);
     }
 
-    @action addMatchToModel(match: Match) {
-        this.matches.push(match);
+    @action resolvePromise(promise: Promise<any>, model) {
+        console.log("Promise recieved")
+
+        function dataRecievedACB(querySnapshot) {
+            console.log("Data recieved: ", querySnapshot)
+            querySnapshot.forEach(doc => {
+                model.addMatchFromFirestore(doc.data() as Match)
+            });
+        }
+
+        function errorACB(error) {
+            console.error(error)
+            model.fireStorePromiseState.error = error
+        }
+
+        model.fireStorePromiseState.promise = promise
+        promise.then(dataRecievedACB).catch(errorACB)
     }
 
-    syncModel() {
-        console.log("model syncing with firestore")
-        getMatches(10).then((querySnapshot) => {
-            runInAction(() => {
-                querySnapshot.forEach((doc) => {
-                    this.addMatchToModel(doc.data() as Match);
-                })
-                console.log("Matches synced, new match amount: ", this.matches.length);
-            })
-        });
+    @action addMatchFromFirestore(match: Match) {
+        // Måste göra detta för att mobx ska fatta att arrayen uppdateras
+        this.fireStorePromiseState.matches = [...this.fireStorePromiseState.matches, match]
+    }
+
+    @action addMatch(match: Match) {
+        this.fireStorePromiseState.matches = [...this.fireStorePromiseState.matches, match]
+        addMatchToFirestore(match)
+    }
+
+    getMatches(): Match[] {
+        return this.fireStorePromiseState.matches
     }
 }
