@@ -24,21 +24,37 @@ export function LastestMatchesView({ addDummyMatch, matches }: { addDummyMatch: 
         <div>
             <h1>Latest Matches</h1>
             <button onClick={dummyMatchClickedACB}>Add dummy match</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Player 1</th>
-                        <th>Faction 1</th>
-                        <th>Player 2</th>
-                        <th>Faction 2</th>
-                        <th>Winner</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {matches.map(matchRenderCB)}
-                </tbody>
-            </table>
+            <div className="table-wrapper">
+                <div className="table-scroll">
+                    <table className="matches-table">
+                        <thead>
+                            <tr>
+                                <th><span>
+                                    Date
+                                </span></th>
+                                <th><span>
+                                    Player 1
+                                </span></th>
+                                <th><span>
+                                    Faction 1
+                                </span></th>
+                                <th><span>
+                                    Player 2
+                                </span></th>
+                                <th><span>
+                                    Faction 2
+                                </span></th>
+                                <th><span>
+                                    Winner
+                                </span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {matches.map(matchRenderCB)}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     )
 }
