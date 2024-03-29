@@ -21,7 +21,6 @@ const HomeScreen = observer(
 
 		return (
 			<div>
-				hyello {model.dailyWeatherLocation}
 				<button onClick={addDummyMatch}>Add dummy match</button>
 				<button onClick={createMatchClick}>Create a match</button>
 			</div>
