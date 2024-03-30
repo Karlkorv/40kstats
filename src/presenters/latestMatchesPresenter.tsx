@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { LastestMatchesView } from "../views/LatestMatchesView";
+import { LastestMatchesView } from "../views/latestMatchesView.tsx";
 import { LeaderBoardModel } from "../model/LeaderboardModel";
 
 
