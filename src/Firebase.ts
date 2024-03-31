@@ -1,6 +1,6 @@
-import { firebaseConfig } from './firebaseConfig';
+import { firebaseConfig } from './firebaseConfig.ts';
 import { initializeApp } from 'firebase/app';
-import {Match} from "./model/Match.ts";
+import {Match} from "./model/match.ts";
 import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs} from 'firebase/firestore'; 
 // Initialize Firebase
 

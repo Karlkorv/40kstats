@@ -1,5 +1,5 @@
 import React from "react"
-import { Match } from "../model/Match"
+import { Match } from "../model/match.ts"
 
 export function LastestMatchesView({ syncClicked, matches }: { syncClicked: () => void, matches: Match[] }) {
     function onSyncClickACB() {
