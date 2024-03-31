@@ -7,7 +7,6 @@ const MatchCreator = observer(
         function createNewMatch(match){
             return model.addMatch(match);
         }
-
         return (
             <div>
                 <MatchCreatorView createMatch={createNewMatch}>
