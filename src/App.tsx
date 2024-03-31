@@ -1,12 +1,26 @@
 import React from "react";
 import { HomeScreen } from "./presenters/homePresenter.tsx";
 import { MatchCreator } from "./presenters/matchCreatorPresenter.tsx";
-import { createHashRouter, RouterProvider } from "react-router-dom";
+import { MatchPres } from "./presenters/matchPresenter.tsx";
+import { createHashRouter, RouterProvider, RouteObject } from "react-router-dom";
 import { LatestMatches } from "./presenters/latestMatchesPresenter.tsx";
 import { observer } from "mobx-react-lite";
 import { LeaderBoardModel } from "./model/LeaderboardModel.ts";
 
 export const App = observer(({ model }: { model: LeaderBoardModel }) => {
+    function makeMatchPaths(){
+        let pathArray : RouteObject[] = [];
+        for (var match of model.matches){
+            pathArray.push(
+                {
+                    path: `/${match.matchID.toString(10)}`,
+                    element: <MatchPres match={match}></MatchPres>,
+                },
+            );
+        }
+        return pathArray;
+    }
+
     function makeRouter(model: LeaderBoardModel) {
         return createHashRouter([
             {
@@ -16,8 +30,9 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
             {
                 path: "/matchCreator",
                 element: <MatchCreator model={model}></MatchCreator>,
-            }
-        ])
+            },
+            ...makeMatchPaths()
+        ]);
     }
 
     return (

@@ -12,7 +12,8 @@ export class Match {
         this.points_secondary = s_points;
         this.points_total = p_points.map((value, index) => value + s_points[index]);
     }
-
+    
+    matchID: number;
     date: Date;
 
     players: string[];
