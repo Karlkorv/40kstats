@@ -2,8 +2,10 @@ import { observer } from "mobx-react-lite";
 import React from "react"
 import { MatchView } from "../views/matchView.tsx";
 import { Match } from "../model/match.ts"
+import { addMatch } from "../Firebase.ts"
 
-const Match = observer(({match} : {match : Match}) => {
+const MatchPres = observer(({match} : {match : Match}) => {
+  addMatch(match);
     return (
       <div>
         <MatchView matchModel={match}>
@@ -13,4 +15,4 @@ const Match = observer(({match} : {match : Match}) => {
     )
 });
 
-export { Match }
+export { MatchPres }

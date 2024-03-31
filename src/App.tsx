@@ -1,7 +1,7 @@
 import React from "react";
 import { HomeScreen } from "./presenters/homePresenter.tsx";
 import { MatchCreator } from "./presenters/matchCreatorPresenter.tsx";
-import { Match } from "./presenters/matchPresenter.tsx";
+import { MatchPres } from "./presenters/matchPresenter.tsx";
 import { createHashRouter, RouterProvider, RouteObject } from "react-router-dom";
 import { LatestMatches } from "./presenters/latestMatchesPresenter.tsx";
 import { observer } from "mobx-react-lite";
@@ -14,7 +14,7 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
             pathArray.push(
                 {
                     path: `/${match.matchID.toString(10)}`,
-                    element: <Match match={match}></Match>,
+                    element: <MatchPres match={match}></MatchPres>,
                 },
             );
         }
