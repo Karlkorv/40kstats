@@ -1,16 +1,16 @@
 import React from "react"
 import { Match } from "../model/match.ts"
 
-export function LastestMatchesView({ syncClicked, matches }: { syncClicked: () => void, matches: Match[] }) {
-    function onSyncClickACB() {
-        console.log("Sync clicked")
-        syncClicked();
+export function LastestMatchesView({ addDummyMatch, matches }: { addDummyMatch: () => void, matches: Match[] }) {
+
+    function dummyMatchClickedACB() {
+        addDummyMatch();
     }
 
     function matchRenderCB(match: Match) {
         return (
             <tr key={match.date.getTime()}>
-                <td>{match.date.toISOString()}</td>
+                <td>{match.getDateString()}</td>
                 <td>{match.players[0]}</td>
                 <td>{match.factions[0]}</td>
                 <td>{match.players[1]}</td>
@@ -23,7 +23,7 @@ export function LastestMatchesView({ syncClicked, matches }: { syncClicked: () =
     return (
         <div>
             <h1>Latest Matches</h1>
-            <button onClick={onSyncClickACB}>Sync</button>
+            <button onClick={dummyMatchClickedACB}>Add dummy match</button>
             <table>
                 <thead>
                     <tr>

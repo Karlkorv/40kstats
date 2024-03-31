@@ -1,29 +1,63 @@
 import { Match } from "./match.ts";
-import { FACTIONS } from "./factions";
-import { addMatch, getMatches } from "../Firebase.ts";
+import { addMatchToFirestore, getLatestMatches } from "../firebase";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
+import { FACTIONS } from "./factions.ts";
+import { QuerySnapshot } from "firebase/firestore";
 
 export class LeaderBoardModel {
-    @observable matches: Match[] = [];
-    currentMatchId: Date | undefined = undefined;
+    @observable currentMatchId: Date | undefined = undefined;
+    ready: boolean = false;
+    @observable loading = false
+    @observable error = undefined
+    @observable matches: Match[] = []
 
     constructor() {
-        makeAutoObservable(this);
-    }
+        makeObservable(this);
 
-    @action addMatchToModel(match: Match) {
-        this.matches.push(match);
-    }
-
-    syncModel() {
-        console.log("model syncing with firestore")
-        getMatches(10).then((querySnapshot) => {
-            runInAction(() => {
+        this.loading = true
+        getLatestMatches(10).then((querySnapshot) => {
+            runInAction(() => { // Run in action för att mobx ska fatta att vi uppdaterar state
                 querySnapshot.forEach((doc) => {
-                    this.addMatchToModel(doc.data() as Match);
+                    const data = doc.data()
+                    this.addMatchFromFirestore(
+                        new Match(
+                            data.players,
+                            data.factions,
+                            data.winners,
+                            data.points_primary,
+                            data.points_secondary,
+                            data.date.toDate(),
+                        )
+                    )
                 })
-                console.log("Matches synced, new match amount: ", this.matches.length);
+                this.loading = false
             })
-        });
+        }).catch((error) => {
+            runInAction(() => {
+                this.loading = false
+                console.error("Error reading from firestore:", error)
+                this.error = error
+            })
+        })
+    }
+
+    @action addMatchFromFirestore(match: Match) {
+        if (!this.matches) {
+            this.matches = []
+        }
+        // Måste göra detta för att mobx ska fatta att arrayen uppdateras
+        this.matches = [...this.matches, match]
+    }
+
+    @action addMatch(match: Match) {
+        if (!this.matches) {
+            this.matches = []
+        }
+        this.matches = [...this.matches, match]
+        addMatchToFirestore(match)
+    }
+
+    getMatches(): Match[] {
+        return this.matches || []
     }
 }

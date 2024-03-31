@@ -1,4 +1,17 @@
-export interface Match {
+export class Match {
+    constructor(players: string[], factions: string[], winners: string[], p_points: number[], s_points: number[], date: Date = new Date()) {
+        if (players.length != factions.length || players.length != p_points.length || players.length != s_points.length) {
+            throw new Error('The length of the arrays must be the same');
+        }
+
+        this.date = date;
+        this.players = players;
+        this.factions = factions;
+        this.winners = winners;
+        this.points_primary = p_points;
+        this.points_secondary = s_points;
+        this.points_total = p_points.map((value, index) => value + s_points[index]);
+    }
     
     matchID: number;
     date: Date;
@@ -10,4 +23,8 @@ export interface Match {
     points_primary: number[];
     points_secondary: number[];
     points_total: number[];
+
+    public getDateString(): string {
+        return this.date.toDateString();
+    }
 }
