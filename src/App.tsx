@@ -8,24 +8,24 @@ import { observer } from "mobx-react-lite";
 import { LeaderBoardModel } from "./model/LeaderboardModel.ts";
 
 export const App = observer(({ model } : { model : LeaderBoardModel} ) => {
-    function makeMatchPaths(){
-        let pathArray : RouteObject[] = [];
-        for (var match of model.matches){
-            pathArray.push(
-                {
-                    path: `/match/${match.matchID.toString(10)}`,
-                    element: 
-                    <MatchPres 
-                        {...model} 
-                        addMatchFromFirestore={model.addMatchFromFirestore} 
-                        addMatch={model.addMatch} 
-                        getMatches={model.getMatches}>
-                    </MatchPres>,
-                },
-            );
-        }
-        return pathArray;
-    }
+    // function makeMatchPaths(){
+    //     let pathArray : RouteObject[] = [];
+    //     for (var match of model.matches){
+    //         pathArray.push(
+    //             {
+    //                 path: `/match/${match.matchID.toString(10)}`,
+    //                 element: 
+    //                 <MatchPres 
+    //                     {...model} 
+    //                     addMatchFromFirestore={model.addMatchFromFirestore} 
+    //                     addMatch={model.addMatch} 
+    //                     getMatches={model.getMatches}>
+    //                 </MatchPres>,
+    //             },
+    //         );
+    //     }
+    //     return pathArray;
+    // }
 
     function makeRouter(model: LeaderBoardModel) {
         let routes : RouteObject[] = [
@@ -38,7 +38,6 @@ export const App = observer(({ model } : { model : LeaderBoardModel} ) => {
                 element: <MatchCreator model={model}></MatchCreator>,
             },
         ]
-        if(model.matches) routes = [...routes, ...makeMatchPaths()]
         return createHashRouter(routes);
     }
 
