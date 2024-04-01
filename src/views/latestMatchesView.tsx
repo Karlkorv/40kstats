@@ -9,7 +9,7 @@ export function LastestMatchesView({ addDummyMatch, matches }: { addDummyMatch: 
 
     function matchRenderCB(match: Match) {
         return (
-            <tr key={match.date.getTime()}>
+            <tr className="matchRow" key={match.date.getTime()}>
                 <td>{match.getDateString()}</td>
                 <td>{match.players[0]}</td>
                 <td>{match.factions[0]}</td>
@@ -24,9 +24,9 @@ export function LastestMatchesView({ addDummyMatch, matches }: { addDummyMatch: 
         <div>
             <h1>Latest Matches</h1>
             <button onClick={dummyMatchClickedACB}>Add dummy match</button>
-            <div className="table-wrapper">
-                <div className="table-scroll">
-                    <table className="matches-table">
+            <div id="table-wrapper">
+                <div id="table-scroll">
+                    <table>
                         <thead>
                             <tr>
                                 <th><span>
