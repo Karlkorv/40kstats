@@ -8,7 +8,8 @@ export function LastestMatchesView({ addDummyMatch, matchClicked, matches }: { a
     }
 
     function matchRenderCB(match: Match) {
-        function matchRowClickedACB() {
+        function matchRowClickedACB(e) {
+            e.preventDefault();
             matchClicked(match);
         }
         return (

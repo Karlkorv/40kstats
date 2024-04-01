@@ -67,6 +67,10 @@ export class LeaderBoardModel {
     }
 
     @action setCurrentMatchById(matchID: string) {
+        if (this.currentMatch && this.currentMatch.matchID === matchID) {
+            return;
+        }
+
         const match = this.matches.find((match) => match.matchID === matchID)
         if (match) {
             this.currentMatch = match
@@ -79,7 +83,6 @@ export class LeaderBoardModel {
                     this.currentMatch = undefined
                     throw new Error("Match not found");
                 }
-                console.log("Match found: ", doc.data())
                 const data = doc.data()!
                 this.currentMatch = new Match(
                     data.players,

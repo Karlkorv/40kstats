@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 
 const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
 	const { matchId } = useParams()
-	console.log("Trying to get match using id: ", matchId)
 	model.setCurrentMatchById(matchId!)
 
 	if (model.currentMatch === undefined) {

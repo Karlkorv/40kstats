@@ -21,8 +21,6 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
             console.error("Match does not have an id");
             return;
         }
-        console.log("Match clicked: ", match);
-        // route to match id
         window.location.hash = "#/match/" + match.matchID;
     }
 
