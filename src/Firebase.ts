@@ -14,7 +14,15 @@ export function getLatestMatches(amount: number) {
     return getDocs(q);
 }
 
+export function getMatchById(matchId: string) {
+    return getDoc(doc(db, "matches", matchId));
+}
+
 export function addMatchToFirestore(match: Match) {
+    if (match.matchID) {
+        throw new Error("Match is already added to firestore");
+    }
+
     const matchToAdd = {
         date: match.date,
         players: match.players,
@@ -25,7 +33,8 @@ export function addMatchToFirestore(match: Match) {
         points_total: match.points_total
     }
 
-    addDoc(matchRef, matchToAdd).then(() => {
-        console.log("Match added to Firestore");
+    return addDoc(matchRef, matchToAdd).then((doc) => {
+        console.log("Match added to Firestore, id: ", doc.id);
+        return doc.id;
     });
 }

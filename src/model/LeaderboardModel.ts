@@ -1,24 +1,26 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, getLatestMatches } from "../firebase";
+import { addMatchToFirestore, getLatestMatches, getMatchById } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
-import { FACTIONS } from "./factions.ts";
-import { QuerySnapshot } from "firebase/firestore";
 
 export class LeaderBoardModel {
-    @observable currentMatchId: Date | undefined = undefined;
     ready: boolean = false;
     @observable loading = false
     @observable error = undefined
     @observable matches: Match[] = []
+    @observable currentMatch: Match | undefined = undefined
 
     constructor() {
         makeObservable(this);
 
-        this.loading = true
+        this.getLatestMatchesFromFirestore();
+    }
+
+    private getLatestMatchesFromFirestore() {
+        this.loading = true;
         getLatestMatches(10).then((querySnapshot) => {
-            runInAction(() => { // Run in action för att mobx ska fatta att vi uppdaterar state
+            runInAction(() => {
                 querySnapshot.forEach((doc) => {
-                    const data = doc.data()
+                    const data = doc.data();
                     this.addMatchFromFirestore(
                         new Match(
                             data.players,
@@ -27,18 +29,19 @@ export class LeaderBoardModel {
                             data.points_primary,
                             data.points_secondary,
                             data.date.toDate(),
+                            doc.id
                         )
-                    )
-                })
-                this.loading = false
-            })
+                    );
+                });
+                this.loading = false;
+            });
         }).catch((error) => {
             runInAction(() => {
-                this.loading = false
-                console.error("Error reading from firestore:", error)
-                this.error = error
-            })
-        })
+                this.loading = false;
+                console.error("Error reading from firestore:", error);
+                this.error = error;
+            });
+        });
     }
 
     @action addMatchFromFirestore(match: Match) {
@@ -54,7 +57,46 @@ export class LeaderBoardModel {
             this.matches = []
         }
         this.matches = [...this.matches, match]
-        addMatchToFirestore(match)
+        addMatchToFirestore(match).then((id) => {
+            match.setId(id)
+        })
+    }
+
+    @action setCurrentMatch(match: Match) {
+        this.currentMatch = match
+    }
+
+    @action setCurrentMatchById(matchID: string) {
+        const match = this.matches.find((match) => match.matchID === matchID)
+        if (match) {
+            this.currentMatch = match
+            return
+        }
+
+        getMatchById(matchID).then((doc) => {
+            runInAction(() => {
+                if (!doc.exists()) {
+                    this.currentMatch = undefined
+                    throw new Error("Match not found");
+                }
+                console.log("Match found: ", doc.data())
+                const data = doc.data()!
+                this.currentMatch = new Match(
+                    data.players,
+                    data.factions,
+                    data.winners,
+                    data.points_primary,
+                    data.points_secondary,
+                    data.date.toDate(),
+                )
+            })
+        }).catch((error) => {
+            runInAction(() => {
+                console.error("Error reading from firestore:", error)
+                this.error = error
+                this.currentMatch = undefined
+            })
+        })
     }
 
     getMatches(): Match[] {
