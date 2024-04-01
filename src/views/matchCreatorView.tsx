@@ -34,6 +34,7 @@ export function MatchCreatorView(props) {
                 <label htmlFor={label}>Player {num}:</label>
                 <div className="player-input">
                     <input
+                        key = {index}
                         type = {type || "text"}
                         id = {label}
                         value={value || ""}
@@ -77,12 +78,7 @@ export function MatchCreatorView(props) {
                 <input type="date" id="mDate" name="mDate" value={""}/><br></br>
 
                 {formValues.map((obj, index) => (
-                    <PlayerInput
-                        key={index}
-                        objValue={obj}
-                        onChange={handleChange}
-                        index={index}
-                    />
+                    PlayerInput({objValue:obj, onChange: handleChange, index: index})
                 ))}
                 
             </form>
