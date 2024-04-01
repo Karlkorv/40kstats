@@ -25,7 +25,9 @@ export function addMatchToFirestore(match: Match) {
         points_total: match.points_total
     }
 
-    addDoc(matchRef, matchToAdd).then(() => {
-        console.log("Match added to Firestore");
+
+    return addDoc(matchRef, matchToAdd).then((docRef) => {
+        console.log("Match added to Firestore, id: ", docRef.id);
+        return docRef.id;
     });
 }

@@ -1,5 +1,5 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, getLatestMatches } from "../firebase";
+import { addMatchToFirestore, getLatestMatches } from "../Firebase";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts";
 import { QuerySnapshot } from "firebase/firestore";
@@ -12,6 +12,7 @@ export class LeaderBoardModel {
     @observable matches: Match[] = []
 
     constructor() {
+        this.matches = [];
         makeObservable(this);
 
         this.loading = true
@@ -54,7 +55,7 @@ export class LeaderBoardModel {
             this.matches = []
         }
         this.matches = [...this.matches, match]
-        addMatchToFirestore(match)
+        return addMatchToFirestore(match)
     }
 
     getMatches(): Match[] {

@@ -2,14 +2,14 @@ import { observer } from "mobx-react-lite";
 import React from "react"
 import { MatchView } from "../views/matchView.tsx";
 import { Match } from "../model/match.ts"
-import { addMatch } from "../Firebase.ts"
+import { LeaderBoardModel } from "../model/LeaderboardModel.ts"
 
-const MatchPres = observer(({match} : {match : Match}) => {
-  addMatch(match);
+const MatchPres = observer((model : LeaderBoardModel) => {
+
     return (
       <div>
-        <MatchView matchModel={match}>
-
+        <MatchView
+          matchModel={new Match([],[],[],[],[])}>
         </MatchView>
       </div>
     )

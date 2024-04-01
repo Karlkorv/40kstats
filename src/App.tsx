@@ -7,14 +7,20 @@ import { LatestMatches } from "./presenters/latestMatchesPresenter.tsx";
 import { observer } from "mobx-react-lite";
 import { LeaderBoardModel } from "./model/LeaderboardModel.ts";
 
-export const App = observer(({ model }: { model: LeaderBoardModel }) => {
+export const App = observer(({ model } : { model : LeaderBoardModel} ) => {
     function makeMatchPaths(){
         let pathArray : RouteObject[] = [];
         for (var match of model.matches){
             pathArray.push(
                 {
-                    path: `/${match.matchID.toString(10)}`,
-                    element: <MatchPres match={match}></MatchPres>,
+                    path: `/match/${match.matchID.toString(10)}`,
+                    element: 
+                    <MatchPres 
+                        {...model} 
+                        addMatchFromFirestore={model.addMatchFromFirestore} 
+                        addMatch={model.addMatch} 
+                        getMatches={model.getMatches}>
+                    </MatchPres>,
                 },
             );
         }
@@ -22,7 +28,7 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
     }
 
     function makeRouter(model: LeaderBoardModel) {
-        return createHashRouter([
+        let routes : RouteObject[] = [
             {
                 path: "/",
                 element: <HomeScreen model={model}></HomeScreen>,
@@ -31,8 +37,9 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
                 path: "/matchCreator",
                 element: <MatchCreator model={model}></MatchCreator>,
             },
-            ...makeMatchPaths()
-        ]);
+        ]
+        if(model.matches) routes = [...routes, ...makeMatchPaths()]
+        return createHashRouter(routes);
     }
 
     return (
