@@ -1,15 +1,19 @@
 import React from "react"
 import { Match } from "../model/match.ts"
 
-export function LastestMatchesView({ addDummyMatch, matches }: { addDummyMatch: () => void, matches: Match[] }) {
+export function LastestMatchesView({ addDummyMatch, matchClicked, matches }: { addDummyMatch: () => void, matchClicked: (match: Match) => void, matches: Match[] }) {
 
     function dummyMatchClickedACB() {
         addDummyMatch();
     }
 
     function matchRenderCB(match: Match) {
+        function matchRowClickedACB(e) {
+            e.preventDefault();
+            matchClicked(match);
+        }
         return (
-            <tr key={match.date.getTime()}>
+            <tr key={match.date.getTime()} onClick={matchRowClickedACB}>
                 <td>{match.getDateString()}</td>
                 <td>{match.players[0]}</td>
                 <td>{match.factions[0]}</td>
