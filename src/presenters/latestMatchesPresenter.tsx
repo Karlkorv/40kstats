@@ -6,7 +6,7 @@ import { LeaderBoardModel } from "../model/LeaderboardModel";
 import { Match } from "../model/match";
 
 
-const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => { // Update the type annotation for the model prop
+const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
     function addDummyMatch() {
         model.addMatch(new Match(
             ["Janne", "Johan"],
@@ -16,7 +16,13 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => { // 
         );
     }
 
-
+    function matchClicked(match: Match) {
+        if (!match.matchID) {
+            console.error("Match does not have an id");
+            return;
+        }
+        window.location.hash = "#/match/" + match.matchID;
+    }
 
     if (model.loading) {
         return (
@@ -37,7 +43,7 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => { // 
     if (!(model.matches.length == 0)) {
         return (
             <div>
-                <LastestMatchesView addDummyMatch={addDummyMatch} matches={model.getMatches().slice()} />
+                <LastestMatchesView addDummyMatch={addDummyMatch} matchClicked={matchClicked} matches={model.getMatches().slice()} />
             </div>
         )
     }
