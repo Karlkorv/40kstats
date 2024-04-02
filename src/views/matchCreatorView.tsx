@@ -2,7 +2,7 @@ import React from "react"
 import { Match } from "../model/match.ts";
 
 export function MatchCreatorView(props) {
-    const [formValues, setFormValues] : any = React.useState([
+    const [formInputValues, setFormInputValues] : any = React.useState([
         {
             label: "mPlayer1",
             num: "1",
@@ -27,7 +27,7 @@ export function MatchCreatorView(props) {
         console.log("Creating Match")
     }
 
-    function PlayerInput({objValue, onChange, index}){
+    function PlayerInput({objValue, onChange, index, deleteField}){
         const { label, num, type, value } = objValue;
         return (
             <div className="player-input-group">
@@ -40,6 +40,11 @@ export function MatchCreatorView(props) {
                         value={value || ""}
                         onChange={(e) => onChange(e, index)}
                     />
+                    { index >= 2 &&
+                        <div>
+                        <button onClick={(e) => deleteField(e)}>X</button>
+                    </div>
+                    }
                 </div>
             </div>
         )
@@ -47,7 +52,7 @@ export function MatchCreatorView(props) {
 
     const onClickAddPlayerACB = (e) => {
         e.preventDefault();
-        const values = [...formValues];
+        const values = [...formInputValues];
         let playerID = "mPlayer" + numOfPlayers;
         values.push({
             label: playerID,
@@ -55,16 +60,24 @@ export function MatchCreatorView(props) {
             type: "text",
             value: "",
         });
-        setFormValues(values);
+        setFormInputValues(values);
         setNumOfPlayers(numOfPlayers+1);
         setToggle(false);
         console.log(numOfPlayers);
     }
+
+    const handleDeleteField = (e) => {
+        e.preventDefault();
+        const values = [...formInputValues];
+        values.splice(values.length-1, 1);
+        setNumOfPlayers(numOfPlayers-1)
+        setFormInputValues(values);
+    }
     
     const handleChange = (e, index) => {
-        const values = [...formValues];
+        const values = [...formInputValues];
         values[index].value=e.target.value;
-        setFormValues(values);
+        setFormInputValues(values);
     };
 
     function onClickCancelACB(){
@@ -77,8 +90,8 @@ export function MatchCreatorView(props) {
                 <label htmlFor="mDate">Match Date: </label>
                 <input type="date" id="mDate" name="mDate" value={""}/><br></br>
 
-                {formValues.map((obj, index) => (
-                    PlayerInput({objValue:obj, onChange: handleChange, index: index})
+                {formInputValues.map((obj, index) => (
+                    PlayerInput({objValue:obj, onChange: handleChange, index: index, deleteField: handleDeleteField})
                 ))}
                 
             </form>
