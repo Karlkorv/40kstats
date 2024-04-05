@@ -7,6 +7,7 @@ import { FACTIONS } from "../model/factions.ts";
 const HomeScreen = observer(
 	function HomePresenter({ model }: any) {
 		function createMatchClick(evt) {
+			model.startMatchCreation();
 			window.location.hash = "#/matchCreator"
 		}
 

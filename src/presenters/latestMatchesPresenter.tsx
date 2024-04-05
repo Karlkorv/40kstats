@@ -43,7 +43,7 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
             </div>
         )
     }
-
+    
     if (!(model.matches.length == 0)) {
         return (
             <div>
