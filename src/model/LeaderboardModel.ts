@@ -1,27 +1,37 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, getLatestMatches } from "../Firebase";
+import { addMatchToFirestore, getLatestMatches, getMatchById, getTotalMatchesFromFirestore } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
-import { FACTIONS } from "./factions.ts";
-import { QuerySnapshot } from "firebase/firestore";
+import { FACTIONS } from "./factions.ts"
 
 export class LeaderBoardModel {
-    @observable currentMatchId: Date | undefined = undefined;
     ready: boolean = false;
     @observable loading = false
     @observable error = undefined
     @observable matches: Match[] = []
     @observable matchUnderCreation : any = {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:""}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:""}], numOfPlayers:2, focusedValue:undefined,winners:undefined,primary_points:0,secondary_points:0,}
+    @observable currentMatch: Match | undefined = undefined
+    totalMatches: number = 0
 
     readonly DEFAULT_CREATE_MATCH: {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:""}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:""}], numOfPlayers:2, focusedValue:undefined,winners:undefined,primary_points:0,secondary_points:0,}
     constructor() {
         this.matches = [];
         makeObservable(this);
 
-        this.loading = true
-        getLatestMatches(10).then((querySnapshot) => {
-            runInAction(() => { // Run in action för att mobx ska fatta att vi uppdaterar state
+        this.getLatestMatchesFromFirestore();
+        getTotalMatchesFromFirestore().then((total) => {
+            this.totalMatches = total;
+        })
+    }
+
+    @action private getLatestMatchesFromFirestore() {
+        this.loading = true;
+        getLatestMatches(50).then((querySnapshot) => {
+            runInAction(() => {
                 querySnapshot.forEach((doc) => {
-                    const data = doc.data()
+                    const data = doc.data();
+                    if (this.matches.find((match) => match.matchID === doc.id)) {
+                        return;
+                    }
                     this.addMatchFromFirestore(
                         new Match(
                             data.players,
@@ -30,16 +40,44 @@ export class LeaderBoardModel {
                             data.points_primary,
                             data.points_secondary,
                             data.date.toDate(),
+                            doc.id
                         )
-                    )
-                })
-                this.loading = false
-            })
+                    );
+                });
+            });
         }).catch((error) => {
             runInAction(() => {
-                this.loading = false
-                console.error("Error reading from firestore:", error)
-                this.error = error
+                this.loading = false;
+                console.error("Error reading from firestore:", error);
+                this.error = error;
+            });
+        }).finally(() => {
+            runInAction(() => {
+                this.loading = false;
+            })
+        });
+    }
+
+    @action getMoreMatches(amt?: number) {
+        getLatestMatches(this.matches.length + (amt || 10)).then((querySnapshot) => {
+            runInAction(() => {
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    if (this.matches.find((match) => match.matchID === doc.id)) {
+                        return;
+                    }
+                    this.addMatchFromFirestore(
+                        new Match(
+                            data.players,
+                            data.factions,
+                            data.winners,
+                            data.points_primary,
+                            data.points_secondary,
+                            data.date.toDate(),
+                            doc.id
+                        )
+                    );
+                });
             })
         })
     }
@@ -49,15 +87,17 @@ export class LeaderBoardModel {
             this.matches = []
         }
         // Måste göra detta för att mobx ska fatta att arrayen uppdateras
-        this.matches = [...this.matches, match]
+        this.matches = [match, ...this.matches]
     }
 
     @action addMatch(match: Match) {
         if (!this.matches) {
             this.matches = []
         }
-        this.matches = [...this.matches, match]
-        return addMatchToFirestore(match)
+        this.matches = [match, ...this.matches]
+        addMatchToFirestore(match).then((id) => {
+            match.setId(id)
+        })
     }
 
     @action startMatchCreation(){
@@ -124,6 +164,46 @@ export class LeaderBoardModel {
         const tempVar = {...this.matchUnderCreation};
         tempVar.secondary_points = Number(e);
         this.matchUnderCreation = tempVar;
+    }
+
+    @action setCurrentMatch(match: Match) {
+        this.currentMatch = match
+    }
+
+    @action setCurrentMatchById(matchID: string) {
+        if (this.currentMatch && this.currentMatch.matchID === matchID) {
+            return;
+        }
+
+        const match = this.matches.find((match) => match.matchID === matchID)
+        if (match) {
+            this.currentMatch = match
+            return
+        }
+
+        getMatchById(matchID).then((doc) => {
+            runInAction(() => {
+                if (!doc.exists()) {
+                    this.currentMatch = undefined
+                    throw new Error("Match not found");
+                }
+                const data = doc.data()!
+                this.currentMatch = new Match(
+                    data.players,
+                    data.factions,
+                    data.winners,
+                    data.points_primary,
+                    data.points_secondary,
+                    data.date.toDate(),
+                )
+            })
+        }).catch((error) => {
+            runInAction(() => {
+                console.error("Error reading from firestore:", error)
+                this.error = error
+                this.currentMatch = undefined
+            })
+        })
     }
 
     getMatches(): Match[] {

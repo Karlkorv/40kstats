@@ -1,34 +1,16 @@
 import React from "react";
 import { HomeScreen } from "./presenters/homePresenter.tsx";
 import { MatchCreator } from "./presenters/matchCreatorPresenter.tsx";
-import { MatchPres } from "./presenters/matchPresenter.tsx";
+import { MatchPresenter } from "./presenters/matchPresenter.tsx";
 import { createHashRouter, RouterProvider, RouteObject } from "react-router-dom";
 import { LatestMatches } from "./presenters/latestMatchesPresenter.tsx";
 import { observer } from "mobx-react-lite";
 import { LeaderBoardModel } from "./model/LeaderboardModel.ts";
+import "./style.css"
 
-export const App = observer(({ model } : { model : LeaderBoardModel} ) => {
-    // function makeMatchPaths(){
-    //     let pathArray : RouteObject[] = [];
-    //     for (var match of model.matches){
-    //         pathArray.push(
-    //             {
-    //                 path: `/match/${match.matchID.toString(10)}`,
-    //                 element: 
-    //                 <MatchPres 
-    //                     {...model} 
-    //                     addMatchFromFirestore={model.addMatchFromFirestore} 
-    //                     addMatch={model.addMatch} 
-    //                     getMatches={model.getMatches}>
-    //                 </MatchPres>,
-    //             },
-    //         );
-    //     }
-    //     return pathArray;
-    // }
-
+export const App = observer(({ model }: { model: LeaderBoardModel }) => {
     function makeRouter(model: LeaderBoardModel) {
-        let routes : RouteObject[] = [
+        const routes: RouteObject[] = [
             {
                 path: "/",
                 element: <HomeScreen model={model}></HomeScreen>,
@@ -37,10 +19,14 @@ export const App = observer(({ model } : { model : LeaderBoardModel} ) => {
                 path: "/matchCreator",
                 element: <MatchCreator model={model}></MatchCreator>,
             },
+            // Add route for individual matches
+            {
+                path: "/match/:matchId", // Dynamic route parameter for match ID
+                element: <MatchPresenter model={model}></MatchPresenter>,
+            },
         ]
         return createHashRouter(routes);
     }
-
     return (
         <div>
             <RouterProvider router={makeRouter(model)} />

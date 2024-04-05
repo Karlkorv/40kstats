@@ -1,7 +1,7 @@
 import { firebaseConfig } from './firebaseConfig.ts';
 import { initializeApp } from 'firebase/app';
 import { Match } from './model/match.ts';
-import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer } from 'firebase/firestore';
 import { LeaderBoardModel } from './model/LeaderboardModel.ts';
 // Initialize Firebase
 
@@ -14,7 +14,21 @@ export function getLatestMatches(amount: number) {
     return getDocs(q);
 }
 
+export function getMatchById(matchId: string) {
+    return getDoc(doc(db, "matches", matchId));
+}
+
+export function getTotalMatchesFromFirestore() {
+    return getCountFromServer(matchRef).then((count) => {
+        return count.data().count;
+    })
+}
+
 export function addMatchToFirestore(match: Match) {
+    if (match.matchID) {
+        throw new Error("Match is already added to firestore");
+    }
+
     const matchToAdd = {
         date: match.date,
         players: match.players,
@@ -25,9 +39,8 @@ export function addMatchToFirestore(match: Match) {
         points_total: match.points_total
     }
 
-
-    return addDoc(matchRef, matchToAdd).then((docRef) => {
-        console.log("Match added to Firestore, id: ", docRef.id);
-        return docRef.id;
+    return addDoc(matchRef, matchToAdd).then((doc) => {
+        console.log("Match added to Firestore, id: ", doc.id);
+        return doc.id;
     });
 }

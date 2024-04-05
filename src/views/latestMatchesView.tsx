@@ -1,15 +1,36 @@
 import React from "react"
 import { Match } from "../model/match.ts"
 
-export function LastestMatchesView({ addDummyMatch, matches }: { addDummyMatch: () => void, matches: Match[] }) {
+export function LastestMatchesView({
+    addDummyMatch,
+    matchClicked,
+    matches,
+    moreMatches,
+    totalMatches
+}:
+    {
+        addDummyMatch: () => void,
+        matchClicked: (match: Match) => void,
+        matches: Match[],
+        moreMatches: (amt?: number) => void,
+        totalMatches: number
+    }) {
 
     function dummyMatchClickedACB() {
         addDummyMatch();
     }
 
+    function moreMatchesACB() {
+        moreMatches(10)
+    }
+
     function matchRenderCB(match: Match) {
+        function matchRowClickedACB(e) {
+            e.preventDefault();
+            matchClicked(match);
+        }
         return (
-            <tr key={match.date.getTime()}>
+            <tr className="matchRow" key={match.matchID || match.date.getTime()} onClick={matchRowClickedACB}>
                 <td>{match.getDateString()}</td>
                 <td>{match.players[0]}</td>
                 <td>{match.factions[0]}</td>
@@ -24,21 +45,39 @@ export function LastestMatchesView({ addDummyMatch, matches }: { addDummyMatch: 
         <div>
             <h1>Latest Matches</h1>
             <button onClick={dummyMatchClickedACB}>Add dummy match</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Player 1</th>
-                        <th>Faction 1</th>
-                        <th>Player 2</th>
-                        <th>Faction 2</th>
-                        <th>Winner</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {matches.map(matchRenderCB)}
-                </tbody>
-            </table>
+            <p>Showing {matches.length} / {totalMatches} Matches</p>
+            <div id="table-wrapper">
+                <div id="table-scroll">
+                    <table>
+                        <thead id="table-header">
+                            <tr>
+                                <th><span>
+                                    Date
+                                </span></th>
+                                <th><span>
+                                    Player 1
+                                </span></th>
+                                <th><span>
+                                    Faction 1
+                                </span></th>
+                                <th><span>
+                                    Player 2
+                                </span></th>
+                                <th><span>
+                                    Faction 2
+                                </span></th>
+                                <th><span>
+                                    Winner
+                                </span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {matches.map(matchRenderCB)}
+                        </tbody>
+                    </table>
+                </div>
+                <button id="button-more-matches" onClick={moreMatchesACB}>More</button>
+            </div>
         </div>
     )
 }

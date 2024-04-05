@@ -2,17 +2,24 @@ import { observer } from "mobx-react-lite";
 import React from "react"
 import { MatchView } from "../views/matchView.tsx";
 import { Match } from "../model/match.ts"
-import { LeaderBoardModel } from "../model/LeaderboardModel.ts"
+import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
+import { useParams } from "react-router-dom";
 
-const MatchPres = observer((model : LeaderBoardModel) => {
+const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
+	const { matchId } = useParams()
+	model.setCurrentMatchById(matchId!)
 
-    return (
-      <div>
-        <MatchView
-          matchModel={new Match([],[],[],[],[])}>
-        </MatchView>
-      </div>
-    )
+	if (model.currentMatch === undefined) {
+		return (
+			<div>
+				Match not found
+			</div>
+		)
+	}
+
+	return (
+		<MatchView match={model.currentMatch} />
+	)
 });
 
-export { MatchPres }
+export { MatchPresenter }
