@@ -48,7 +48,9 @@ export class LeaderBoardModel {
                 this.error = error;
             });
         }).finally(() => {
-            this.loading = false;
+            runInAction(() => {
+                this.loading = false;
+            })
         });
     }
 
