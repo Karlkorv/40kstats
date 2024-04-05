@@ -168,6 +168,24 @@ export class LeaderBoardModel {
         this.matchUnderCreation = tempVar;
     }
 
+    @action handleWinnerChange(e){
+        let tempVar = {...this.matchUnderCreation};
+        let inputVal = e.target.value;
+        const options = this.matchUnderCreation.formInputValues.map(({player_value}) => (player_value));
+        if(options.includes(inputVal)) {tempVar.winners=inputVal;}
+        this.matchUnderCreation = tempVar;
+    }
+
+    @action handleWinnerFocus(e){
+        
+    }
+
+    @action handleWinnerBlur(e){
+        let tempVar = {...this.matchUnderCreation};
+        tempVar.winners = this.matchUnderCreation.focusedValue;
+        this.matchUnderCreation = tempVar;
+    }
+
     @action setCurrentMatch(match: Match) {
         this.currentMatch = match
     }

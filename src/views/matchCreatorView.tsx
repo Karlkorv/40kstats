@@ -5,7 +5,7 @@ import { FACTIONS } from "../model/factions.ts"
 /*  Currently, the component state is handled and stored directly in the View.
 Maybe this should be handled in the Presenter instead, as per good MSV practice?
 */
-export function MatchCreatorView({formInputValues, numOfPlayers, focusedValue, winners, primary_points, secondary_points, createNewMatch, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange}) {
+export function MatchCreatorView({formInputValues, numOfPlayers, focusedValue, winners, primary_points, secondary_points, createNewMatch, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange, handleWinnerChange, handleWinnerFocus, handleWinnerBlur}) {
     
     function onClickCreateMatchACB(evt){
         createNewMatch();
@@ -47,6 +47,18 @@ export function MatchCreatorView({formInputValues, numOfPlayers, focusedValue, w
 
     function onSecondaryPointsChangeACB(e, index){
         onSecondaryPointsChange(e, index);
+    }
+
+    function onWinnerChangeACB(e){
+        handleWinnerChange(e);
+    }
+
+    function onWinnerFocusACB(e){
+        handleWinnerFocus(e);
+    }
+
+    function onWinnerBlurACB(e){
+        handleWinnerBlur(e);
     }
 
     function PlayerInput({objValue, onNameChange, index, deleteField, onListChange, onFocus, onBlur, onPrimaryPointsChange, onSecondaryPointsChange}){
@@ -129,7 +141,14 @@ export function MatchCreatorView({formInputValues, numOfPlayers, focusedValue, w
                     <div className="winners-input">
                         <input 
                             value={winners}
+                            list="player_list"
+                            onInput={(e) => onWinnerChangeACB(e)}
+                            onFocus={onWinnerFocusACB}
+                            onBlur={(e) => onWinnerBlurACB(e)}
                         />
+                        <datalist id="player_list">
+                            {formInputValues.map(({num, player_value}) =>  {return (<option key={num} value={player_value}/>)})}
+                        </datalist>
                     </div>
                 </div>
             </form>

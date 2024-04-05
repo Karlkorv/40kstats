@@ -8,7 +8,7 @@ const MatchCreator = observer(
         function createNewMatch(){
             let players = model.matchUnderCreation.formInputValues.map(({player_value}) => (player_value));
             let factions = model.matchUnderCreation.formInputValues.map(({faction_value}) => (faction_value));
-            let winners = [];
+            let winners = model.matchUnderCreation.winners;
             let p_points = model.matchUnderCreation.formInputValues.map(({p_points}) => (p_points));
             let s_points = model.matchUnderCreation.formInputValues.map(({s_points}) => (s_points));
             let match = new Match(players, factions, winners, p_points, s_points)
@@ -64,6 +64,19 @@ const MatchCreator = observer(
             }
         }
 
+        function handleWinnerChange(e){
+            model.handleWinnerChange(e);
+        }
+
+        function handleWinnerFocus(e){
+            model.handleFocus(e)
+            e.target.value="";
+        }
+
+        function handleWinnerBlur(e){
+            if (e.target.value === '') { model.handleWinnerBlur(e);}
+        }
+
         return (
             <div>
                 {<MatchCreatorView 
@@ -83,6 +96,9 @@ const MatchCreator = observer(
                     handleBlur={handleBlur}
                     onPrimaryPointsChange={onPrimaryPointsChange}
                     onSecondaryPointsChange={onSecondaryPointsChange}
+                    handleWinnerChange={handleWinnerChange}
+                    handleWinnerFocus={handleWinnerFocus}
+                    handleWinnerBlur={handleWinnerBlur}
                 >
                 </MatchCreatorView>}
             </div>
