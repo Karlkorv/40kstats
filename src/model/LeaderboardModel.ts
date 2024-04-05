@@ -10,6 +10,28 @@ export class LeaderBoardModel {
     @observable loading = false
     @observable error = undefined
     @observable matches: Match[] = []
+    @observable matchUnderCreation : any = 
+        {
+            formInputValues:[
+                {
+                    label: "mPlayer1",
+                    num: "1",
+                    type: "text",
+                    player_value: "",
+                    faction_value:""
+                }, 
+                {
+                    label: "mPlayer2",
+                    num: "2",
+                    type: "text",
+                    player_value: "",
+                    faction_value:""
+                }
+            ], 
+            numOfPlayers:2, 
+            focusedValue:undefined
+        }
+
 
     constructor() {
         this.matches = [];
@@ -56,6 +78,41 @@ export class LeaderBoardModel {
         }
         this.matches = [...this.matches, match]
         return addMatchToFirestore(match)
+    }
+
+    @action addPlayerToForm() {
+        this.matchUnderCreation.numOfPlayers++;
+        this.matchUnderCreation.formInputValues=[...this.matchUnderCreation.formInputValues, 
+            {
+            label: "mPlayer" + this.matchUnderCreation.numOfPlayers,
+            num: this.matchUnderCreation.numOfPlayers.toString(),
+            type: "text",
+            player_value: "",
+            faction_value:""
+            }
+        ]
+    }
+
+    @action removePlayerFromForm() {
+        let formLength = this.matchUnderCreation.formInputValues.length;
+        this.matchUnderCreation.numOfPlayers--;
+        this.matchUnderCreation.formInputValues.splice(formLength-1, 1);
+    }
+
+    @action handlePlayerInputFieldChange(e, index){
+        let tempVar = {...this.matchUnderCreation};
+        let inputVal = e.target.value;
+        tempVar.formInputValues[index].player_value = inputVal;
+        this.matchUnderCreation = tempVar;
+        console.log(this.matchUnderCreation.formInputValues[index]);
+    }
+
+    @action handleFactionChange(e, index){
+        let tempVar = {...this.matchUnderCreation};
+        let inputVal = e.target.value;
+        const options = Object.values(FACTIONS)
+        if(options.includes(inputVal)) {tempVar.formInputValues[index].faction_value=inputVal;}
+        this.matchUnderCreation = tempVar;
     }
 
     getMatches(): Match[] {
