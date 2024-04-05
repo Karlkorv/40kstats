@@ -20,10 +20,42 @@
     display: table-header-group;
 }
 
-#button-more-matches {
+#winner-cell {
+    background-color: #3bd806;
+}
+
+#match-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+#match-wrapper table {
+    width: 100%;
+}
+
+#match-wrapper table thead {
+    background-color: #f1f1f1;
+}
+
+#match-buttons {
+    /*Place div to the left of parent container*/
     position: relative;
-    margin: 5px;
-    left: 93%;
+    left: 20%;
+    margin: 10px;
+
+    /*Space out buttons with relative distance*/
+    display: flex;
+    justify-content: space-between;
+    width: 45%;
+}
+
+#match-wrapper table tr td {
+    text-align: right;
+    outline: 1px solid rgb(165, 164, 164);
+    padding: 10px
 }
 
 .matchRow {
@@ -31,18 +63,4 @@
     height: 30px;
     outline: 1px solid rgb(165, 164, 164);
     cursor: pointer;
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-#more-player-matches {
-    animation: spin;
 }

@@ -43,9 +43,7 @@ export function LastestMatchesView({
 
     return (
         <div>
-            <h1>Latest Matches</h1>
             <button onClick={dummyMatchClickedACB}>Add dummy match</button>
-            <p>Showing {matches.length} / {totalMatches} Matches</p>
             <div id="table-wrapper">
                 <div id="table-scroll">
                     <table>
@@ -76,8 +74,11 @@ export function LastestMatchesView({
                         </tbody>
                     </table>
                 </div>
-                <button id="button-more-matches" onClick={moreMatchesACB}>More</button>
+                <div id="matches-more">
+                    <p>Showing {matches.length} / {totalMatches} Matches</p>
+                    <button onClick={moreMatchesACB}>More</button>
+                </div>
             </div>
-        </div>
+        </div >
     )
 }
