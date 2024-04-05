@@ -6,6 +6,7 @@ import { createHashRouter, RouterProvider, RouteObject } from "react-router-dom"
 import { LatestMatches } from "./presenters/latestMatchesPresenter.tsx";
 import { observer } from "mobx-react-lite";
 import { LeaderBoardModel } from "./model/LeaderboardModel.ts";
+import "./style.css"
 
 export const App = observer(({ model }: { model: LeaderBoardModel }) => {
     function makeRouter(model: LeaderBoardModel) {

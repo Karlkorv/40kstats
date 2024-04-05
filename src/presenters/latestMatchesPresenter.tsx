@@ -24,6 +24,10 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
         window.location.hash = "#/match/" + match.matchID;
     }
 
+    function loadMoreMatches(amt?: number) {
+        model.getMoreMatches(amt);
+    }
+
     if (model.loading) {
         return (
             <div>
@@ -43,7 +47,13 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
     if (!(model.matches.length == 0)) {
         return (
             <div>
-                <LastestMatchesView addDummyMatch={addDummyMatch} matchClicked={matchClicked} matches={model.getMatches().slice()} />
+                <LastestMatchesView
+                    addDummyMatch={addDummyMatch}
+                    matchClicked={matchClicked}
+                    matches={model.getMatches()}
+                    moreMatches={loadMoreMatches}
+                    totalMatches={model.totalMatches}
+                />
             </div>
         )
     }
