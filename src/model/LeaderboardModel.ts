@@ -8,11 +8,13 @@ export class LeaderBoardModel {
     @observable loading = false
     @observable error = undefined
     @observable matches: Match[] = []
-    @observable matchUnderCreation : any = {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}], numOfPlayers:2, focusedValue:undefined,winners:undefined,}
+    @observable matchUnderCreation: any = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, }
     @observable currentMatch: Match | undefined = undefined
+    @observable gettingCurrentMatch: boolean = false
+
     totalMatches: number = 0
 
-    readonly DEFAULT_CREATE_MATCH: {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}], numOfPlayers:2, focusedValue:undefined,winners:undefined,}
+    readonly DEFAULT_CREATE_MATCH: { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, }
     constructor() {
         this.matches = [];
         makeObservable(this);
@@ -97,91 +99,92 @@ export class LeaderBoardModel {
         this.matches = [match, ...this.matches]
         addMatchToFirestore(match).then((id) => {
             match.setId(id)
+            this.totalMatches++
         })
     }
 
-    @action startMatchCreation(){
-        this.matchUnderCreation = {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}], numOfPlayers:2, focusedValue:undefined,winners:undefined,}
+    @action startMatchCreation() {
+        this.matchUnderCreation = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, }
     }
 
-    @action cancelMatchCreation(){
-        this.matchUnderCreation = {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}], numOfPlayers:2, focusedValue:undefined,winners:undefined,}
+    @action cancelMatchCreation() {
+        this.matchUnderCreation = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, }
     }
 
     @action addPlayerToForm() {
         this.matchUnderCreation.numOfPlayers++;
-        this.matchUnderCreation.formInputValues=[...this.matchUnderCreation.formInputValues, 
-            {
+        this.matchUnderCreation.formInputValues = [...this.matchUnderCreation.formInputValues,
+        {
             label: "mPlayer" + this.matchUnderCreation.numOfPlayers,
             num: this.matchUnderCreation.numOfPlayers.toString(),
             type: "text",
             player_value: "",
-            faction_value:"",
-            p_points:0,
-            s_points:0,
-            }
+            faction_value: "",
+            p_points: 0,
+            s_points: 0,
+        }
         ]
     }
 
     @action removePlayerFromForm() {
         let formLength = this.matchUnderCreation.formInputValues.length;
         this.matchUnderCreation.numOfPlayers--;
-        this.matchUnderCreation.formInputValues.splice(formLength-1, 1);
+        this.matchUnderCreation.formInputValues.splice(formLength - 1, 1);
     }
 
-    @action handlePlayerInputFieldChange(e, index){
-        let tempVar = {...this.matchUnderCreation};
+    @action handlePlayerInputFieldChange(e, index) {
+        let tempVar = { ...this.matchUnderCreation };
         let inputVal = e.target.value;
         tempVar.formInputValues[index].player_value = inputVal;
         this.matchUnderCreation = tempVar;
     }
 
-    @action handleFactionChange(e, index){
-        let tempVar = {...this.matchUnderCreation};
+    @action handleFactionChange(e, index) {
+        let tempVar = { ...this.matchUnderCreation };
         let inputVal = e.target.value;
         const options = Object.values(FACTIONS)
-        if(options.includes(inputVal)) {tempVar.formInputValues[index].faction_value=inputVal;}
+        if (options.includes(inputVal)) { tempVar.formInputValues[index].faction_value = inputVal; }
         this.matchUnderCreation = tempVar;
     }
 
     /* Not sure if handleFocus and handleBlur should be handled here or in the presenter
      */
-    @action handleFocus(e){
-        this.matchUnderCreation.focusedValue=e.target.value;
+    @action handleFocus(e) {
+        this.matchUnderCreation.focusedValue = e.target.value;
     }
 
     @action handleBlur(e, index) {
-        let tempVar = {...this.matchUnderCreation};
+        let tempVar = { ...this.matchUnderCreation };
         tempVar.formInputValues[index].faction_value = this.matchUnderCreation.focusedValue;
         this.matchUnderCreation = tempVar;
     }
 
     @action handlePrimaryPointsChange(e, index) {
-        let tempVar = {...this.matchUnderCreation};
+        let tempVar = { ...this.matchUnderCreation };
         tempVar.formInputValues[index].p_points = Number(e);
         this.matchUnderCreation = tempVar;
     }
 
     @action handleSecondaryPointsChange(e, index) {
-        let tempVar = {...this.matchUnderCreation};
+        let tempVar = { ...this.matchUnderCreation };
         tempVar.formInputValues[index].s_points = Number(e);
         this.matchUnderCreation = tempVar;
     }
 
-    @action handleWinnerChange(e){
-        let tempVar = {...this.matchUnderCreation};
+    @action handleWinnerChange(e) {
+        let tempVar = { ...this.matchUnderCreation };
         let inputVal = e.target.value;
-        const options = this.matchUnderCreation.formInputValues.map(({player_value}) => (player_value));
-        if(options.includes(inputVal)) {tempVar.winners=inputVal;}
+        const options = this.matchUnderCreation.formInputValues.map(({ player_value }) => (player_value));
+        if (options.includes(inputVal)) { tempVar.winners = inputVal; }
         this.matchUnderCreation = tempVar;
     }
 
-    @action handleWinnerFocus(e){
-        
+    @action handleWinnerFocus(e) {
+
     }
 
-    @action handleWinnerBlur(e){
-        let tempVar = {...this.matchUnderCreation};
+    @action handleWinnerBlur(e) {
+        let tempVar = { ...this.matchUnderCreation };
         tempVar.winners = this.matchUnderCreation.focusedValue;
         this.matchUnderCreation = tempVar;
     }
@@ -200,6 +203,8 @@ export class LeaderBoardModel {
             this.currentMatch = match
             return
         }
+
+        this.gettingCurrentMatch = true
 
         getMatchById(matchID).then((doc) => {
             runInAction(() => {
@@ -222,6 +227,10 @@ export class LeaderBoardModel {
                 console.error("Error reading from firestore:", error)
                 this.error = error
                 this.currentMatch = undefined
+            })
+        }).finally(() => {
+            runInAction(() => {
+                this.gettingCurrentMatch = false
             })
         })
     }
