@@ -93,6 +93,7 @@ export class LeaderBoardModel {
         this.matches = [match, ...this.matches]
         addMatchToFirestore(match).then((id) => {
             match.setId(id)
+            this.totalMatches++
         })
     }
 
