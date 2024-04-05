@@ -1,5 +1,5 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, getLatestMatches, getMatchById } from "../Firebase.ts";
+import { addMatchToFirestore, getLatestMatches, getMatchById, getTotalMatchesFromFirestore } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 
 export class LeaderBoardModel {
@@ -8,11 +8,15 @@ export class LeaderBoardModel {
     @observable error = undefined
     @observable matches: Match[] = []
     @observable currentMatch: Match | undefined = undefined
+    totalMatches: number = 0
 
     constructor() {
         makeObservable(this);
 
         this.getLatestMatchesFromFirestore();
+        getTotalMatchesFromFirestore().then((total) => {
+            this.totalMatches = total;
+        })
     }
 
     @action private getLatestMatchesFromFirestore() {

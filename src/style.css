@@ -1,11 +1,7 @@
 /* from https://stackoverflow#com/questions/8232713/how-to-display-scroll-bar-onto-a-html-table */
 
-#table-wrapper {
-    position: relative;
-}
-
 #table-scroll {
-    height: 200px;
+    height: 40%;
     overflow: scroll;
     margin-top: 20px;
     border: 1px solid black;
@@ -16,7 +12,23 @@
     width: 100%;
 }
 
+/* #table-wrapper {
+    border: 1px solid black;
+} */
+
+#table-header {
+    display: table-header-group;
+}
+
+#button-more-matches {
+    position: relative;
+    margin: 5px;
+    left: 93%;
+}
 
 .matchRow {
-    outline: 1px solid rgb(155, 155, 155);
+    margin: 5px;
+    height: 30px;
+    outline: 1px solid rgb(165, 164, 164);
+    cursor: pointer;
 }

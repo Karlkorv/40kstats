@@ -47,7 +47,13 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
     if (!(model.matches.length == 0)) {
         return (
             <div>
-                <LastestMatchesView addDummyMatch={addDummyMatch} matchClicked={matchClicked} matches={model.getMatches()} moreMatches={loadMoreMatches} />
+                <LastestMatchesView
+                    addDummyMatch={addDummyMatch}
+                    matchClicked={matchClicked}
+                    matches={model.getMatches()}
+                    moreMatches={loadMoreMatches}
+                    totalMatches={model.totalMatches}
+                />
             </div>
         )
     }
