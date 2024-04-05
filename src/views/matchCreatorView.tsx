@@ -5,12 +5,11 @@ import { FACTIONS } from "../model/factions.ts"
 /*  Currently, the component state is handled and stored directly in the View.
 Maybe this should be handled in the Presenter instead, as per good MSV practice?
 */
-export function MatchCreatorView({formInputValues, numOfPlayers, focusedValue, winners, primary_points, secondary_points, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange}) {
+export function MatchCreatorView({formInputValues, numOfPlayers, focusedValue, winners, primary_points, secondary_points, createNewMatch, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange}) {
     
     function onClickCreateMatchACB(evt){
-        let match = null;
-        //props.addMatch();
-        console.log("Creating Match")
+        createNewMatch();
+        console.log("Creating Match");
     }
     function onClickCancelACB(){
         handleCancelClick();
@@ -42,16 +41,16 @@ export function MatchCreatorView({formInputValues, numOfPlayers, focusedValue, w
     }
 
 
-    function onPrimaryPointsChangeACB(e){
-        onPrimaryPointsChange(e);
+    function onPrimaryPointsChangeACB(e, index){
+        onPrimaryPointsChange(e, index);
     }
 
-    function onSecondaryPointsChangeACB(e){
-        onSecondaryPointsChange(e);
+    function onSecondaryPointsChangeACB(e, index){
+        onSecondaryPointsChange(e, index);
     }
 
-    function PlayerInput({objValue, onChange, index, deleteField, onListChange, onFocus, onBlur}){
-        const { label, num, type, player_value, faction_value } = objValue;
+    function PlayerInput({objValue, onNameChange, index, deleteField, onListChange, onFocus, onBlur, onPrimaryPointsChange, onSecondaryPointsChange}){
+        const { label, num, type, player_value, faction_value, p_points, s_points } = objValue;
         return (
             <div className="player-input-group">
                 <label htmlFor={label}>Player {num}:</label>
@@ -61,7 +60,7 @@ export function MatchCreatorView({formInputValues, numOfPlayers, focusedValue, w
                         type = {type || "text"}
                         id = {label}
                         value={player_value || ""}
-                        onChange={(e) => onChange(e, index)}
+                        onChange={(e) => onNameChange(e, index)}
                         required
                     />
                 </div>
@@ -88,6 +87,28 @@ export function MatchCreatorView({formInputValues, numOfPlayers, focusedValue, w
                         ))}
                     </datalist>
                 </div>
+                <div>
+                    <label htmlFor="primary-points">Primary points</label>
+                    <div className="primary-points-input">
+                        <input
+                            key = {index}
+                            type = "text"
+                            value={p_points}
+                            onChange={(e) => onPrimaryPointsChange(e, index)}
+                        />
+                    </div>
+                </div>
+                <div>
+                    <label htmlFor="secondary-points">Secondary points</label>
+                    <div className="secondary-points-input">
+                        <input
+                            key = {index}
+                            type = "text"
+                            value={s_points}
+                            onChange={(e) => onSecondaryPointsChange(e, index)}
+                        />
+                    </div>
+                </div>
                 { index >= 2 && <div><button onClick={(e) => deleteField(e)}>X</button></div> }
             </div>
         )
@@ -100,7 +121,7 @@ export function MatchCreatorView({formInputValues, numOfPlayers, focusedValue, w
                 <input type="date" id="mDate" name="mDate" value={""}/><br></br>
 
                 {formInputValues.map((obj, index) => (
-                    PlayerInput({objValue:obj, onChange: handleNameChangeACB, index: index, deleteField: handleDeleteFieldACB, onListChange: handleListChangeACB, onFocus:handleFocusACB, onBlur: handleBlurACB})
+                    PlayerInput({objValue:obj, onNameChange: handleNameChangeACB, index: index, deleteField: handleDeleteFieldACB, onListChange: handleListChangeACB, onFocus:handleFocusACB, onBlur: handleBlurACB, onPrimaryPointsChange: onPrimaryPointsChangeACB, onSecondaryPointsChange: onSecondaryPointsChangeACB})
                 ))}
                 
                 <div>
@@ -108,26 +129,6 @@ export function MatchCreatorView({formInputValues, numOfPlayers, focusedValue, w
                     <div className="winners-input">
                         <input 
                             value={winners}
-                        />
-                    </div>
-                </div>
-                <div>
-                    <label htmlFor="primary-points">Primary points</label>
-                    <div className="primary-points-input">
-                        <input
-                            type = "text"
-                            value={primary_points}
-                            onChange={onPrimaryPointsChangeACB}
-                        />
-                    </div>
-                </div>
-                <div>
-                    <label htmlFor="secondary-points">Secondary points</label>
-                    <div className="secondary-points-input">
-                        <input
-                            type = "text"
-                            value={secondary_points}
-                            onChange={onSecondaryPointsChangeACB}
                         />
                     </div>
                 </div>

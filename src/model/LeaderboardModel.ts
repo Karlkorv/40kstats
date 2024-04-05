@@ -8,11 +8,11 @@ export class LeaderBoardModel {
     @observable loading = false
     @observable error = undefined
     @observable matches: Match[] = []
-    @observable matchUnderCreation : any = {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:""}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:""}], numOfPlayers:2, focusedValue:undefined,winners:undefined,primary_points:0,secondary_points:0,}
+    @observable matchUnderCreation : any = {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}], numOfPlayers:2, focusedValue:undefined,winners:undefined,}
     @observable currentMatch: Match | undefined = undefined
     totalMatches: number = 0
 
-    readonly DEFAULT_CREATE_MATCH: {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:""}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:""}], numOfPlayers:2, focusedValue:undefined,winners:undefined,primary_points:0,secondary_points:0,}
+    readonly DEFAULT_CREATE_MATCH: {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}], numOfPlayers:2, focusedValue:undefined,winners:undefined,}
     constructor() {
         this.matches = [];
         makeObservable(this);
@@ -101,11 +101,11 @@ export class LeaderBoardModel {
     }
 
     @action startMatchCreation(){
-        this.matchUnderCreation = {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:""}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:""}], numOfPlayers:2, focusedValue:undefined,winners:undefined,primary_points:0,secondary_points:0,}
+        this.matchUnderCreation = {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}], numOfPlayers:2, focusedValue:undefined,winners:undefined,}
     }
 
     @action cancelMatchCreation(){
-        this.matchUnderCreation = {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:""}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:""}], numOfPlayers:2, focusedValue:undefined,winners:undefined,primary_points:0,secondary_points:0,}
+        this.matchUnderCreation = {formInputValues:[{label: "mPlayer1",num: "1",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}, {label: "mPlayer2",num: "2",type: "text",player_value: "",faction_value:"",p_points:0, s_points:0}], numOfPlayers:2, focusedValue:undefined,winners:undefined,}
     }
 
     @action addPlayerToForm() {
@@ -116,7 +116,9 @@ export class LeaderBoardModel {
             num: this.matchUnderCreation.numOfPlayers.toString(),
             type: "text",
             player_value: "",
-            faction_value:""
+            faction_value:"",
+            p_points:0,
+            s_points:0,
             }
         ]
     }
@@ -149,20 +151,20 @@ export class LeaderBoardModel {
     }
 
     @action handleBlur(e, index) {
-        const tempVar = {...this.matchUnderCreation};
+        let tempVar = {...this.matchUnderCreation};
         tempVar.formInputValues[index].faction_value = this.matchUnderCreation.focusedValue;
         this.matchUnderCreation = tempVar;
     }
 
-    @action handlePrimaryPointsChange(e) {
-        const tempVar = {...this.matchUnderCreation};
-        tempVar.primary_points = Number(e);
+    @action handlePrimaryPointsChange(e, index) {
+        let tempVar = {...this.matchUnderCreation};
+        tempVar.formInputValues[index].p_points = Number(e);
         this.matchUnderCreation = tempVar;
     }
 
-    @action handleSecondaryPointsChange(e) {
-        const tempVar = {...this.matchUnderCreation};
-        tempVar.secondary_points = Number(e);
+    @action handleSecondaryPointsChange(e, index) {
+        let tempVar = {...this.matchUnderCreation};
+        tempVar.formInputValues[index].s_points = Number(e);
         this.matchUnderCreation = tempVar;
     }
 
