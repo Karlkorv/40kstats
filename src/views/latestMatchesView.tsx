@@ -1,10 +1,14 @@
 import React from "react"
 import { Match } from "../model/match.ts"
 
-export function LastestMatchesView({ addDummyMatch, matchClicked, matches }: { addDummyMatch: () => void, matchClicked: (match: Match) => void, matches: Match[] }) {
+export function LastestMatchesView({ addDummyMatch, matchClicked, matches, moreMatches }: { addDummyMatch: () => void, matchClicked: (match: Match) => void, matches: Match[], moreMatches: (amt?: number) => void }) {
 
     function dummyMatchClickedACB() {
         addDummyMatch();
+    }
+
+    function moreMatchesACB() {
+        moreMatches(10)
     }
 
     function matchRenderCB(match: Match) {
@@ -13,7 +17,7 @@ export function LastestMatchesView({ addDummyMatch, matchClicked, matches }: { a
             matchClicked(match);
         }
         return (
-            <tr key={match.date.getTime()} onClick={matchRowClickedACB}>
+            <tr key={match.matchID || match.date.getTime()} onClick={matchRowClickedACB}>
                 <td>{match.getDateString()}</td>
                 <td>{match.players[0]}</td>
                 <td>{match.factions[0]}</td>
@@ -58,6 +62,7 @@ export function LastestMatchesView({ addDummyMatch, matchClicked, matches }: { a
                         </tbody>
                     </table>
                 </div>
+                <button onClick={moreMatchesACB}>More</button>
             </div>
         </div>
     )

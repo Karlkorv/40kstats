@@ -15,12 +15,15 @@ export class LeaderBoardModel {
         this.getLatestMatchesFromFirestore();
     }
 
-    private getLatestMatchesFromFirestore() {
+    @action private getLatestMatchesFromFirestore() {
         this.loading = true;
-        getLatestMatches(10).then((querySnapshot) => {
+        getLatestMatches(50).then((querySnapshot) => {
             runInAction(() => {
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
+                    if (this.matches.find((match) => match.matchID === doc.id)) {
+                        return;
+                    }
                     this.addMatchFromFirestore(
                         new Match(
                             data.players,
@@ -33,7 +36,6 @@ export class LeaderBoardModel {
                         )
                     );
                 });
-                this.loading = false;
             });
         }).catch((error) => {
             runInAction(() => {
@@ -41,7 +43,33 @@ export class LeaderBoardModel {
                 console.error("Error reading from firestore:", error);
                 this.error = error;
             });
+        }).finally(() => {
+            this.loading = false;
         });
+    }
+
+    @action getMoreMatches(amt?: number) {
+        getLatestMatches(this.matches.length + (amt || 10)).then((querySnapshot) => {
+            runInAction(() => {
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    if (this.matches.find((match) => match.matchID === doc.id)) {
+                        return;
+                    }
+                    this.addMatchFromFirestore(
+                        new Match(
+                            data.players,
+                            data.factions,
+                            data.winners,
+                            data.points_primary,
+                            data.points_secondary,
+                            data.date.toDate(),
+                            doc.id
+                        )
+                    );
+                });
+            })
+        })
     }
 
     @action addMatchFromFirestore(match: Match) {
