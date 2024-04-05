@@ -49,14 +49,14 @@ export class LeaderBoardModel {
             this.matches = []
         }
         // Måste göra detta för att mobx ska fatta att arrayen uppdateras
-        this.matches = [...this.matches, match]
+        this.matches = [match, ...this.matches]
     }
 
     @action addMatch(match: Match) {
         if (!this.matches) {
             this.matches = []
         }
-        this.matches = [...this.matches, match]
+        this.matches = [match, ...this.matches]
         addMatchToFirestore(match).then((id) => {
             match.setId(id)
         })
