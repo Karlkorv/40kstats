@@ -6,12 +6,14 @@ import { MatchCreatorView } from "../views/matchCreatorView";
 const MatchCreator = observer(
     function MatchCreatorPresenter({model} : any){
         function createNewMatch(){
-            let players = model.matchUnderCreation.formInputValues.map((player_value) => (player_value));
-            let factions = model.matchUnderCreation.formInputValues.map((faction_value) => (faction_value));
+            let players = model.matchUnderCreation.formInputValues.map(({player_value}) => (player_value));
+            let factions = model.matchUnderCreation.formInputValues.map(({faction_value}) => (faction_value));
             let winners = [];
-            let p_points = model.matchUnderCreation.formInputValues.map((p_points) => (p_points));
-            let s_points = model.matchUnderCreation.formInputValues.map((s_points) => (s_points));
+            let p_points = model.matchUnderCreation.formInputValues.map(({p_points}) => (p_points));
+            let s_points = model.matchUnderCreation.formInputValues.map(({s_points}) => (s_points));
             let match = new Match(players, factions, winners, p_points, s_points)
+            console.log(players)
+            console.log(match)
             model.addMatch(match);
             console.log("Match created")
         }
