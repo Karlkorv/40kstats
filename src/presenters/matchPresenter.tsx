@@ -9,6 +9,14 @@ const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
 	const { matchId } = useParams()
 	model.setCurrentMatchById(matchId!)
 
+
+	if (model.gettingCurrentMatch) {
+		return (
+			<div>
+				Loading...
+			</div>
+		)
+	}
 	if (model.currentMatch === undefined) {
 		return (
 			<div>

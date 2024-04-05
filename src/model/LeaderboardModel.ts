@@ -7,7 +7,10 @@ export class LeaderBoardModel {
     @observable loading = false
     @observable error = undefined
     @observable matches: Match[] = []
+
     @observable currentMatch: Match | undefined = undefined
+    @observable gettingCurrentMatch: boolean = false
+
     totalMatches: number = 0
 
     constructor() {
@@ -112,6 +115,8 @@ export class LeaderBoardModel {
             return
         }
 
+        this.gettingCurrentMatch = true
+
         getMatchById(matchID).then((doc) => {
             runInAction(() => {
                 if (!doc.exists()) {
@@ -133,6 +138,10 @@ export class LeaderBoardModel {
                 console.error("Error reading from firestore:", error)
                 this.error = error
                 this.currentMatch = undefined
+            })
+        }).finally(() => {
+            runInAction(() => {
+                this.gettingCurrentMatch = false
             })
         })
     }
