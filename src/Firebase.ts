@@ -1,17 +1,22 @@
 import { firebaseConfig } from './firebaseConfig.ts';
 import { initializeApp } from 'firebase/app';
 import { Match } from './model/match.ts';
+import { getAuth } from 'firebase/auth';
 import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer } from 'firebase/firestore';
-import { LeaderBoardModel } from './model/LeaderboardModel.ts';
 // Initialize Firebase
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const matchRef = collection(db, "matches");
+const auth = getAuth(app);
 
 export function getLatestMatches(amount: number) {
     const q = query(matchRef, orderBy("date", "desc"), limit(amount));
     return getDocs(q);
+}
+
+export function getAuthFromFirebase() {
+    return auth;
 }
 
 export function getMatchById(matchId: string) {
