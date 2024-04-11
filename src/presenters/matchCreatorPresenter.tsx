@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Match } from "../model/match.ts"
-import React  from "react";
+import React from "react";
 import { MatchCreatorView } from "../views/matchCreatorView";
 
 const MatchCreator = observer(
@@ -21,16 +21,16 @@ const MatchCreator = observer(
             }
         }
 
-        function handleCancelClick(){
+        function handleCancelClick() {
             model.cancelMatchCreation();
         }
-
+      
         function handlePlayerNameChange(e, index){
             if(e.target.value.length > 20) { alert("Name too long!")}
             else {model.handlePlayerInputFieldChange(e, index);}
         }
 
-        function handleFactionChange(e, index){
+        function handleFactionChange(e, index) {
             model.handleFactionChange(e, index);
         }
 
@@ -38,17 +38,17 @@ const MatchCreator = observer(
             model.addPlayerToForm();
         }
 
-        function onClickRemovePlayer(){
+        function onClickRemovePlayer() {
             model.removePlayerFromForm();
         }
 
-        function handleFocus(e){
+        function handleFocus(e) {
             model.handleFocus(e);
-            e.target.value="";
+            e.target.value = "";
         }
 
-        function handleBlur(e, index){
-            if (e.target.value === '') { model.handleBlur(e, index);}
+        function handleBlur(e, index) {
+            if (e.target.value === '') { model.handleBlur(e, index); }
         }
 
         function onPrimaryPointsChange(e, index){
@@ -73,31 +73,31 @@ const MatchCreator = observer(
             }
         }
 
-        function handleWinnerChange(e){
+        function handleWinnerChange(e) {
             model.handleWinnerChange(e);
         }
 
-        function handleWinnerFocus(e){
+        function handleWinnerFocus(e) {
             model.handleFocus(e)
-            e.target.value="";
+            e.target.value = "";
         }
 
-        function handleWinnerBlur(e){
-            if (e.target.value === '') { model.handleWinnerBlur(e);}
+        function handleWinnerBlur(e) {
+            if (e.target.value === '') { model.handleWinnerBlur(e); }
         }
 
         return (
             <div>
-                {<MatchCreatorView 
-                    formInputValues={model.matchUnderCreation.formInputValues} 
-                    numOfPlayers={model.matchUnderCreation.numOfPlayers} 
+                {<MatchCreatorView
+                    formInputValues={model.matchUnderCreation.formInputValues}
+                    numOfPlayers={model.matchUnderCreation.numOfPlayers}
                     focusedValue={model.matchUnderCreation.focusedValue}
                     winners={model.matchUnderCreation.winners}
                     primary_points={model.matchUnderCreation.primary_points}
                     secondary_points={model.matchUnderCreation.secondary_points}
                     createNewMatch={createNewMatch}
                     handleCancelClick={handleCancelClick}
-                    onClickAddPlayer={onClickAddPlayer} 
+                    onClickAddPlayer={onClickAddPlayer}
                     onClickRemovePlayer={onClickRemovePlayer}
                     handlePlayerNameChange={handlePlayerNameChange}
                     handleFactionChange={handleFactionChange}
@@ -108,9 +108,9 @@ const MatchCreator = observer(
                     handleWinnerChange={handleWinnerChange}
                     handleWinnerFocus={handleWinnerFocus}
                     handleWinnerBlur={handleWinnerBlur}
-                >
+                    loggedIn={model.loggedIn}>
                 </MatchCreatorView>}
-            </div>
+            </div >
         )
     }
 );

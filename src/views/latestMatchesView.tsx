@@ -6,14 +6,16 @@ export function LastestMatchesView({
     matchClicked,
     matches,
     moreMatches,
-    totalMatches
+    totalMatches,
+    loggedIn
 }:
     {
         addDummyMatch: () => void,
         matchClicked: (match: Match) => void,
         matches: Match[],
         moreMatches: (amt?: number) => void,
-        totalMatches: number
+        totalMatches: number,
+        loggedIn: boolean
     }) {
 
     function dummyMatchClickedACB() {
@@ -43,7 +45,7 @@ export function LastestMatchesView({
 
     return (
         <div>
-            <button onClick={dummyMatchClickedACB}>Add dummy match</button>
+            <button disabled={!loggedIn} onClick={dummyMatchClickedACB}>Add dummy match</button>
             <div id="table-wrapper">
                 <div id="table-scroll">
                     <table>

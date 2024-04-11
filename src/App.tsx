@@ -7,6 +7,7 @@ import { LatestMatches } from "./presenters/latestMatchesPresenter.tsx";
 import { observer } from "mobx-react-lite";
 import { LeaderBoardModel } from "./model/LeaderboardModel.ts";
 import "./style.css"
+import { Login } from "./presenters/loginPresenter.tsx";
 
 export const App = observer(({ model }: { model: LeaderBoardModel }) => {
     function makeRouter(model: LeaderBoardModel) {
@@ -29,6 +30,7 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
     }
     return (
         <div>
+            <Login model={model} />
             <RouterProvider router={makeRouter(model)} />
             <LatestMatches model={model} />
         </div>
