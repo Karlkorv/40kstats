@@ -4,26 +4,30 @@ import React from "react";
 import { MatchCreatorView } from "../views/matchCreatorView";
 
 const MatchCreator = observer(
-    function MatchCreatorPresenter({ model }: any) {
-        function createNewMatch() {
-            let players = model.matchUnderCreation.formInputValues.map(({ player_value }) => (player_value));
-            let factions = model.matchUnderCreation.formInputValues.map(({ faction_value }) => (faction_value));
-            let winners = model.matchUnderCreation.winners;
-            let p_points = model.matchUnderCreation.formInputValues.map(({ p_points }) => (p_points));
-            let s_points = model.matchUnderCreation.formInputValues.map(({ s_points }) => (s_points));
-            let match = new Match(players, factions, winners, p_points, s_points)
+    function MatchCreatorPresenter({model} : any){
+        function createNewMatch(){
+            let players = model.matchUnderCreation.formInputValues.map(({player_value}) => (player_value));
             console.log(players)
-            console.log(match)
-            model.addMatch(match);
-            console.log("Match created")
+            let factions = model.matchUnderCreation.formInputValues.map(({faction_value}) => (faction_value));
+            let winners = model.matchUnderCreation.winners;
+            let p_points = model.matchUnderCreation.formInputValues.map(({p_points}) => (p_points));
+            let s_points = model.matchUnderCreation.formInputValues.map(({s_points}) => (s_points));
+            if(players.some((player) => (player === ""))) { alert("Please fill in all Players") }
+            if(factions.some((faction) => (faction === ""))) { alert("Please fill in all Factions") }
+            if(winners === "") { alert("Please pick the winner") }
+            if(!(players.some((player) => (player === "")) || factions.some((faction) => (faction === "") || winners === ""))) { 
+                model.addMatch(new Match(players, factions, winners, p_points, s_points));
+                console.log("Match created");
+            }
         }
 
         function handleCancelClick() {
             model.cancelMatchCreation();
         }
-
-        function handlePlayerNameChange(e, index) {
-            model.handlePlayerInputFieldChange(e, index);
+      
+        function handlePlayerNameChange(e, index){
+            if(e.target.value.length > 20) { alert("Name too long!")}
+            else {model.handlePlayerInputFieldChange(e, index);}
         }
 
         function handleFactionChange(e, index) {
@@ -47,20 +51,25 @@ const MatchCreator = observer(
             if (e.target.value === '') { model.handleBlur(e, index); }
         }
 
-        function onPrimaryPointsChange(e, index) {
-            console.log(e);
-            if (!isNaN(Number(e.target.value))) {
+        function onPrimaryPointsChange(e, index){
+            if(!isNaN(Number(e.target.value)) && Number(e.target.value) < Number.MAX_SAFE_INTEGER && Number(e.target.value) > Number.MIN_SAFE_INTEGER){
                 let newString = e.target.value;
-                model.handlePrimaryPointsChange(newString, index);
+                model.handlePrimaryPointsChange(newString, index); 
+            } else if(Number(e.target.value) >= Number.MAX_SAFE_INTEGER-1 || Number(e.target.value) <= Number.MIN_SAFE_INTEGER+1){
+                alert("Value too large!")
+            } else {
+                alert("Please enter an integer!")
             }
         }
 
-        function onSecondaryPointsChange(e, index) {
-            console.log(e);
-            console.log(Number(e.nativeEvent.data));
-            if (!isNaN(Number(e.target.value))) {
+        function onSecondaryPointsChange(e, index){
+            if(!isNaN(Number(e.target.value)) && Number(e.target.value) < Number.MAX_SAFE_INTEGER && Number(e.target.value) > Number.MIN_SAFE_INTEGER){
                 let newString = e.target.value;
-                model.handleSecondaryPointsChange(newString, index);
+                model.handleSecondaryPointsChange(newString, index); 
+            } else if (Number(e.target.value) >= Number.MAX_SAFE_INTEGER-1 || Number(e.target.value) <= Number.MIN_SAFE_INTEGER+1){
+                alert("Value too large!")
+            } else {
+                alert("Please enter an integer!")
             }
         }
 

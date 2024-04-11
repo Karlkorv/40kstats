@@ -72,6 +72,7 @@ export function MatchCreatorView({ formInputValues, numOfPlayers, focusedValue, 
                         type={type || "text"}
                         id={label}
                         value={player_value || ""}
+                        placeholder={"Player " + num}
                         onChange={(e) => onNameChange(e, index)}
                         required
                     />
