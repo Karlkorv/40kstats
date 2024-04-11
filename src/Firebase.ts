@@ -3,20 +3,68 @@ import { initializeApp } from 'firebase/app';
 import { Match } from './model/match.ts';
 import { getAuth } from 'firebase/auth';
 import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer } from 'firebase/firestore';
+import { LeaderBoardModel } from './model/LeaderboardModel.ts';
+import { runInAction } from 'mobx';
 // Initialize Firebase
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const matchRef = collection(db, "matches");
-const auth = getAuth(app);
+const persistenceRef = collection(db, "persistence");
+export const auth = getAuth(app);
 
 export function getLatestMatches(amount: number) {
     const q = query(matchRef, orderBy("date", "desc"), limit(amount));
     return getDocs(q);
 }
 
-export function getAuthFromFirebase() {
-    return auth;
+export function modelToPersistence(model: LeaderBoardModel) {
+    return model.matchUnderCreation;
+}
+
+export function persistenceToModel(persistence: any, model: LeaderBoardModel) {
+    if (!persistence) {
+        model.setMatchUnderCreation(model.DEFAULT_CREATE_MATCH);
+        return;
+    }
+
+    model.setMatchUnderCreation(persistence);
+}
+
+export function saveToFirebase(model: LeaderBoardModel) {
+    if (!model.ready || !model.user) {
+        return;
+    }
+
+    setDoc(doc(persistenceRef, model.user.uid), modelToPersistence(model)).then(() => {
+        console.log("Persistence written to firebase")
+    });
+}
+
+export function loadFromFirebase(model: LeaderBoardModel) {
+    model.ready = false;
+    if (!model.user) {
+        console.log("Tried to read persistence from firebase without user")
+        return;
+    }
+
+    getDoc(doc(persistenceRef, model.user.uid)).then((doc) => {
+        persistenceToModel(doc.data(), model);
+        console.log("Persistence read from firebase")
+    }).then(() => {
+        model.ready = true;
+    });
+}
+
+export function connectToFirebase(model: LeaderBoardModel, watchFunction) {
+    watchFunction(() => model.matchUnderCreation, () => saveToFirebase(model));
+    auth.onAuthStateChanged((user) => {
+        if (!user) {
+            model.userLoggedOut();
+        }
+        model.setUser(user);
+        loadFromFirebase(model);
+    });
 }
 
 export function getMatchById(matchId: string) {
