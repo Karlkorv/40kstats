@@ -12,8 +12,6 @@ const MatchCreator = observer(
             let p_points = model.matchUnderCreation.formInputValues.map(({p_points}) => (p_points));
             let s_points = model.matchUnderCreation.formInputValues.map(({s_points}) => (s_points));
             let match = new Match(players, factions, winners, p_points, s_points)
-            console.log(players)
-            console.log(match)
             model.addMatch(match);
             console.log("Match created")
         }
@@ -48,19 +46,24 @@ const MatchCreator = observer(
         }
 
         function onPrimaryPointsChange(e, index){
-            console.log(e);
-            if(!isNaN(Number(e.target.value))){
+            if(!isNaN(Number(e.target.value)) && Number(e.target.value) < Number.MAX_SAFE_INTEGER && Number(e.target.value) > Number.MIN_SAFE_INTEGER){
                 let newString = e.target.value;
                 model.handlePrimaryPointsChange(newString, index); 
+            } else if(Number(e.target.value) >= Number.MAX_SAFE_INTEGER-1 || Number(e.target.value) <= Number.MIN_SAFE_INTEGER+1){
+                alert("Value too large!")
+            } else {
+                alert("Please enter an integer!")
             }
         }
 
         function onSecondaryPointsChange(e, index){
-            console.log(e);
-            console.log(Number(e.nativeEvent.data));
-            if(!isNaN(Number(e.target.value))){
+            if(!isNaN(Number(e.target.value)) && Number(e.target.value) < Number.MAX_SAFE_INTEGER && Number(e.target.value) > Number.MIN_SAFE_INTEGER){
                 let newString = e.target.value;
                 model.handleSecondaryPointsChange(newString, index); 
+            } else if (Number(e.target.value) >= Number.MAX_SAFE_INTEGER-1 || Number(e.target.value) <= Number.MIN_SAFE_INTEGER+1){
+                alert("Value too large!")
+            } else {
+                alert("Please enter an integer!")
             }
         }
 
