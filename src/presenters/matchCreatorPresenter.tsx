@@ -26,7 +26,8 @@ const MatchCreator = observer(
         }
 
         function handlePlayerNameChange(e, index){
-            model.handlePlayerInputFieldChange(e, index);
+            if(e.target.value.length > 20) { alert("Name too long!")}
+            else {model.handlePlayerInputFieldChange(e, index);}
         }
 
         function handleFactionChange(e, index){
