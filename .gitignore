@@ -9,6 +9,7 @@ package-lock.json
 test/vtl/__tests__
 test/vtl/__mocks__
 .firebase
+.firebaserc
 src/firebaseConfig.ts
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
