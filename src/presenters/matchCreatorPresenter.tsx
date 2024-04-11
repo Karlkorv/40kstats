@@ -7,13 +7,18 @@ const MatchCreator = observer(
     function MatchCreatorPresenter({model} : any){
         function createNewMatch(){
             let players = model.matchUnderCreation.formInputValues.map(({player_value}) => (player_value));
+            console.log(players)
             let factions = model.matchUnderCreation.formInputValues.map(({faction_value}) => (faction_value));
             let winners = model.matchUnderCreation.winners;
             let p_points = model.matchUnderCreation.formInputValues.map(({p_points}) => (p_points));
             let s_points = model.matchUnderCreation.formInputValues.map(({s_points}) => (s_points));
-            let match = new Match(players, factions, winners, p_points, s_points)
-            model.addMatch(match);
-            console.log("Match created")
+            if(players.some((player) => (player === ""))) { alert("Please fill in all Players") }
+            if(factions.some((faction) => (faction === ""))) { alert("Please fill in all Factions") }
+            if(winners === "") { alert("Please pick the winner") }
+            if(!(players.some((player) => (player === "")) || factions.some((faction) => (faction === "") || winners === ""))) { 
+                model.addMatch(new Match(players, factions, winners, p_points, s_points));
+                console.log("Match created");
+            }
         }
 
         function handleCancelClick(){
