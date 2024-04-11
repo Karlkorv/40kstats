@@ -9,6 +9,11 @@ const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
 	const { matchId } = useParams()
 	model.setCurrentMatchById(matchId!)
 
+	function deleteMatch(matchID){
+		model.deleteMatch(matchID);
+		console.log("Deleting match with ID: " + matchID)
+	}
+
 
 	if (model.gettingCurrentMatch) {
 		return (
@@ -26,7 +31,7 @@ const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
 	}
 
 	return (
-		<MatchView match={model.currentMatch} />
+		<MatchView match={model.currentMatch} deleteMatch={deleteMatch}/>
 	)
 });
 

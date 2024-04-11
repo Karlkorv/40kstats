@@ -1,5 +1,5 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, getAuthFromFirebase, getLatestMatches, getMatchById, getTotalMatchesFromFirestore } from "../Firebase.ts";
+import { addMatchToFirestore, getAuthFromFirebase, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, deleteMatchFromFirestore } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts"
 import { Auth, User } from "firebase/auth";
@@ -112,9 +112,14 @@ export class LeaderBoardModel {
         }
         this.matches = [match, ...this.matches]
         addMatchToFirestore(match).then((id) => {
+            match.setCreatorId(user.uid);
             match.setId(id)
             this.totalMatches++
         })
+    }
+
+    @action deleteMatch(matchID) {
+        deleteMatchFromFirestore(matchID);
     }
 
     @action startMatchCreation() {

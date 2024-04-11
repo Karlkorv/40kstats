@@ -2,7 +2,7 @@ import { firebaseConfig } from './firebaseConfig.ts';
 import { initializeApp } from 'firebase/app';
 import { Match } from './model/match.ts';
 import { getAuth } from 'firebase/auth';
-import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer } from 'firebase/firestore';
+import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc } from 'firebase/firestore';
 // Initialize Firebase
 
 const app = initializeApp(firebaseConfig);
@@ -48,4 +48,8 @@ export function addMatchToFirestore(match: Match) {
         console.log("Match added to Firestore, id: ", doc.id);
         return doc.id;
     });
+}
+
+export function deleteMatchFromFirestore(matchID){
+    getDoc(doc(db, "matches", matchID)).then((doc) => deleteDoc(doc.ref));
 }

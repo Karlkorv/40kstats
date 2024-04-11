@@ -1,7 +1,12 @@
 import React from "react";
 import { Match } from "../model/match.ts";
 
-export function MatchView({ match }: { match: Match }) {
+export function MatchView({ match, deleteMatch }: { match: Match, deleteMatch: any }) {
+  function deleteMatchACB(){
+    console.log("Deleting match with ID: " + match.matchID)
+    deleteMatch(match.matchID);
+  }
+
   function renderWinnerRow(match: Match) {
     if (match.winners[0] === match.players[0]) {
       return (
@@ -57,8 +62,9 @@ export function MatchView({ match }: { match: Match }) {
         </tbody>
       </table>
       <div id="match-buttons">
+        <button >Edit</button>
         <button onClick={() => { window.location.hash = "#/"; }}>Back</button>
-        <button onClick={() => { new Audio("/audio/dino-noise.m4a").play() }}>Delete match</button>
+        <button onClick={() => { deleteMatchACB(), new Audio("/audio/dino-noise.m4a").play() }}>Delete match</button>
         <button>Share match</button>
       </div>
     </div>
