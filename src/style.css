@@ -64,3 +64,11 @@
     outline: 1px solid rgb(165, 164, 164);
     cursor: pointer;
 }
+
+.navbar {
+    padding: 5px;
+    border-color: black;
+    border-radius: 5px;
+    background-color: aqua;
+    display: flex;
+}
