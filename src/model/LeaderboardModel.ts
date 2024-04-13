@@ -9,7 +9,7 @@ export class LeaderBoardModel {
     @observable loading = false
     @observable error = undefined
     @observable matches: Match[] = []
-    @observable matchUnderCreation: any = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, }
+    @observable matchUnderCreation: any = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, notes:""}
     @observable currentMatch: Match | undefined = undefined
     @observable gettingCurrentMatch: boolean = false
     @observable authentication: Auth;
@@ -17,7 +17,7 @@ export class LeaderBoardModel {
 
     totalMatches: number = 0
 
-    readonly DEFAULT_CREATE_MATCH: { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, }
+    readonly DEFAULT_CREATE_MATCH: { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, notes:""}
     constructor() {
         this.matches = [];
         makeObservable(this);
@@ -123,11 +123,11 @@ export class LeaderBoardModel {
     }
 
     @action startMatchCreation() {
-        this.matchUnderCreation = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, }
+        this.matchUnderCreation = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, notes:""}
     }
 
     @action cancelMatchCreation() {
-        this.matchUnderCreation = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, }
+        this.matchUnderCreation = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, notes:""}
     }
 
     @action addPlayerToForm() {
@@ -208,6 +208,12 @@ export class LeaderBoardModel {
         this.matchUnderCreation = tempVar;
     }
 
+    @action handleNotesChange(e){
+        let tempVar = { ...this.matchUnderCreation };
+        tempVar.notes = e.target.value;
+        this.matchUnderCreation = tempVar;
+    }
+
     @action setCurrentMatch(match: Match) {
         this.currentMatch = match
     }
@@ -239,6 +245,7 @@ export class LeaderBoardModel {
                     data.points_primary,
                     data.points_secondary,
                     data.date.toDate(),
+                    data.notes
                 )
             })
         }).catch((error) => {

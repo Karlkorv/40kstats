@@ -5,7 +5,7 @@ import { FACTIONS } from "../model/factions.ts"
 /*  Currently, the component state is handled and stored directly in the View.
 Maybe this should be handled in the Presenter instead, as per good MSV practice?
 */
-export function MatchCreatorView({ formInputValues, numOfPlayers, focusedValue, winners, primary_points, secondary_points, createNewMatch, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange, handleWinnerChange, handleWinnerFocus, handleWinnerBlur, loggedIn }) {
+export function MatchCreatorView({ formInputValues, numOfPlayers, focusedValue, winners, primary_points, secondary_points, notes, createNewMatch, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange, handleWinnerChange, handleWinnerFocus, handleWinnerBlur, loggedIn, handleNotesChange }) {
 
     function onClickCreateMatchACB(evt) {
         createNewMatch();
@@ -59,6 +59,10 @@ export function MatchCreatorView({ formInputValues, numOfPlayers, focusedValue, 
 
     function onWinnerBlurACB(e) {
         handleWinnerBlur(e);
+    }
+
+    function onNotesChangeACB(e){
+        handleNotesChange(e);
     }
 
     function PlayerInput({ objValue, onNameChange, index, deleteField, onListChange, onFocus, onBlur, onPrimaryPointsChange, onSecondaryPointsChange }) {
@@ -159,6 +163,13 @@ export function MatchCreatorView({ formInputValues, numOfPlayers, focusedValue, 
                             {formInputValues.map(({ num, player_value }) => { return (<option key={num} value={player_value} />) })}
                         </datalist>
                     </div>
+                </div>
+                <div className="notes-input">
+                    <input
+                        value={notes}
+                        type="text"
+                        onChange={(e) => onNotesChangeACB(e)}
+                    />
                 </div>
             </form>
             <button onClick={onClickAddPlayerACB}>Add player</button>

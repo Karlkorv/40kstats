@@ -12,11 +12,12 @@ const MatchCreator = observer(
             let winners = model.matchUnderCreation.winners;
             let p_points = model.matchUnderCreation.formInputValues.map(({p_points}) => (p_points));
             let s_points = model.matchUnderCreation.formInputValues.map(({s_points}) => (s_points));
+            let notes = model.matchUnderCreation.notes;
             if(players.some((player) => (player === ""))) { alert("Please fill in all Players") }
             if(factions.some((faction) => (faction === ""))) { alert("Please fill in all Factions") }
             if(winners === "") { alert("Please pick the winner") }
             if(!(players.some((player) => (player === "")) || factions.some((faction) => (faction === "") || winners === ""))) { 
-                model.addMatch(new Match(players, factions, winners, p_points, s_points));
+                model.addMatch(new Match(players, factions, winners, p_points, s_points, notes));
                 console.log("Match created");
             }
         }
@@ -86,6 +87,11 @@ const MatchCreator = observer(
             if (e.target.value === '') { model.handleWinnerBlur(e); }
         }
 
+        function handleNotesChange(e) {
+            model.handleNotesChange(e);
+        }
+        
+
         return (
             <div>
                 {<MatchCreatorView
@@ -95,6 +101,7 @@ const MatchCreator = observer(
                     winners={model.matchUnderCreation.winners}
                     primary_points={model.matchUnderCreation.primary_points}
                     secondary_points={model.matchUnderCreation.secondary_points}
+                    notes={model.matchUnderCreation.notes}
                     createNewMatch={createNewMatch}
                     handleCancelClick={handleCancelClick}
                     onClickAddPlayer={onClickAddPlayer}
@@ -108,7 +115,8 @@ const MatchCreator = observer(
                     handleWinnerChange={handleWinnerChange}
                     handleWinnerFocus={handleWinnerFocus}
                     handleWinnerBlur={handleWinnerBlur}
-                    loggedIn={model.loggedIn}>
+                    loggedIn={model.loggedIn}
+                    handleNotesChange={handleNotesChange}>
                 </MatchCreatorView>}
             </div >
         )
