@@ -1,20 +1,20 @@
 import React from "react"
 
-export function NavbarView({model}) {
+export function NavbarView({model, handleHomeButtonClick, handleCreateMatchButtonClick, handleLoginButtonClick, handleLogoutButtonClick}) {
     function onHomeButtonClickACB(e){
-
+        handleHomeButtonClick();
     }
 
     function onCreateMatchButtonClick(e){
-
+        handleCreateMatchButtonClick();
     }
 
     function onLoginButtonClick(e){
-
+        handleLoginButtonClick();
     }
 
     function onLogoutButtonClick(e){
-
+        handleLogoutButtonClick();
     }
 
     return (
@@ -26,19 +26,20 @@ export function NavbarView({model}) {
             </div>
             <div className="create-match-button">
                 <button disabled={!model.user} onClick={(e) => onCreateMatchButtonClick(e)}>
-                    Create Match
+                    {model.user && "Create Match" || !model.user && "Sign in to create match"}
                 </button>
             </div>
-            <div className="login-button">
-                <button disabled={model.user} onClick={(e) => onLoginButtonClick(e)}>
+            {model.user && <div className="login-button">
+                <button onClick={(e) => onLoginButtonClick(e)}>
                     Login
                 </button>
-            </div>
-            <div className="logout-button">
-                <button disabled={!model.user} onClick={(e) => onLogoutButtonClick(e)}>
+            </div>}
 
+            {!model.user && <div className="logout-button">
+                <button onClick={(e) => onLogoutButtonClick(e)}>
+                    Logout
                 </button>
-            </div>
+            </div>}
         </div>
     );
 }

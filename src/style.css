@@ -72,3 +72,7 @@
     background-color: aqua;
     display: flex;
 }
+
+.navbar > div {
+    padding-inline: 5px;
+}
