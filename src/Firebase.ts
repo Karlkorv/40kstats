@@ -2,7 +2,7 @@ import { firebaseConfig } from './firebaseConfig.ts';
 import { initializeApp } from 'firebase/app';
 import { Match } from './model/match.ts';
 import { getAuth } from 'firebase/auth';
-import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer } from 'firebase/firestore';
+import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc } from 'firebase/firestore';
 import { LeaderBoardModel } from './model/LeaderboardModel.ts';
 import { runInAction } from 'mobx';
 // Initialize Firebase
@@ -24,6 +24,8 @@ export function modelToPersistence(model: LeaderBoardModel) {
 
 export function persistenceToModel(persistence: any, model: LeaderBoardModel) {
     if (!persistence) {
+        let match = model.DEFAULT_CREATE_MATCH;
+        match.userID = model.user?.uid ?? '';
         model.setMatchUnderCreation(model.DEFAULT_CREATE_MATCH);
         return;
     }
@@ -89,11 +91,27 @@ export function addMatchToFirestore(match: Match) {
         winners: match.winners,
         points_primary: match.points_primary,
         points_secondary: match.points_secondary,
-        points_total: match.points_total
+        points_total: match.points_total,
+        userID: match.userID
     }
+
+    console.log("Trying to add match: ", matchToAdd);
 
     return addDoc(matchRef, matchToAdd).then((doc) => {
         console.log("Match added to Firestore, id: ", doc.id);
         return doc.id;
     });
+}
+
+/*  Maybe unnecessary to send whole model as a parameter
+    Might be sufficient to only send the User instance
+ */
+export function clearPersistence(model: LeaderBoardModel){
+    if(!model.user){
+        throw new Error("Tried to clear persistence without valid user.")
+    } else {
+        deleteDoc(doc(persistenceRef, model.user?.uid)).then(() => {
+            console.log("Cleared persistence for user: ", model.user?.uid)
+        })
+    }
 }
