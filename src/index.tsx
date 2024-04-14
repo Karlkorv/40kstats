@@ -2,6 +2,8 @@ import { createRoot } from "react-dom/client";
 import { App } from "./App.tsx";
 import React from "react";
 import { LeaderBoardModel } from "./model/LeaderboardModel.ts";
+import { connectToFirebase } from "./Firebase.ts";
+import { reaction } from "mobx";
 
 const model = new LeaderBoardModel();
 
@@ -9,4 +11,6 @@ const model = new LeaderBoardModel();
 (window as any).myModel = model;
 
 createRoot(document.getElementById("root")!).render(<App model={model} />); // root element always 100% exists, no need to null check
+
+connectToFirebase(model, reaction);
 

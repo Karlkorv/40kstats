@@ -4,11 +4,11 @@ import React from "react";
 import { MatchCreatorView } from "../views/matchCreatorView";
 
 const MatchCreator = observer(
-    function MatchCreatorPresenter({model} : any){
-        function createNewMatch(){
-            let players = model.matchUnderCreation.formInputValues.map(({player_value}) => (player_value));
+    function MatchCreatorPresenter({ model }: any) {
+        function createNewMatch() {
+            let players = model.matchUnderCreation.formInputValues.map(({ player_value }) => (player_value));
             console.log(players)
-            let factions = model.matchUnderCreation.formInputValues.map(({faction_value}) => (faction_value));
+            let factions = model.matchUnderCreation.formInputValues.map(({ faction_value }) => (faction_value));
             let winners = model.matchUnderCreation.winners;
             let p_points = model.matchUnderCreation.formInputValues.map(({p_points}) => (p_points));
             let s_points = model.matchUnderCreation.formInputValues.map(({s_points}) => (s_points));
@@ -25,10 +25,10 @@ const MatchCreator = observer(
         function handleCancelClick() {
             model.cancelMatchCreation();
         }
-      
-        function handlePlayerNameChange(e, index){
-            if(e.target.value.length > 20) { alert("Name too long!")}
-            else {model.handlePlayerInputFieldChange(e, index);}
+
+        function handlePlayerNameChange(e, index) {
+            if (e.target.value.length > 20) { alert("Name too long!") }
+            else { model.handlePlayerInputFieldChange(e, index); }
         }
 
         function handleFactionChange(e, index) {
@@ -52,22 +52,22 @@ const MatchCreator = observer(
             if (e.target.value === '') { model.handleBlur(e, index); }
         }
 
-        function onPrimaryPointsChange(e, index){
-            if(!isNaN(Number(e.target.value)) && Number(e.target.value) < Number.MAX_SAFE_INTEGER && Number(e.target.value) > Number.MIN_SAFE_INTEGER){
+        function onPrimaryPointsChange(e, index) {
+            if (!isNaN(Number(e.target.value)) && Number(e.target.value) < Number.MAX_SAFE_INTEGER && Number(e.target.value) > Number.MIN_SAFE_INTEGER) {
                 let newString = e.target.value;
-                model.handlePrimaryPointsChange(newString, index); 
-            } else if(Number(e.target.value) >= Number.MAX_SAFE_INTEGER-1 || Number(e.target.value) <= Number.MIN_SAFE_INTEGER+1){
+                model.handlePrimaryPointsChange(newString, index);
+            } else if (Number(e.target.value) >= Number.MAX_SAFE_INTEGER - 1 || Number(e.target.value) <= Number.MIN_SAFE_INTEGER + 1) {
                 alert("Value too large!")
             } else {
                 alert("Please enter an integer!")
             }
         }
 
-        function onSecondaryPointsChange(e, index){
-            if(!isNaN(Number(e.target.value)) && Number(e.target.value) < Number.MAX_SAFE_INTEGER && Number(e.target.value) > Number.MIN_SAFE_INTEGER){
+        function onSecondaryPointsChange(e, index) {
+            if (!isNaN(Number(e.target.value)) && Number(e.target.value) < Number.MAX_SAFE_INTEGER && Number(e.target.value) > Number.MIN_SAFE_INTEGER) {
                 let newString = e.target.value;
-                model.handleSecondaryPointsChange(newString, index); 
-            } else if (Number(e.target.value) >= Number.MAX_SAFE_INTEGER-1 || Number(e.target.value) <= Number.MIN_SAFE_INTEGER+1){
+                model.handleSecondaryPointsChange(newString, index);
+            } else if (Number(e.target.value) >= Number.MAX_SAFE_INTEGER - 1 || Number(e.target.value) <= Number.MIN_SAFE_INTEGER + 1) {
                 alert("Value too large!")
             } else {
                 alert("Please enter an integer!")
@@ -116,7 +116,8 @@ const MatchCreator = observer(
                     handleWinnerFocus={handleWinnerFocus}
                     handleWinnerBlur={handleWinnerBlur}
                     loggedIn={model.loggedIn}
-                    handleNotesChange={handleNotesChange}>
+                    handleNotesChange={handleNotesChange}
+                    user={model.user}>
                 </MatchCreatorView>}
             </div >
         )

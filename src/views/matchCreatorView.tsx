@@ -5,7 +5,7 @@ import { FACTIONS } from "../model/factions.ts"
 /*  Currently, the component state is handled and stored directly in the View.
 Maybe this should be handled in the Presenter instead, as per good MSV practice?
 */
-export function MatchCreatorView({ formInputValues, numOfPlayers, focusedValue, winners, primary_points, secondary_points, notes, createNewMatch, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange, handleWinnerChange, handleWinnerFocus, handleWinnerBlur, loggedIn, handleNotesChange }) {
+export function MatchCreatorView({ formInputValues, numOfPlayers, focusedValue, winners, primary_points, secondary_points, notes, createNewMatch, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange, handleWinnerChange, handleWinnerFocus, handleWinnerBlur, loggedIn, handleNotesChange, user }) {
 
     function onClickCreateMatchACB(evt) {
         createNewMatch();
@@ -131,7 +131,7 @@ export function MatchCreatorView({ formInputValues, numOfPlayers, focusedValue, 
         )
     }
 
-    if (!loggedIn) {
+    if (!user) {
         return (
             <div>
                 <span>You need to be logged in to create a match</span>
