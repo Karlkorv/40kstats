@@ -5,7 +5,7 @@ import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
 
 export class LeaderBoardModel {
-    readonly DEFAULT_CREATE_MATCH = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: "", winners: "", userID:""}
+    readonly DEFAULT_CREATE_MATCH = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: "", winners: "", userID: "" }
     ready: boolean = false;
     @observable loading = false
     @observable error = undefined
@@ -14,11 +14,10 @@ export class LeaderBoardModel {
     @observable currentMatch: Match | undefined = undefined
     @observable gettingCurrentMatch: boolean = false
     @observable user: User | null = null;
-
-    totalMatches: number = 0
+    @observable totalMatches: number = 0
 
     constructor() {
-        
+
         this.matches = [];
         makeObservable(this);
 
@@ -115,9 +114,9 @@ export class LeaderBoardModel {
         }
         match.setUserID(this.user?.uid);
         this.matches = [match, ...this.matches]
+        this.totalMatches++;
         addMatchToFirestore(match).then((id) => {
             match.setId(id);
-            this.totalMatches++;
             clearPersistence(this);
         })
     }

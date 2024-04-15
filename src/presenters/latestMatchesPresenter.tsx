@@ -53,7 +53,7 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
                     matches={model.getMatches()}
                     moreMatches={loadMoreMatches}
                     totalMatches={model.totalMatches}
-                    loggedIn={model.loggedIn}
+                    user={model.user}
                 />
             </div>
         )
