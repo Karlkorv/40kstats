@@ -1,5 +1,5 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, addUserName, auth, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, getUsername, usernameIsValid } from "../Firebase.ts";
+import { addMatchToFirestore, addUserName, auth, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, getUsername, userExists } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
@@ -50,9 +50,9 @@ export class LeaderBoardModel {
     }
 
     @action checkUsername(username: string) {
-        usernameIsValid(username).then((result) => {
+        userExists(username).then((result) => {
             runInAction(() => {
-                this.isValidUserName = result;
+                this.isValidUserName = result!;
             })
         })
     }
