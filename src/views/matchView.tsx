@@ -1,10 +1,14 @@
 import React from "react";
 import { Match } from "../model/match.ts";
 
-export function MatchView({ match, deleteMatch }: { match: Match, deleteMatch: any }) {
+export function MatchView({ match, deleteMatch, editMatch }: { match: Match, deleteMatch: any, editMatch: any }) {
   function deleteMatchACB(){
     console.log("Deleting match with ID: " + match.matchID)
     deleteMatch(match.matchID);
+  }
+  
+  function editMatchACB(){
+    editMatch(match);
   }
 
   function renderWinnerRow(match: Match) {
@@ -62,7 +66,7 @@ export function MatchView({ match, deleteMatch }: { match: Match, deleteMatch: a
         </tbody>
       </table>
       <div id="match-buttons">
-        <button >Edit</button>
+        <button onClick={() => { editMatchACB() }}>Edit</button>
         <button onClick={() => { window.location.hash = "#/"; }}>Back</button>
         <button onClick={() => { deleteMatchACB(), new Audio("/audio/dino-noise.m4a").play() }}>Delete match</button>
         <button>Share match</button>

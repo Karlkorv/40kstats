@@ -14,6 +14,13 @@ const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
 		console.log("Deleting match with ID: " + matchID)
 	}
 
+	function editMatch(match: Match){
+		let matchFormValues = {
+			
+		}
+		model.editMatch(matchFormValues);
+	}
+
 
 	if (model.gettingCurrentMatch) {
 		return (
@@ -31,7 +38,7 @@ const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
 	}
 
 	return (
-		<MatchView match={model.currentMatch} deleteMatch={deleteMatch}/>
+		<MatchView match={model.currentMatch} deleteMatch={deleteMatch} editMatch={editMatch}/>
 	)
 });
 

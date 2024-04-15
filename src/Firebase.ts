@@ -105,7 +105,6 @@ export function addMatchToFirestore(match: Match) {
 
 export function deleteMatchFromFirestore(matchID){
     getDoc(doc(db, "matches", matchID)).then((doc) => deleteDoc(doc.ref));
-
 }
 
 /*  Maybe unnecessary to send whole model as a parameter

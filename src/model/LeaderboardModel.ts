@@ -1,16 +1,16 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore } from "../Firebase.ts";
+import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, deleteMatchFromFirestore } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
+import { MatchCreatorInput, DEFAULT_CREATE_MATCH} from "./FormModel.ts";
 
 export class LeaderBoardModel {
-    readonly DEFAULT_CREATE_MATCH = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: "", winners: "", userID:""}
     ready: boolean = false;
     @observable loading = false
     @observable error = undefined
     @observable matches: Match[] = []
-    @observable matchUnderCreation: any = this.DEFAULT_CREATE_MATCH;
+    @observable matchUnderCreation: any = DEFAULT_CREATE_MATCH;
     @observable currentMatch: Match | undefined = undefined
     @observable gettingCurrentMatch: boolean = false
     @observable user: User | null = null;
@@ -70,7 +70,7 @@ export class LeaderBoardModel {
 
     @action userLoggedOut() {
         this.user = null;
-        this.matchUnderCreation = this.DEFAULT_CREATE_MATCH;
+        this.matchUnderCreation = DEFAULT_CREATE_MATCH;
     }
 
     @action setMatchUnderCreation(match: any) {
@@ -126,13 +126,17 @@ export class LeaderBoardModel {
         deleteMatchFromFirestore(matchID);
     }
 
+    @action editMatch(match: any){
+        this.matchUnderCreation = match;
+    }
+
     @action startMatchCreation() {
-        this.matchUnderCreation = this.DEFAULT_CREATE_MATCH;
+        this.matchUnderCreation = DEFAULT_CREATE_MATCH;
         this.matchUnderCreation.userID = this.user?.uid;
     }
 
     @action cancelMatchCreation() {
-        this.matchUnderCreation = this.DEFAULT_CREATE_MATCH;
+        this.matchUnderCreation = DEFAULT_CREATE_MATCH;
     }
 
     @action addPlayerToForm() {
