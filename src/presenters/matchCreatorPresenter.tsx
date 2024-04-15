@@ -12,12 +12,15 @@ const MatchCreator = observer(
             let winners = model.matchUnderCreation.winners;
             let p_points = model.matchUnderCreation.formInputValues.map(({p_points}) => (p_points));
             let s_points = model.matchUnderCreation.formInputValues.map(({s_points}) => (s_points));
+            let userID = model.matchUnderCreation.userID;
             let notes = model.matchUnderCreation.notes;
+            let matchID = model.matchUnderCreation.matchID;
             if(players.some((player) => (player === ""))) { alert("Please fill in all Players") }
             if(factions.some((faction) => (faction === ""))) { alert("Please fill in all Factions") }
             if(winners === "") { alert("Please pick the winner") }
             if(!(players.some((player) => (player === "")) || factions.some((faction) => (faction === "") || winners === ""))) { 
-                model.addMatch(new Match(players, factions, winners, p_points, s_points, notes));
+                model.addMatch(new Match(players, factions, winners, p_points, s_points, undefined, userID, notes, matchID));
+                window.location.hash = "#/";
                 console.log("Match created");
             }
         }

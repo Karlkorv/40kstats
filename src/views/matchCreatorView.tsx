@@ -164,12 +164,16 @@ export function MatchCreatorView({ formInputValues, numOfPlayers, focusedValue, 
                         </datalist>
                     </div>
                 </div>
-                <div className="notes-input">
-                    <input
-                        value={notes}
-                        type="text"
-                        onChange={(e) => onNotesChangeACB(e)}
-                    />
+                <div className="notes">
+                    <label htmlFor="notes">Match notes:</label>
+                    <div className="notes-input">
+                        <input
+                            placeholder="Match notes"
+                            value={notes}
+                            type="text"
+                            onChange={(e) => onNotesChangeACB(e)}
+                        />
+                    </div>
                 </div>
             </form>
             <button onClick={onClickAddPlayerACB}>Add player</button>

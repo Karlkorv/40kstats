@@ -10,7 +10,7 @@ export class LeaderBoardModel {
     @observable loading = false
     @observable error = undefined
     @observable matches: Match[] = []
-    @observable matchUnderCreation: any = DEFAULT_CREATE_MATCH;
+    @observable matchUnderCreation: MatchCreatorInput = DEFAULT_CREATE_MATCH;
     @observable currentMatch: Match | undefined = undefined
     @observable gettingCurrentMatch: boolean = false
     @observable user: User | null = null;
@@ -45,6 +45,8 @@ export class LeaderBoardModel {
                             data.points_primary,
                             data.points_secondary,
                             data.date.toDate(),
+                            data.userID,
+                            data.notes,
                             doc.id
                         )
                     );
@@ -93,6 +95,8 @@ export class LeaderBoardModel {
                             data.points_primary,
                             data.points_secondary,
                             data.date.toDate(),
+                            data.userID,
+                            data.notes,
                             doc.id
                         )
                     );
@@ -118,16 +122,20 @@ export class LeaderBoardModel {
         addMatchToFirestore(match).then((id) => {
             match.setId(id);
             this.totalMatches++;
+            this.matchUnderCreation = DEFAULT_CREATE_MATCH;
             clearPersistence(this);
         })
     }
 
-    @action deleteMatch(matchID) {
-        deleteMatchFromFirestore(matchID);
+    @action deleteMatch(id) {
+        let index = this.matches.findIndex(({matchID}) => matchID === id);
+        let tempVar = this.matches.slice(0, index).concat(this.matches.slice(index+1));
+        deleteMatchFromFirestore(id);
+        this.matches = tempVar;
     }
 
-    @action editMatch(match: any){
-        this.matchUnderCreation = match;
+    @action editMatch(matchFormValues: MatchCreatorInput){
+        this.matchUnderCreation = matchFormValues;
     }
 
     @action startMatchCreation() {
@@ -254,7 +262,9 @@ export class LeaderBoardModel {
                     data.points_primary,
                     data.points_secondary,
                     data.date.toDate(),
-                    data.notes
+                    data.userID,
+                    data.notes,
+                    doc.id
                 )
             })
         }).catch((error) => {

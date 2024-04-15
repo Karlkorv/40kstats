@@ -5,6 +5,7 @@ import { getAuth } from 'firebase/auth';
 import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc } from 'firebase/firestore';
 import { LeaderBoardModel } from './model/LeaderboardModel.ts';
 import { runInAction } from 'mobx';
+import { DEFAULT_CREATE_MATCH } from './model/FormModel.ts';
 // Initialize Firebase
 
 const app = initializeApp(firebaseConfig);
@@ -24,9 +25,9 @@ export function modelToPersistence(model: LeaderBoardModel) {
 
 export function persistenceToModel(persistence: any, model: LeaderBoardModel) {
     if (!persistence) {
-        let match = model.DEFAULT_CREATE_MATCH;
+        let match = DEFAULT_CREATE_MATCH;
         match.userID = model.user?.uid ?? '';
-        model.setMatchUnderCreation(model.DEFAULT_CREATE_MATCH);
+        model.setMatchUnderCreation(DEFAULT_CREATE_MATCH);
         return;
     }
 
