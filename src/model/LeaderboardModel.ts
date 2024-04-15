@@ -1,41 +1,30 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, getAuthFromFirebase, getLatestMatches, getMatchById, getTotalMatchesFromFirestore } from "../Firebase.ts";
+import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts"
-import { Auth, User } from "firebase/auth";
+import { User } from "firebase/auth";
 
 export class LeaderBoardModel {
+    readonly DEFAULT_CREATE_MATCH = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: "", winners: "", userID:""}
     ready: boolean = false;
     @observable loading = false
     @observable error = undefined
     @observable matches: Match[] = []
-    @observable matchUnderCreation: any = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, }
+    @observable matchUnderCreation: any = this.DEFAULT_CREATE_MATCH;
     @observable currentMatch: Match | undefined = undefined
     @observable gettingCurrentMatch: boolean = false
-    @observable authentication: Auth;
-    @observable loggedIn: boolean = false;
+    @observable user: User | null = null;
 
     totalMatches: number = 0
 
-    readonly DEFAULT_CREATE_MATCH: { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, }
     constructor() {
+        
         this.matches = [];
         makeObservable(this);
 
         this.getLatestMatchesFromFirestore();
         getTotalMatchesFromFirestore().then((total) => {
             this.totalMatches = total;
-        })
-        this.authentication = getAuthFromFirebase();
-
-        this.authentication.onAuthStateChanged((user: User | null) => {
-            runInAction(() => {
-                if (user) {
-                    this.loggedIn = true;
-                } else {
-                    this.loggedIn = false;
-                }
-            })
         })
     }
 
@@ -74,6 +63,20 @@ export class LeaderBoardModel {
         });
     }
 
+    @action setUser(user: User | null) {
+        this.user = user;
+        this.matchUnderCreation.userID = user?.uid;
+    }
+
+    @action userLoggedOut() {
+        this.user = null;
+        this.matchUnderCreation = this.DEFAULT_CREATE_MATCH;
+    }
+
+    @action setMatchUnderCreation(match: any) {
+        this.matchUnderCreation = match;
+    }
+
     @action getMoreMatches(amt?: number) {
         getLatestMatches(this.matches.length + (amt || 10)).then((querySnapshot) => {
             runInAction(() => {
@@ -110,19 +113,22 @@ export class LeaderBoardModel {
         if (!this.matches) {
             this.matches = []
         }
+        match.setUserID(this.user?.uid);
         this.matches = [match, ...this.matches]
         addMatchToFirestore(match).then((id) => {
-            match.setId(id)
-            this.totalMatches++
+            match.setId(id);
+            this.totalMatches++;
+            clearPersistence(this);
         })
     }
 
     @action startMatchCreation() {
-        this.matchUnderCreation = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, }
+        this.matchUnderCreation = this.DEFAULT_CREATE_MATCH;
+        this.matchUnderCreation.userID = this.user?.uid;
     }
 
     @action cancelMatchCreation() {
-        this.matchUnderCreation = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: undefined, winners: undefined, }
+        this.matchUnderCreation = this.DEFAULT_CREATE_MATCH;
     }
 
     @action addPlayerToForm() {
