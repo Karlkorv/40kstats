@@ -1,5 +1,5 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, addUserName, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, getUsername, usernameIsValid } from "../Firebase.ts";
+import { addMatchToFirestore, addUserName, auth, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, getUsername, usernameIsValid } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
@@ -28,9 +28,11 @@ export class LeaderBoardModel {
             this.totalMatches = total;
         })
 
-        getUsername().then((result) => {
-            runInAction(() => {
-                this.username = result;
+        auth.onAuthStateChanged(() => {
+            getUsername().then((result) => {
+                runInAction(() => {
+                    this.username = result;
+                })
             })
         })
     }

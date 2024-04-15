@@ -121,13 +121,14 @@ export function getUsername() {
         return Promise.resolve(null);
     }
 
-    const usernameRef = collection(db, "usernames");
+    const userRef = collection(db, "users");
 
-    return getDoc(doc(usernameRef, this.auth.currentUser.uid)).then((doc) => {
+    return getDoc(doc(userRef, auth.currentUser.uid)).then((doc) => {
         if (!doc.exists) {
             return null;
         }
-        return doc.data()!.username; // If the doc exists there will be a username
+        console.log("Got username from firebase:", doc.data())
+        return doc.data()!.username_display; // If the doc exists there will be a username
     })
 }
 
@@ -138,13 +139,15 @@ export function addUserName(username: string) {
         return Promise.reject("No user logged in");
     }
 
-    const usernameDoc = doc(collection(db, "usernames"), username);
+    const usernameDoc = doc(collection(db, "usernames"), username.toLowerCase());
     const userDoc = doc(collection(db, "users"), auth.currentUser.uid);
 
     const batch = writeBatch(db);
 
+    console.log("Adding username: ", username);
+
     batch.set(usernameDoc, { uid: auth.currentUser.uid });
-    batch.set(userDoc, { username: username });
+    batch.set(userDoc, { username_display: username, username: username.toLowerCase() });
 
     return batch.commit();
 }
@@ -152,7 +155,7 @@ export function addUserName(username: string) {
 export function usernameIsValid(username: string) {
     const usernameRef = collection(db, "usernames");
 
-    return getDoc(doc(usernameRef, username)).then((doc) => {
+    return getDoc(doc(usernameRef, username.toLowerCase())).then((doc) => {
         return !doc.exists;
     })
 }
