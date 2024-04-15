@@ -1,8 +1,8 @@
 import { firebaseConfig } from './firebaseConfig.ts';
 import { initializeApp } from 'firebase/app';
 import { Match } from './model/match.ts';
-import { getAuth } from 'firebase/auth';
-import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc } from 'firebase/firestore';
+import { getAuth, User } from 'firebase/auth';
+import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc, where, writeBatch } from 'firebase/firestore';
 import { LeaderBoardModel } from './model/LeaderboardModel.ts';
 import { runInAction } from 'mobx';
 // Initialize Firebase
@@ -106,12 +106,53 @@ export function addMatchToFirestore(match: Match) {
 /*  Maybe unnecessary to send whole model as a parameter
     Might be sufficient to only send the User instance
  */
-export function clearPersistence(model: LeaderBoardModel){
-    if(!model.user){
+export function clearPersistence(model: LeaderBoardModel) {
+    if (!model.user) {
         throw new Error("Tried to clear persistence without valid user.")
     } else {
         deleteDoc(doc(persistenceRef, model.user?.uid)).then(() => {
             console.log("Cleared persistence for user: ", model.user?.uid)
         })
     }
+}
+
+export function getUsername() {
+    if (!auth.currentUser) {
+        return Promise.resolve(null);
+    }
+
+    const usernameRef = collection(db, "usernames");
+
+    return getDoc(doc(usernameRef, this.auth.currentUser.uid)).then((doc) => {
+        if (!doc.exists) {
+            return null;
+        }
+        return doc.data()!.username; // If the doc exists there will be a username
+    })
+}
+
+export function addUserName(username: string) {
+    // From https://fireship.io/lessons/custom-usernames-firebase/
+
+    if (!auth.currentUser) {
+        return Promise.reject("No user logged in");
+    }
+
+    const usernameDoc = doc(collection(db, "usernames"), username);
+    const userDoc = doc(collection(db, "users"), auth.currentUser.uid);
+
+    const batch = writeBatch(db);
+
+    batch.set(usernameDoc, { uid: auth.currentUser.uid });
+    batch.set(userDoc, { username: username });
+
+    return batch.commit();
+}
+
+export function usernameIsValid(username: string) {
+    const usernameRef = collection(db, "usernames");
+
+    return getDoc(doc(usernameRef, username)).then((doc) => {
+        return !doc.exists;
+    })
 }
