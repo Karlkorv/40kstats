@@ -11,9 +11,14 @@ const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
 	model.setCurrentMatchById(matchId!)
 
 	function deleteMatch(matchID){
+		if(matchID != model.currentMatch?.matchID) { throw new Error("Trying to delete different match than the currently focused match.") }
+		if (model.user?.uid != model.currentMatch?.userID) {
+			alert("You can only delete matches created by you.")
+		} else {
 		model.deleteMatch(matchID);
 		window.location.hash = "#/";
 		console.log("Deleting match with ID: " + matchID);
+		}
 	}
 
 	function editMatch(match: Match){
