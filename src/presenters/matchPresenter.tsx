@@ -15,15 +15,15 @@ const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
 		if (model.user?.uid != model.currentMatch?.userID) {
 			alert("You can only delete matches created by you.")
 		} else {
-		model.deleteMatch(matchID);
-		window.location.hash = "#/";
-		console.log("Deleting match with ID: " + matchID);
+			model.deleteMatch(matchID);
+			window.location.hash = "#/";
+			console.log("Deleting match with ID: " + matchID);
 		}
 	}
 
 	function editMatch(match: Match){
-		window.location.hash = "#/matchCreator";
 		model.editMatch(matchToMatchCreatorInput(match));
+		window.location.hash = "#/matchCreator";
 	}
 
 
