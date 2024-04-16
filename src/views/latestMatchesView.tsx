@@ -1,5 +1,6 @@
 import React from "react"
 import { Match } from "../model/match.ts"
+import { toJS } from "mobx"
 
 export function LastestMatchesView({
     addDummyMatch,
@@ -42,7 +43,10 @@ export function LastestMatchesView({
             </tr>
         )
     }
-
+    console.log(toJS(matches));
+    //console.log(typeof(toJS(matches)));
+    console.log("'matches':" ,matches);
+    console.log("Type of 'matches':" ,typeof(matches));
     return (
         <div>
             <button disabled={!loggedIn} onClick={dummyMatchClickedACB}>Add dummy match</button>
@@ -72,7 +76,7 @@ export function LastestMatchesView({
                             </tr>
                         </thead>
                         <tbody>
-                            {matches.map(matchRenderCB)}
+                            {Array.isArray(toJS(matches)) && toJS(matches).map(matchRenderCB)}
                         </tbody>
                     </table>
                 </div>

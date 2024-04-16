@@ -120,6 +120,7 @@ export class LeaderBoardModel {
         match.setUserID(this.user?.uid);
         if(!match.matchID) { 
             this.matches = [match, ...this.matches]; 
+            this.totalMatches++;
         } else {
             let index = this.matches.findIndex(((matchInArray) => matchInArray.matchID === match.matchID))
             let tempVar = {...this.matches};
@@ -128,10 +129,9 @@ export class LeaderBoardModel {
         }
         addMatchToFirestore(match).then((id) => {
             match.setId(id);
-            this.totalMatches++;
-            this.matchUnderCreation = DEFAULT_CREATE_MATCH;
             clearPersistence(this);
         })
+        this.matchUnderCreation = DEFAULT_CREATE_MATCH;
     }
 
     @action deleteMatch(id) {

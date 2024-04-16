@@ -20,7 +20,7 @@ const MatchCreator = observer(
             if(winners === "") { alert("Please pick the winner") }
             if(!(players.some((player) => (player === "")) || factions.some((faction) => (faction === "") || winners === ""))) { 
                 model.addMatch(new Match(players, factions, winners, p_points, s_points, undefined, userID, notes, matchID));
-                window.location.hash = "#/";
+                window.location.hash = "";
                 console.log("Match created");
             }
         }
