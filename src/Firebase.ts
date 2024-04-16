@@ -2,7 +2,7 @@ import { firebaseConfig } from './firebaseConfig.ts';
 import { initializeApp } from 'firebase/app';
 import { Match } from './model/match.ts';
 import { getAuth } from 'firebase/auth';
-import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc } from 'firebase/firestore';
+import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc, updateDoc } from 'firebase/firestore';
 import { LeaderBoardModel } from './model/LeaderboardModel.ts';
 import { runInAction } from 'mobx';
 import { DEFAULT_CREATE_MATCH } from './model/FormModel.ts';
@@ -81,10 +81,7 @@ export function getTotalMatchesFromFirestore() {
 }
 
 export function addMatchToFirestore(match: Match) {
-    if (match.matchID) {
-        throw new Error("Match is already added to firestore");
-    }
-
+    
     const matchToAdd = {
         date: match.date,
         players: match.players,
@@ -93,15 +90,25 @@ export function addMatchToFirestore(match: Match) {
         points_primary: match.points_primary,
         points_secondary: match.points_secondary,
         points_total: match.points_total,
-        userID: match.userID
+        userID: match.userID,
+        matchID: match.matchID
+    }
+    
+    if (match.matchID !== undefined) {
+        console.log("Updating existing match!")
+        return updateDoc(doc(db, "matches", match.matchID), matchToAdd).then(() => {
+            return match.matchID;
+        });
+
+    } else {
+        console.log("Trying to add match: ", matchToAdd);
+    
+        return addDoc(matchRef, matchToAdd).then((doc) => {
+            console.log("Match added to Firestore, id: ", doc.id);
+            return doc.id;
+        });
     }
 
-    console.log("Trying to add match: ", matchToAdd);
-
-    return addDoc(matchRef, matchToAdd).then((doc) => {
-        console.log("Match added to Firestore, id: ", doc.id);
-        return doc.id;
-    });
 }
 
 export function deleteMatchFromFirestore(matchID){

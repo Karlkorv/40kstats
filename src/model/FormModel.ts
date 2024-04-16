@@ -7,7 +7,7 @@ export class MatchCreatorInput {
         numOfPlayers: number, 
         focusedValue: string,
         winners: string,
-        notes: string | "",
+        notes?: string,
         matchID?: string,
         userID?: string,
     ) {
@@ -25,7 +25,7 @@ export class MatchCreatorInput {
     numOfPlayers: number
     focusedValue: string
     winners: string
-    notes: string
+    notes: string | undefined
     matchID: string | undefined
     userID: string | undefined
 }

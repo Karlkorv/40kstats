@@ -35,8 +35,8 @@ export class Match {
     }
 
     public setId(id: string) {
-        if (this.matchID) {
-            throw new Error("Tried to set id on a match that already has an id");
+        if (this.matchID && this.matchID != id) {
+            throw new Error("Tried to set different id on a match that already has an id");
         }
         this.matchID = id;
     }

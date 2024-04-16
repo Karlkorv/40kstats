@@ -118,7 +118,14 @@ export class LeaderBoardModel {
             this.matches = []
         }
         match.setUserID(this.user?.uid);
-        this.matches = [match, ...this.matches]
+        if(!match.matchID) { 
+            this.matches = [match, ...this.matches]; 
+        } else {
+            let index = this.matches.findIndex(((matchInArray) => matchInArray.matchID === match.matchID))
+            let tempVar = {...this.matches};
+            tempVar[index] = match;
+            this.matches = tempVar;
+        }
         addMatchToFirestore(match).then((id) => {
             match.setId(id);
             this.totalMatches++;
