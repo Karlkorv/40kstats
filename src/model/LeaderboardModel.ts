@@ -1,5 +1,5 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore } from "../Firebase.ts";
+import { addMatchToFirestore, addUserName, auth, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, getUsername, userExists } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
@@ -15,6 +15,8 @@ export class LeaderBoardModel {
     @observable gettingCurrentMatch: boolean = false
     @observable user: User | null = null;
     @observable totalMatches: number = 0
+    @observable username: string | null = null;
+    @observable isValidUserName: boolean | null = null;
 
     constructor() {
 
@@ -24,6 +26,34 @@ export class LeaderBoardModel {
         this.getLatestMatchesFromFirestore();
         getTotalMatchesFromFirestore().then((total) => {
             this.totalMatches = total;
+        })
+
+        auth.onAuthStateChanged(() => {
+            getUsername().then((result) => {
+                runInAction(() => {
+                    this.username = result;
+                })
+            })
+        })
+    }
+
+    @action createUserName(username: string) {
+        if (this.username) {
+            return;
+        }
+
+        addUserName(username).then(() => {
+            runInAction(() => {
+                this.username = username;
+            })
+        })
+    }
+
+    @action checkUsername(username: string) {
+        userExists(username).then((result) => {
+            runInAction(() => {
+                this.isValidUserName = result!;
+            })
         })
     }
 
