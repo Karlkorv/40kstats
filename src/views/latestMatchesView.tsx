@@ -45,8 +45,8 @@ export function LastestMatchesView({
     }
     console.log(toJS(matches));
     //console.log(typeof(toJS(matches)));
-    console.log("'matches':" ,matches);
-    console.log("Type of 'matches':" ,typeof(matches));
+    console.log("'matches':", matches);
+    console.log("Type of 'matches':", typeof (matches));
     return (
         <div>
             <button disabled={!loggedIn} onClick={dummyMatchClickedACB}>Add dummy match</button>
@@ -76,7 +76,7 @@ export function LastestMatchesView({
                             </tr>
                         </thead>
                         <tbody>
-                            {Array.isArray(toJS(matches)) && toJS(matches).map(matchRenderCB)}
+                            {matches.map(matchRenderCB)}
                         </tbody>
                     </table>
                 </div>

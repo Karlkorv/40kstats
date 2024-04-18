@@ -3,7 +3,7 @@ import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, 
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
-import { MatchCreatorInput, DEFAULT_CREATE_MATCH} from "./FormModel.ts";
+import { MatchCreatorInput, DEFAULT_CREATE_MATCH } from "./FormModel.ts";
 
 export class LeaderBoardModel {
     ready: boolean = false;
@@ -18,7 +18,7 @@ export class LeaderBoardModel {
     totalMatches: number = 0
 
     constructor() {
-        
+
         this.matches = [];
         makeObservable(this);
 
@@ -118,30 +118,30 @@ export class LeaderBoardModel {
             this.matches = []
         }
         match.setUserID(this.user?.uid);
-        if(!match.matchID) { 
-            this.matches = [match, ...this.matches]; 
+        if (!match.matchID) {
+            this.matches = [match, ...this.matches];
             this.totalMatches++;
         } else {
             let index = this.matches.findIndex(((matchInArray) => matchInArray.matchID === match.matchID))
-            let tempVar = {...this.matches};
+            let tempVar = [...this.matches];
             tempVar[index] = match;
             this.matches = tempVar;
         }
         addMatchToFirestore(match).then((id) => {
-            match.setId(id);
+            match.setId(id!);
             clearPersistence(this);
         })
         this.matchUnderCreation = DEFAULT_CREATE_MATCH;
     }
 
     @action deleteMatch(id) {
-        let index = this.matches.findIndex(({matchID}) => matchID === id);
-        let tempVar = this.matches.slice(0, index).concat(this.matches.slice(index+1));
+        let index = this.matches.findIndex(({ matchID }) => matchID === id);
+        let tempVar = this.matches.slice(0, index).concat(this.matches.slice(index + 1));
         deleteMatchFromFirestore(id);
         this.matches = tempVar;
     }
 
-    @action editMatch(matchFormValues: MatchCreatorInput){
+    @action editMatch(matchFormValues: MatchCreatorInput) {
         this.matchUnderCreation = matchFormValues;
     }
 
@@ -232,7 +232,7 @@ export class LeaderBoardModel {
         this.matchUnderCreation = tempVar;
     }
 
-    @action handleNotesChange(e){
+    @action handleNotesChange(e) {
         let tempVar = { ...this.matchUnderCreation };
         tempVar.notes = e.target.value;
         this.matchUnderCreation = tempVar;
