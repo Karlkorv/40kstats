@@ -2,13 +2,16 @@ import { firebaseConfig } from './firebaseConfig.ts';
 import { initializeApp } from 'firebase/app';
 import { Match } from './model/match.ts';
 import { getAuth } from 'firebase/auth';
-import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc, updateDoc } from 'firebase/firestore';
+import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc, updateDoc, initializeFirestore } from 'firebase/firestore';
 import { LeaderBoardModel } from './model/LeaderboardModel.ts';
 import { runInAction } from 'mobx';
 import { DEFAULT_CREATE_MATCH } from './model/FormModel.ts';
 // Initialize Firebase
 
 const app = initializeApp(firebaseConfig);
+initializeFirestore(app, {
+    ignoreUndefinedProperties: true,
+});
 const db = getFirestore(app);
 const matchRef = collection(db, "matches");
 const persistenceRef = collection(db, "persistence");

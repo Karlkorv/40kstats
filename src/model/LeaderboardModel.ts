@@ -4,6 +4,7 @@ import { action, makeAutoObservable, makeObservable, observable, runInAction } f
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
 import { MatchCreatorInput, DEFAULT_CREATE_MATCH } from "./FormModel.ts";
+import { MatchCreatorInput } from './FormModel';
 
 export class LeaderBoardModel {
     ready: boolean = false;
@@ -176,7 +177,7 @@ export class LeaderBoardModel {
     }
 
     @action handlePlayerInputFieldChange(e, index) {
-        let tempVar = { ...this.matchUnderCreation };
+        let tempVar : MatchCreatorInput = { ...this.matchUnderCreation };
         let inputVal = e.target.value;
         tempVar.formInputValues[index].player_value = inputVal;
         this.matchUnderCreation = tempVar;
