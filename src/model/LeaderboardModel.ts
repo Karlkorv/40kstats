@@ -243,10 +243,6 @@ export class LeaderBoardModel {
     }
 
     @action setCurrentMatchById(matchID: string) {
-        if (this.currentMatch && this.currentMatch.matchID === matchID) {
-            return;
-        }
-
         const match = this.matches.find((match) => match.matchID === matchID)
         if (match) {
             this.currentMatch = match
