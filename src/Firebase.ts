@@ -20,7 +20,7 @@ export function getLatestMatches(amount: number) {
 }
 
 export function modelToPersistence(model: LeaderBoardModel) {
-    return model.matchUnderCreation;
+    return { ...model.matchUnderCreation };
 }
 
 export function persistenceToModel(persistence: any, model: LeaderBoardModel) {
@@ -81,7 +81,7 @@ export function getTotalMatchesFromFirestore() {
 }
 
 export function addMatchToFirestore(match: Match) {
-    
+
     const matchToAdd = {
         date: match.date,
         players: match.players,
@@ -93,7 +93,7 @@ export function addMatchToFirestore(match: Match) {
         userID: match.userID,
         matchID: match.matchID
     }
-    
+
     if (match.matchID !== undefined) {
         console.log("Updating existing match!")
         return updateDoc(doc(db, "matches", match.matchID), matchToAdd).then(() => {
@@ -102,7 +102,7 @@ export function addMatchToFirestore(match: Match) {
 
     } else {
         console.log("Trying to add match: ", matchToAdd);
-    
+
         return addDoc(matchRef, matchToAdd).then((doc) => {
             console.log("Match added to Firestore, id: ", doc.id);
             return doc.id;
@@ -111,15 +111,15 @@ export function addMatchToFirestore(match: Match) {
 
 }
 
-export function deleteMatchFromFirestore(matchID){
+export function deleteMatchFromFirestore(matchID) {
     getDoc(doc(db, "matches", matchID)).then((doc) => deleteDoc(doc.ref));
 }
 
 /*  Maybe unnecessary to send whole model as a parameter
     Might be sufficient to only send the User instance
  */
-export function clearPersistence(model: LeaderBoardModel){
-    if(!model.user){
+export function clearPersistence(model: LeaderBoardModel) {
+    if (!model.user) {
         throw new Error("Tried to clear persistence without valid user.")
     } else {
         deleteDoc(doc(persistenceRef, model.user?.uid)).then(() => {
