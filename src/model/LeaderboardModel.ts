@@ -4,7 +4,6 @@ import { action, makeAutoObservable, makeObservable, observable, runInAction } f
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
 import { MatchCreatorInput, DEFAULT_CREATE_MATCH } from "./FormModel.ts";
-import { MatchCreatorInput } from './FormModel';
 
 export class LeaderBoardModel {
     ready: boolean = false;
@@ -156,18 +155,20 @@ export class LeaderBoardModel {
     }
 
     @action addPlayerToForm() {
-        this.matchUnderCreation.numOfPlayers++;
-        this.matchUnderCreation.formInputValues = [...this.matchUnderCreation.formInputValues,
-        {
-            label: "mPlayer" + this.matchUnderCreation.numOfPlayers,
-            num: this.matchUnderCreation.numOfPlayers.toString(),
-            type: "text",
-            player_value: "",
-            faction_value: "",
-            p_points: 0,
-            s_points: 0,
-        }
-        ]
+        let tempVar : MatchCreatorInput = this.matchUnderCreation;
+        tempVar.numOfPlayers++;
+        tempVar.formInputValues = [...this.matchUnderCreation.formInputValues,
+            {
+                label: "mPlayer" + this.matchUnderCreation.numOfPlayers,
+                num: this.matchUnderCreation.numOfPlayers.toString(),
+                type: "text",
+                player_value: "",
+                faction_value: "",
+                p_points: 0,
+                s_points: 0,
+            }
+        ];
+        this.matchUnderCreation = tempVar;
     }
 
     @action removePlayerFromForm() {
