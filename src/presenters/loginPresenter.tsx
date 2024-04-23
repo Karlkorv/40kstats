@@ -10,6 +10,7 @@ export const Login = observer(({ model }: { model: LeaderBoardModel }) => {
 
     function login() {
         signInWithPopup(auth, provider).then((result) => {
+            model.setUser(result.user);
             console.log("Logged in as: ", result.user.displayName);
         })
     }

@@ -143,7 +143,13 @@ export function getUsername() {
             return null;
         }
         console.log("Got username from firebase:", doc.data())
-        return doc.data()!.username_display; // If the doc exists there will be a username
+        try {
+            return doc.data()!.username_display;
+        } catch (error) {
+            console.log("Error: No username: ", error);
+            return "";
+        }
+        //return doc.data()!.username_display; // If the doc exists there will be a username
     })
 }
 

@@ -1,6 +1,7 @@
 import React from "react"
 import { IconButton, Button, AppBar, Toolbar } from "@mui/material";
 import { Home } from "@mui/icons-material";
+import { trace } from "mobx";
 
 export function NavbarView({model, handleHomeButtonClick, handleCreateMatchButtonClick, handleLoginButtonClick, handleLogoutButtonClick}) {
     function onHomeButtonClickACB(e){
@@ -18,7 +19,7 @@ export function NavbarView({model, handleHomeButtonClick, handleCreateMatchButto
     function onLogoutButtonClick(e){
         handleLogoutButtonClick();
     }
-
+    
     return (
         <div className="navbar">
             <AppBar className="MuiAppBar" position="sticky">

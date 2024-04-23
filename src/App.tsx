@@ -31,12 +31,12 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
     }
     return (
         <div>
+            <Login model={model} />
             <div>
                 <Navbar model={model}/>
             </div>
-            <Login model={model} />
             <RouterProvider router={makeRouter(model)} />
             <LatestMatches model={model} />
         </div>
     )
-})
+});

@@ -20,8 +20,8 @@ export class LeaderBoardModel {
 
     constructor() {
 
-        this.matches = [];
         makeObservable(this);
+        this.matches = [];
 
         this.getLatestMatchesFromFirestore();
         getTotalMatchesFromFirestore().then((total) => {
@@ -29,10 +29,15 @@ export class LeaderBoardModel {
         })
 
         auth.onAuthStateChanged(() => {
+            runInAction(() => {
+                this.setUser(auth.currentUser);
+            });
             getUsername().then((result) => {
                 runInAction(() => {
                     this.username = result;
                 })
+            }, (error) => {
+                console.log("Error when resolving promise: ", error)
             })
         })
     }
