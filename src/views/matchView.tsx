@@ -2,12 +2,12 @@ import React from "react";
 import { Match } from "../model/match.ts";
 
 export function MatchView({ match, deleteMatch, editMatch }: { match: Match, deleteMatch: any, editMatch: any }) {
-  function deleteMatchACB(){
+  function deleteMatchACB() {
     console.log("Deleting match with ID: " + match.matchID)
     deleteMatch(match.matchID);
   }
-  
-  function editMatchACB(){
+
+  function editMatchACB() {
     editMatch(match);
   }
 

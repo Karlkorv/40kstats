@@ -8,10 +8,12 @@ import { MatchCreatorInput, matchToMatchCreatorInput } from "../model/FormModel.
 
 const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
 	const { matchId } = useParams()
-	model.setCurrentMatchById(matchId!)
+	if (matchId != "matchNotFound") {
+		model.setCurrentMatchById(matchId!)
+	}
 
-	function deleteMatch(matchID){
-		if(matchID != model.currentMatch?.matchID) { throw new Error("Trying to delete different match than the currently focused match.") }
+	function deleteMatch(matchID) {
+		if (matchID != model.currentMatch?.matchID) { throw new Error("Trying to delete different match than the currently focused match.") }
 		if (model.user?.uid != model.currentMatch?.userID) {
 			alert("You can only delete matches created by you.")
 		} else {
@@ -21,20 +23,24 @@ const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
 		}
 	}
 
-	function editMatch(match: Match){
+	function editMatch(match: Match) {
 		model.editMatch(matchToMatchCreatorInput(match));
 		window.location.hash = "#/matchCreator";
 	}
 
+	console.log("Rendering match presenter, current match: " + model.currentMatch)
+
 
 	if (model.gettingCurrentMatch) {
+		console.log("Rendering loading")
 		return (
 			<div>
 				Loading...
 			</div>
 		)
 	}
-	if (model.currentMatch === undefined) {
+	if (!model.currentMatch) {
+		console.log("Match not found, rendering error")
 		return (
 			<div>
 				Match not found
@@ -43,7 +49,7 @@ const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
 	}
 
 	return (
-		<MatchView match={model.currentMatch} deleteMatch={deleteMatch} editMatch={editMatch}/>
+		<MatchView match={model.currentMatch} deleteMatch={deleteMatch} editMatch={editMatch} />
 	)
 });
 
