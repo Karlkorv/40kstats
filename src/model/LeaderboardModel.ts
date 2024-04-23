@@ -1,5 +1,5 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, deleteMatchFromFirestore } from "../Firebase.ts";
+import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, deleteMatchFromFirestore, auth, getUsername } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
@@ -184,18 +184,18 @@ export class LeaderBoardModel {
     }
 
     @action addPlayerToForm() {
-        let tempVar : MatchCreatorInput = this.matchUnderCreation;
+        let tempVar: MatchCreatorInput = this.matchUnderCreation;
         tempVar.numOfPlayers++;
         tempVar.formInputValues = [...this.matchUnderCreation.formInputValues,
-            {
-                label: "mPlayer" + this.matchUnderCreation.numOfPlayers,
-                num: this.matchUnderCreation.numOfPlayers.toString(),
-                type: "text",
-                player_value: "",
-                faction_value: "",
-                p_points: 0,
-                s_points: 0,
-            }
+        {
+            label: "mPlayer" + this.matchUnderCreation.numOfPlayers,
+            num: this.matchUnderCreation.numOfPlayers.toString(),
+            type: "text",
+            player_value: "",
+            faction_value: "",
+            p_points: 0,
+            s_points: 0,
+        }
         ];
         this.matchUnderCreation = tempVar;
     }
@@ -207,7 +207,7 @@ export class LeaderBoardModel {
     }
 
     @action handlePlayerInputFieldChange(e, index) {
-        let tempVar : MatchCreatorInput = { ...this.matchUnderCreation };
+        let tempVar: MatchCreatorInput = { ...this.matchUnderCreation };
         let inputVal = e.target.value;
         tempVar.formInputValues[index].player_value = inputVal;
         this.matchUnderCreation = tempVar;
