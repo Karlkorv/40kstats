@@ -2,7 +2,7 @@ import React from "react"
 import { Match } from "../model/match.ts";
 import { FACTIONS } from "../model/factions.ts"
 
-export function MatchCreatorView({ formInputValues, numOfPlayers, focusedValue, winners, primary_points, secondary_points, notes, createNewMatch, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange, handleWinnerChange, handleWinnerFocus, handleWinnerBlur, loggedIn, handleNotesChange, user }) {
+export function MatchCreatorView({ formInputValues, winners, notes, createNewMatch, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange, handleWinnerChange, handleWinnerFocus, handleWinnerBlur, handleNotesChange, user }) {
 
     function onClickCreateMatchACB(evt) {
         createNewMatch();
@@ -58,7 +58,7 @@ export function MatchCreatorView({ formInputValues, numOfPlayers, focusedValue, 
         handleWinnerBlur(e);
     }
 
-    function onNotesChangeACB(e){
+    function onNotesChangeACB(e) {
         handleNotesChange(e);
     }
 
