@@ -14,8 +14,9 @@ export class LeaderBoardModel {
     @observable currentMatch: Match | undefined = undefined
     @observable gettingCurrentMatch: boolean = false
     @observable user: User | null = null;
-
-    totalMatches: number = 0
+    @observable totalMatches: number = 0
+    @observable username: string | null = null;
+    @observable isValidUserName: boolean | null = null;
 
     constructor() {
 
@@ -25,6 +26,34 @@ export class LeaderBoardModel {
         this.getLatestMatchesFromFirestore();
         getTotalMatchesFromFirestore().then((total) => {
             this.totalMatches = total;
+        })
+
+        auth.onAuthStateChanged(() => {
+            getUsername().then((result) => {
+                runInAction(() => {
+                    this.username = result;
+                })
+            })
+        })
+    }
+
+    @action createUserName(username: string) {
+        if (this.username) {
+            return;
+        }
+
+        addUserName(username).then(() => {
+            runInAction(() => {
+                this.username = username;
+            })
+        })
+    }
+
+    @action checkUsername(username: string) {
+        userExists(username).then((result) => {
+            runInAction(() => {
+                this.isValidUserName = result!;
+            })
         })
     }
 

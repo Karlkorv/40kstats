@@ -130,3 +130,47 @@ export function clearPersistence(model: LeaderBoardModel) {
         })
     }
 }
+
+export function getUsername() {
+    if (!auth.currentUser) {
+        return Promise.resolve(null);
+    }
+
+    const userRef = collection(db, "users");
+
+    return getDoc(doc(userRef, auth.currentUser.uid)).then((doc) => {
+        if (!doc.exists) {
+            return null;
+        }
+        console.log("Got username from firebase:", doc.data())
+        return doc.data()!.username_display; // If the doc exists there will be a username
+    })
+}
+
+export function addUserName(username: string) {
+    // From https://fireship.io/lessons/custom-usernames-firebase/
+
+    if (!auth.currentUser) {
+        return Promise.reject("No user logged in");
+    }
+
+    const usernameDoc = doc(collection(db, "usernames"), username.toLowerCase());
+    const userDoc = doc(collection(db, "users"), auth.currentUser.uid);
+
+    const batch = writeBatch(db);
+
+    console.log("Adding username: ", username);
+
+    batch.set(usernameDoc, { uid: auth.currentUser.uid });
+    batch.set(userDoc, { username_display: username, username: username.toLowerCase() });
+
+    return batch.commit();
+}
+
+export function userExists(username: string) {
+    const usernameRef = collection(db, "usernames");
+
+    return getDoc(doc(usernameRef, username.toLowerCase())).then((doc) => {
+        return doc.exists;
+    })
+}

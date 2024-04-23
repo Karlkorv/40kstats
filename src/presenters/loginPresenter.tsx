@@ -15,12 +15,21 @@ export const Login = observer(({ model }: { model: LeaderBoardModel }) => {
     }
 
     function logOut() {
-        signOut(auth).then(() => {
-            console.log("Logged out");
-        });
+        signOut(auth);
     }
 
+    function createUserName(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        const target = event.target as HTMLFormElement;
+        model.createUserName(target.username.value);
+    }
+
+    function checkUserName(event: React.ChangeEvent<HTMLInputElement>) {
+        model.checkUsername(event.target.value)
+    }
+
+
     return (
-        <LoginView login={login} logout={logOut} user={model.user} />
+        <LoginView login={login} logout={logOut} user={model.user} username={model.username} createUserName={createUserName} checkUserName={checkUserName} validUsername={model.isValidUserName} />
     )
 })
