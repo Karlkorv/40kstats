@@ -171,6 +171,6 @@ export function userExists(username: string) {
     const usernameRef = collection(db, "usernames");
 
     return getDoc(doc(usernameRef, username.toLowerCase())).then((doc) => {
-        return doc.exists;
+        return doc.exists();
     })
 }
