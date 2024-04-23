@@ -4,22 +4,22 @@ import React from "react";
 import { MatchCreatorView } from "../views/matchCreatorView";
 import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
 
-const MatchCreator = observer(({model} : {model : LeaderBoardModel}) => {
+const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
     function createNewMatch() {
         let players = model.matchUnderCreation.formInputValues.map(({ player_value }) => (player_value));
         console.log(players)
         let factions = model.matchUnderCreation.formInputValues.map(({ faction_value }) => (faction_value));
         let winners = model.matchUnderCreation.winners;
-        let p_points = model.matchUnderCreation.formInputValues.map(({p_points}) => (p_points));
-        let s_points = model.matchUnderCreation.formInputValues.map(({s_points}) => (s_points));
+        let p_points = model.matchUnderCreation.formInputValues.map(({ p_points }) => (p_points));
+        let s_points = model.matchUnderCreation.formInputValues.map(({ s_points }) => (s_points));
         let userID = model.matchUnderCreation.userID;
         let notes = model.matchUnderCreation.notes;
         let matchID = model.matchUnderCreation.matchID;
-        if(players.some((player) => (player === ""))) { alert("Please fill in all Players") }
-        if(factions.some((faction) => (faction === ""))) { alert("Please fill in all Factions") }
-        if(winners === "") { alert("Please pick the winner") }
-        if(!(players.some((player) => (player === "")) || factions.some((faction) => (faction === "") || winners === ""))) { 
-            model.addMatch(new Match(players, factions, winners, p_points, s_points, undefined, userID, notes, matchID));
+        if (players.some((player) => (player === ""))) { alert("Please fill in all Players") }
+        if (factions.some((faction) => (faction === ""))) { alert("Please fill in all Factions") }
+        if (winners === "") { alert("Please pick the winner") }
+        if (!(players.some((player) => (player === "")) || factions.some((faction) => (faction === "") || winners === ""))) {
+            model.addMatch(new Match(players, factions, [winners], p_points, s_points, undefined, userID, notes, matchID));
             window.location.hash = "";
             console.log("Match created");
         }
@@ -93,17 +93,13 @@ const MatchCreator = observer(({model} : {model : LeaderBoardModel}) => {
     function handleNotesChange(e) {
         model.handleNotesChange(e);
     }
-    
+
 
     return (
         <div>
             {<MatchCreatorView
                 formInputValues={model.matchUnderCreation.formInputValues}
-                numOfPlayers={model.matchUnderCreation.numOfPlayers}
-                focusedValue={model.matchUnderCreation.focusedValue}
                 winners={model.matchUnderCreation.winners}
-                primary_points={model.matchUnderCreation.primary_points}
-                secondary_points={model.matchUnderCreation.secondary_points}
                 notes={model.matchUnderCreation.notes}
                 createNewMatch={createNewMatch}
                 handleCancelClick={handleCancelClick}
@@ -118,7 +114,6 @@ const MatchCreator = observer(({model} : {model : LeaderBoardModel}) => {
                 handleWinnerChange={handleWinnerChange}
                 handleWinnerFocus={handleWinnerFocus}
                 handleWinnerBlur={handleWinnerBlur}
-                loggedIn={model.loggedIn}               //Maybe delete this?
                 handleNotesChange={handleNotesChange}
                 user={model.user}>
             </MatchCreatorView>}

@@ -1,5 +1,5 @@
 export class Match {
-    constructor(players: string[], factions: string[], winners: string[], p_points: number[], s_points: number[], date: Date = new Date(), userID: string, notes?: string, matchID?: string) {
+    constructor(players: string[], factions: string[], winners: string[], p_points: number[], s_points: number[], date: Date = new Date(), userID?: string, notes?: string, matchID?: string) {
         if (players.length != factions.length || players.length != p_points.length || players.length != s_points.length) {
             throw new Error('The length of the arrays must be the same');
         }
@@ -41,8 +41,8 @@ export class Match {
         this.matchID = id;
     }
 
-    public setUserID(id){
-        if(!id) { return alert("Error: Invalid User ID")}
+    public setUserID(id) {
+        if (!id) { return alert("Error: Invalid User ID") }
         this.userID = id;
         console.log(this);
     }

@@ -18,7 +18,7 @@ const persistenceRef = collection(db, "persistence");
 export const auth = getAuth(app);
 
 export function getLatestMatches(amount: number) {
-    const q = query(matchRef, orderBy("date", "desc"), limit(amount));
+    const q = query(matchRef, orderBy("date", "asc"), limit(amount));
     return getDocs(q);
 }
 
