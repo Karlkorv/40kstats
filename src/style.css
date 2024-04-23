@@ -66,13 +66,20 @@
 }
 
 .navbar {
-    padding: 5px;
+    padding-bottom: 10px;
     border-color: black;
     border-radius: 5px;
-    background-color: aqua;
     display: flex;
 }
 
 .navbar > div {
+    padding-inline: 5px;
+}
+
+.MuiAppBar {
+    border-radius: 5px;
+}
+
+.MuiToolbar > div {
     padding-inline: 5px;
 }

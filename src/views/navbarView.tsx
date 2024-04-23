@@ -21,8 +21,8 @@ export function NavbarView({model, handleHomeButtonClick, handleCreateMatchButto
 
     return (
         <div className="navbar">
-            <AppBar>
-                <Toolbar>
+            <AppBar className="MuiAppBar" position="sticky">
+                <Toolbar className="MuiToolbar">
                     <div className="home-button">
                         <IconButton onClick={(e) => onHomeButtonClickACB(e)}>
                             <Home/>
