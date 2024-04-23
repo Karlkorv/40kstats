@@ -1,13 +1,17 @@
 import { firebaseConfig } from './firebaseConfig.ts';
 import { initializeApp } from 'firebase/app';
 import { Match } from './model/match.ts';
-import { getAuth, User } from 'firebase/auth';
-import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc, where, writeBatch } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc, updateDoc, initializeFirestore } from 'firebase/firestore';
 import { LeaderBoardModel } from './model/LeaderboardModel.ts';
 import { runInAction } from 'mobx';
+import { DEFAULT_CREATE_MATCH } from './model/FormModel.ts';
 // Initialize Firebase
 
 const app = initializeApp(firebaseConfig);
+initializeFirestore(app, {
+    ignoreUndefinedProperties: true,
+});
 const db = getFirestore(app);
 const matchRef = collection(db, "matches");
 const persistenceRef = collection(db, "persistence");
@@ -19,14 +23,14 @@ export function getLatestMatches(amount: number) {
 }
 
 export function modelToPersistence(model: LeaderBoardModel) {
-    return model.matchUnderCreation;
+    return { ...model.matchUnderCreation };
 }
 
 export function persistenceToModel(persistence: any, model: LeaderBoardModel) {
     if (!persistence) {
-        let match = model.DEFAULT_CREATE_MATCH;
+        let match = DEFAULT_CREATE_MATCH;
         match.userID = model.user?.uid ?? '';
-        model.setMatchUnderCreation(model.DEFAULT_CREATE_MATCH);
+        model.setMatchUnderCreation(DEFAULT_CREATE_MATCH);
         return;
     }
 
@@ -80,9 +84,6 @@ export function getTotalMatchesFromFirestore() {
 }
 
 export function addMatchToFirestore(match: Match) {
-    if (match.matchID) {
-        throw new Error("Match is already added to firestore");
-    }
 
     const matchToAdd = {
         date: match.date,
@@ -92,15 +93,29 @@ export function addMatchToFirestore(match: Match) {
         points_primary: match.points_primary,
         points_secondary: match.points_secondary,
         points_total: match.points_total,
-        userID: match.userID
+        userID: match.userID,
+        matchID: match.matchID
     }
 
-    console.log("Trying to add match: ", matchToAdd);
+    if (match.matchID !== undefined) {
+        console.log("Updating existing match!")
+        return updateDoc(doc(db, "matches", match.matchID), matchToAdd).then(() => {
+            return match.matchID;
+        });
 
-    return addDoc(matchRef, matchToAdd).then((doc) => {
-        console.log("Match added to Firestore, id: ", doc.id);
-        return doc.id;
-    });
+    } else {
+        console.log("Trying to add match: ", matchToAdd);
+
+        return addDoc(matchRef, matchToAdd).then((doc) => {
+            console.log("Match added to Firestore, id: ", doc.id);
+            return doc.id;
+        });
+    }
+
+}
+
+export function deleteMatchFromFirestore(matchID) {
+    getDoc(doc(db, "matches", matchID)).then((doc) => deleteDoc(doc.ref));
 }
 
 /*  Maybe unnecessary to send whole model as a parameter

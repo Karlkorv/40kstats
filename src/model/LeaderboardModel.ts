@@ -1,16 +1,16 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, addUserName, auth, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, getUsername, userExists } from "../Firebase.ts";
+import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, deleteMatchFromFirestore } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
+import { MatchCreatorInput, DEFAULT_CREATE_MATCH } from "./FormModel.ts";
 
 export class LeaderBoardModel {
-    readonly DEFAULT_CREATE_MATCH = { formInputValues: [{ label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }], numOfPlayers: 2, focusedValue: "", winners: "", userID: "" }
     ready: boolean = false;
     @observable loading = false
     @observable error = undefined
     @observable matches: Match[] = []
-    @observable matchUnderCreation: any = this.DEFAULT_CREATE_MATCH;
+    @observable matchUnderCreation: MatchCreatorInput = DEFAULT_CREATE_MATCH;
     @observable currentMatch: Match | undefined = undefined
     @observable gettingCurrentMatch: boolean = false
     @observable user: User | null = null;
@@ -74,6 +74,8 @@ export class LeaderBoardModel {
                             data.points_primary,
                             data.points_secondary,
                             data.date.toDate(),
+                            data.userID,
+                            data.notes,
                             doc.id
                         )
                     );
@@ -99,7 +101,7 @@ export class LeaderBoardModel {
 
     @action userLoggedOut() {
         this.user = null;
-        this.matchUnderCreation = this.DEFAULT_CREATE_MATCH;
+        this.matchUnderCreation = DEFAULT_CREATE_MATCH;
     }
 
     @action setMatchUnderCreation(match: any) {
@@ -122,6 +124,8 @@ export class LeaderBoardModel {
                             data.points_primary,
                             data.points_secondary,
                             data.date.toDate(),
+                            data.userID,
+                            data.notes,
                             doc.id
                         )
                     );
@@ -143,36 +147,57 @@ export class LeaderBoardModel {
             this.matches = []
         }
         match.setUserID(this.user?.uid);
-        this.matches = [match, ...this.matches]
-        this.totalMatches++;
+        if (!match.matchID) {
+            this.matches = [match, ...this.matches];
+            this.totalMatches++;
+        } else {
+            let index = this.matches.findIndex(((matchInArray) => matchInArray.matchID === match.matchID))
+            let tempVar = [...this.matches];
+            tempVar[index] = match;
+            this.matches = tempVar;
+        }
         addMatchToFirestore(match).then((id) => {
-            match.setId(id);
+            match.setId(id!);
             clearPersistence(this);
         })
+        this.matchUnderCreation = DEFAULT_CREATE_MATCH;
+    }
+
+    @action deleteMatch(id) {
+        let index = this.matches.findIndex(({ matchID }) => matchID === id);
+        let tempVar = this.matches.slice(0, index).concat(this.matches.slice(index + 1));
+        deleteMatchFromFirestore(id);
+        this.matches = tempVar;
+    }
+
+    @action editMatch(matchFormValues: MatchCreatorInput) {
+        this.matchUnderCreation = matchFormValues;
     }
 
     @action startMatchCreation() {
-        this.matchUnderCreation = this.DEFAULT_CREATE_MATCH;
+        this.matchUnderCreation = DEFAULT_CREATE_MATCH;
         this.matchUnderCreation.userID = this.user?.uid;
     }
 
     @action cancelMatchCreation() {
-        this.matchUnderCreation = this.DEFAULT_CREATE_MATCH;
+        this.matchUnderCreation = DEFAULT_CREATE_MATCH;
     }
 
     @action addPlayerToForm() {
-        this.matchUnderCreation.numOfPlayers++;
-        this.matchUnderCreation.formInputValues = [...this.matchUnderCreation.formInputValues,
-        {
-            label: "mPlayer" + this.matchUnderCreation.numOfPlayers,
-            num: this.matchUnderCreation.numOfPlayers.toString(),
-            type: "text",
-            player_value: "",
-            faction_value: "",
-            p_points: 0,
-            s_points: 0,
-        }
-        ]
+        let tempVar : MatchCreatorInput = this.matchUnderCreation;
+        tempVar.numOfPlayers++;
+        tempVar.formInputValues = [...this.matchUnderCreation.formInputValues,
+            {
+                label: "mPlayer" + this.matchUnderCreation.numOfPlayers,
+                num: this.matchUnderCreation.numOfPlayers.toString(),
+                type: "text",
+                player_value: "",
+                faction_value: "",
+                p_points: 0,
+                s_points: 0,
+            }
+        ];
+        this.matchUnderCreation = tempVar;
     }
 
     @action removePlayerFromForm() {
@@ -182,7 +207,7 @@ export class LeaderBoardModel {
     }
 
     @action handlePlayerInputFieldChange(e, index) {
-        let tempVar = { ...this.matchUnderCreation };
+        let tempVar : MatchCreatorInput = { ...this.matchUnderCreation };
         let inputVal = e.target.value;
         tempVar.formInputValues[index].player_value = inputVal;
         this.matchUnderCreation = tempVar;
@@ -238,15 +263,17 @@ export class LeaderBoardModel {
         this.matchUnderCreation = tempVar;
     }
 
+    @action handleNotesChange(e) {
+        let tempVar = { ...this.matchUnderCreation };
+        tempVar.notes = e.target.value;
+        this.matchUnderCreation = tempVar;
+    }
+
     @action setCurrentMatch(match: Match) {
         this.currentMatch = match
     }
 
     @action setCurrentMatchById(matchID: string) {
-        if (this.currentMatch && this.currentMatch.matchID === matchID) {
-            return;
-        }
-
         const match = this.matches.find((match) => match.matchID === matchID)
         if (match) {
             this.currentMatch = match
@@ -269,6 +296,9 @@ export class LeaderBoardModel {
                     data.points_primary,
                     data.points_secondary,
                     data.date.toDate(),
+                    data.userID,
+                    data.notes,
+                    doc.id
                 )
             })
         }).catch((error) => {

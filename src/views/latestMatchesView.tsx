@@ -1,5 +1,6 @@
 import React from "react"
 import { Match } from "../model/match.ts"
+import { toJS } from "mobx"
 import { User } from "firebase/auth";
 
 export function LastestMatchesView({
@@ -43,7 +44,10 @@ export function LastestMatchesView({
             </tr>
         )
     }
-
+    console.log(toJS(matches));
+    //console.log(typeof(toJS(matches)));
+    console.log("'matches':", matches);
+    console.log("Type of 'matches':", typeof (matches));
     return (
         <div>
             <button disabled={!user} onClick={dummyMatchClickedACB}>Add dummy match</button>
