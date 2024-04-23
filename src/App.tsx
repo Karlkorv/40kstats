@@ -31,7 +31,6 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
     }
     return (
         <div>
-            <Login model={model} />
             <div>
                 <Navbar model={model}/>
             </div>

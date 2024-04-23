@@ -12,7 +12,8 @@ const Navbar = observer(({model} : {model: LeaderBoardModel}) => {
     }
 
     function handleCreateMatchButtonClick(){
-
+        model.startMatchCreation();
+		window.location.hash = "#/matchCreator";
     }
 
     async function handleLoginButtonClick(){
