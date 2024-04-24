@@ -40,7 +40,7 @@ export function LastestMatchesView({
                 <td>{match.factions[0]}</td>
                 <td>{match.players[1]}</td>
                 <td>{match.factions[1]}</td>
-                <td>{match.winners[0]}</td>
+                <td>{match.winners}</td>
             </tr>
         )
     }
