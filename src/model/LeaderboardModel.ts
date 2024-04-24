@@ -291,7 +291,9 @@ export class LeaderBoardModel {
             runInAction(() => {
                 if (!doc.exists()) {
                     this.currentMatch = undefined
-                    throw new Error("Match not found");
+                    window.location.hash = "#/match/matchNotFound";
+                    console.error("Match not found");
+                    return;
                 }
                 const data = doc.data()!
                 this.currentMatch = new Match(
