@@ -10,6 +10,7 @@ import "./style.css"
 import { Login } from "./presenters/loginPresenter.tsx";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorView from "./views/errorView.tsx";
+import { Navbar } from "./presenters/navbarPresenter.tsx"
 
 export const App = observer(({ model }: { model: LeaderBoardModel }) => {
     function makeRouter(model: LeaderBoardModel) {
@@ -33,10 +34,12 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
     return (
         <div>
             <ErrorBoundary fallback={ErrorView()}>
-                <Login model={model} />
+                <div>
+                    <Navbar model={model} />
+                </div>
                 <RouterProvider router={makeRouter(model)} />
                 <LatestMatches model={model} />
             </ErrorBoundary>
-        </div>
+        </div >
     )
-})
+});

@@ -64,3 +64,22 @@
     outline: 1px solid rgb(165, 164, 164);
     cursor: pointer;
 }
+
+.navbar {
+    padding-bottom: 10px;
+    border-color: black;
+    border-radius: 5px;
+    display: flex;
+}
+
+.navbar > div {
+    padding-inline: 5px;
+}
+
+.MuiAppBar {
+    border-radius: 5px;
+}
+
+.MuiToolbar > div {
+    padding-inline: 5px;
+}
