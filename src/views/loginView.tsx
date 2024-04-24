@@ -23,7 +23,7 @@ export function LoginView({ login, logout, user, username, createUserName, check
 
     return (
         <div id="login-wrapper">
-            <button onClick={login}>Sign in with Google</button>
+            {/* <button onClick={login}>Sign in with Google</button> */}
         </div>
     )
 }

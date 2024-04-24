@@ -11,7 +11,6 @@ const HomeScreen = observer(
 
 		return (
 			<div>
-				<button onClick={createMatchClick}>Create a match</button>
 			</div>
 		);
 	}
