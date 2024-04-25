@@ -221,8 +221,7 @@ export class LeaderBoardModel {
     @action handleFactionChange(e, index) {
         let tempVar = { ...this.matchUnderCreation };
         let inputVal = e.target.value;
-        const options = Object.values(FACTIONS)
-        if (options.includes(inputVal)) { tempVar.formInputValues[index].faction_value = inputVal; }
+        tempVar.formInputValues[index].faction_value = inputVal; 
         this.matchUnderCreation = tempVar;
     }
 

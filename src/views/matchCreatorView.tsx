@@ -1,6 +1,7 @@
 import React from "react"
 import { Match } from "../model/match.ts";
 import { FACTIONS } from "../model/factions.ts"
+import { Box, FormControl, FormHelperText, Input, InputLabel, MenuItem, Select } from "@mui/material";
 
 export function MatchCreatorView({ formInputValues, winners, notes, createNewMatch, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange, handleWinnerChange, handleWinnerFocus, handleWinnerBlur, handleNotesChange, user }) {
 
@@ -66,41 +67,47 @@ export function MatchCreatorView({ formInputValues, winners, notes, createNewMat
         const { label, num, type, player_value, faction_value, p_points, s_points } = objValue;
         return (
             <div className="player-input-group">
-                <label htmlFor={label}>Player {num}:</label>
-                <div className="player-input">
-                    <input
-                        key={index}
-                        type={type || "text"}
-                        id={label}
-                        value={player_value || ""}
-                        placeholder={"Player " + num}
-                        onChange={(e) => onNameChange(e, index)}
-                        required
-                    />
-                </div>
-                <label htmlFor={label}>Faction {num}:</label>
-                <div className="faction-input">
-                    <input
-                        key={index}
-                        list="factions"
-                        id={label}
-                        value={faction_value}
-                        autoComplete="off"
-                        onInput={(e) => onListChange(e, index)}
-                        onFocus={onFocus}
-                        onBlur={(e) => onBlur(e, index)}
-                        required
-                    />
-                    {/* TODO
-                        See if there is any way to not have to create a new list 
-                        for every Player Input, so that they can share the same <datalist>
-                    */}
-                    <datalist id="factions">
-                        {Object.values(FACTIONS).map((faction, index) => (
-                            <option key={index} value={faction} />
-                        ))}
-                    </datalist>
-                </div>
+                <Box sx={{ minWidth: 120 }}>
+                    <FormControl>
+                        <InputLabel required={true}>Player {num}:</InputLabel>
+                            <Input
+                                key={index}
+                                type={type || "text"}
+                                id={label}
+                                value={player_value || ""}
+                                onChange={(e) => onNameChange(e, index)}
+                            />
+                            <FormHelperText id={"player" + player_value}></FormHelperText>
+                    </FormControl>
+                </Box>
+
+                <Box sx={{ minWidth: 120 }}>
+                    <FormControl fullWidth>
+                        <InputLabel id={"faction"+num}>Faction {num}:</InputLabel>
+                        <Select
+                            key={index}
+                            id={label}
+                            labelId={"faction"+num}
+                            label="Faction"
+                            value={faction_value}
+                            autoComplete="off"
+                            onChange={(e) => onListChange(e, index)}
+                            onFocus={onFocus}
+                            onBlur={(e) => onBlur(e, index)}
+                            notched={true}
+                        >   
+                            <MenuItem key={0} value="">None</MenuItem>
+                            {/* TODO
+                                See if there is any way to not have to create a new list 
+                                for every Player Input, so that they can share the same <datalist>
+                            */}
+                            {Object.values(FACTIONS).map((faction, index) => (
+                                <MenuItem key={index} value={faction}>{faction}</MenuItem>
+                            ))}
+                        </Select>
+    
+                    </FormControl>
+                </Box>
                 <div>
                     <label htmlFor="primary-points">Primary points</label>
                     <div className="primary-points-input">

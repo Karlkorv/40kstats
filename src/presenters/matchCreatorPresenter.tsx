@@ -3,8 +3,10 @@ import { Match } from "../model/match.ts"
 import React from "react";
 import { MatchCreatorView } from "../views/matchCreatorView";
 import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
+import { FACTIONS } from "../model/factions.ts";
 
 const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
+    const options = Object.values(FACTIONS)
     function createNewMatch() {
         let players = model.matchUnderCreation.formInputValues.map(({ player_value }) => (player_value));
         console.log(players)
@@ -35,7 +37,9 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
     }
 
     function handleFactionChange(e, index) {
-        model.handleFactionChange(e, index);
+        if (options.includes(e.target.value) || e.target.value === "") { 
+            model.handleFactionChange(e, index);
+        }
     }
 
     function onClickAddPlayer() {
