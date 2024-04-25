@@ -14,7 +14,7 @@ export function LoginView({ login, logout, user, username, createUserName, check
     if (user) {
         return (
             <div id="loggedin-wrapper">
-                <span>Signed in as {username || user.displayName}</span>
+                <span>Signed in as {username || user.displayName + " (no username set)"}</span>
                 <button onClick={logout}>Sign out</button>
                 {username ? null : usernameForm()}
             </div>
