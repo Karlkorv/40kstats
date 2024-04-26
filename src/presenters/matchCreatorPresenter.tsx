@@ -44,10 +44,6 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         }
     }
 
-    function onClickAddPlayer() {
-        model.addPlayerToForm();
-    }
-
     function onClickRemovePlayer() {
         model.removePlayerFromForm();
     }
@@ -116,7 +112,6 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
 
                 createNewMatch={createNewMatch}
                 handleCancelClick={handleCancelClick}
-                onClickAddPlayer={onClickAddPlayer}
                 onClickRemovePlayer={onClickRemovePlayer}
                 handlePlayerNameChange={handlePlayerNameChange}
                 handleFactionChange={handleFactionChange}
