@@ -38,6 +38,16 @@ export function MatchCreatorView({ formInputValues, winners, notes, createNewMat
     }
 
 
+    function handlePointsButtonClick(amount: number, index: number, primary: boolean) {
+        if (primary) {
+            amount = formInputValues[index].p_points + amount < 0 ? 0 : amount + formInputValues[index].p_points;
+            onPrimaryPointsChange({ target: { value: amount } }, index);
+        } else {
+            amount = formInputValues[index].s_points + amount < 0 ? 0 : amount + formInputValues[index].s_points;
+            onSecondaryPointsChange({ target: { value: amount } }, index);
+        }
+    }
+
     function onPrimaryPointsChangeACB(e, index) {
         onPrimaryPointsChange(e, index);
     }
@@ -104,23 +114,31 @@ export function MatchCreatorView({ formInputValues, winners, notes, createNewMat
                 <div>
                     <label htmlFor="primary-points">Primary points</label>
                     <div className="primary-points-input">
+                        <button onClick={() => handlePointsButtonClick(-1, index, true)}>-1</button>
                         <input
                             key={index}
                             type="text"
                             value={p_points}
                             onChange={(e) => onPrimaryPointsChange(e, index)}
                         />
+                        <button onClick={() => handlePointsButtonClick(1, index, true)}>+1</button>
+                        <button onClick={() => handlePointsButtonClick(3, index, true)}>+3</button>
+                        <button onClick={() => handlePointsButtonClick(5, index, true)}>+5</button>
                     </div>
                 </div>
                 <div>
                     <label htmlFor="secondary-points">Secondary points</label>
                     <div className="secondary-points-input">
+                        <button onClick={() => handlePointsButtonClick(-1, index, false)}>+1</button>
                         <input
                             key={index}
                             type="text"
                             value={s_points}
                             onChange={(e) => onSecondaryPointsChange(e, index)}
                         />
+                        <button onClick={() => handlePointsButtonClick(1, index, false)}>+1</button>
+                        <button onClick={() => handlePointsButtonClick(3, index, false)}>+3</button>
+                        <button onClick={() => handlePointsButtonClick(5, index, false)}>+5</button>
                     </div>
                 </div>
                 {index >= 2 && <div><button onClick={(e) => deleteField(e)}>X</button></div>}
