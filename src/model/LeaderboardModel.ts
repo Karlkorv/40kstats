@@ -273,6 +273,12 @@ export class LeaderBoardModel {
         this.matchUnderCreation = tempVar;
     }
 
+    @action handleDateChange(e) {
+        let tempVar = { ...this.matchUnderCreation };
+        tempVar.date = e;
+        this.matchUnderCreation = tempVar;
+    }
+
     @action setCurrentMatch(match: Match) {
         this.currentMatch = match
     }

@@ -2,8 +2,13 @@ import React from "react"
 import { Match } from "../model/match.ts";
 import { FACTIONS } from "../model/factions.ts"
 import { Box, FormControl, FormHelperText, Input, InputLabel, MenuItem, Select } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker/"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
-export function MatchCreatorView({ formInputValues, winners, notes, createNewMatch, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange, handleWinnerChange, handleWinnerFocus, handleWinnerBlur, handleNotesChange, user }) {
+
+export function MatchCreatorView({ formInputValues, winners, notes, date, createNewMatch, handleCancelClick, onClickAddPlayer, onClickRemovePlayer, handlePlayerNameChange, handleFactionChange, handleFocus, handleBlur, onPrimaryPointsChange, onSecondaryPointsChange, handleWinnerChange, handleWinnerFocus, handleWinnerBlur, handleNotesChange, user, handleDateChange }) {
 
     function onClickCreateMatchACB(evt) {
         createNewMatch();
@@ -36,6 +41,10 @@ export function MatchCreatorView({ formInputValues, winners, notes, createNewMat
 
     const handleBlurACB = (e, index) => {
         handleBlur(e, index);
+    }
+
+    const handleDateChangeACB = (e) => {
+        handleDateChange(e);
     }
 
 
@@ -83,11 +92,11 @@ export function MatchCreatorView({ formInputValues, winners, notes, createNewMat
 
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl fullWidth>
-                        <InputLabel id={"faction"+num}>Faction {num}:</InputLabel>
+                        <InputLabel id={"faction_"+num}>Faction {num}:</InputLabel>
                         <Select
                             key={index}
                             id={label}
-                            labelId={"faction"+num}
+                            labelId={"faction_"+num}
                             label="Faction"
                             value={faction_value}
                             autoComplete="off"
@@ -108,28 +117,30 @@ export function MatchCreatorView({ formInputValues, winners, notes, createNewMat
     
                     </FormControl>
                 </Box>
-                <div>
-                    <label htmlFor="primary-points">Primary points</label>
-                    <div className="primary-points-input">
-                        <input
+                <Box>
+                    <FormControl>
+                        <InputLabel id={"player_"+{index}+"_primary_points"}>Primary Points</InputLabel>
+                        <Input
                             key={index}
                             type="text"
+                            id={label}
                             value={p_points}
                             onChange={(e) => onPrimaryPointsChange(e, index)}
                         />
-                    </div>
-                </div>
-                <div>
-                    <label htmlFor="secondary-points">Secondary points</label>
-                    <div className="secondary-points-input">
-                        <input
-                            key={index}
-                            type="text"
-                            value={s_points}
-                            onChange={(e) => onSecondaryPointsChange(e, index)}
-                        />
-                    </div>
-                </div>
+                    </FormControl>
+                </Box>
+                <Box>
+                    <FormControl>
+                        <InputLabel id={"player_"+{index}+"_secondary_points"}>Secondary Points</InputLabel>
+                            <Input
+                                key={index}
+                                type="text"
+                                id={label}
+                                value={s_points}
+                                onChange={(e) => onSecondaryPointsChange(e, index)}
+                            />
+                    </FormControl>
+                </Box>
                 {index >= 2 && <div><button onClick={(e) => deleteField(e)}>X</button></div>}
             </div>
         )
@@ -146,39 +157,46 @@ export function MatchCreatorView({ formInputValues, winners, notes, createNewMat
     return (
         <div>
             <form>
-                <label htmlFor="mDate">Match Date: </label>
-                <input type="date" id="mDate" name="mDate" value={""} /><br></br>
+                <Box>
+                    <InputLabel>Match date:</InputLabel>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker value={dayjs(date)} onChange={handleDateChangeACB}/>
+                    </LocalizationProvider>
+                </Box>
 
                 {formInputValues.map((obj, index) => (
                     PlayerInput({ objValue: obj, onNameChange: handleNameChangeACB, index: index, deleteField: handleDeleteFieldACB, onListChange: handleListChangeACB, onFocus: handleFocusACB, onBlur: handleBlurACB, onPrimaryPointsChange: onPrimaryPointsChangeACB, onSecondaryPointsChange: onSecondaryPointsChangeACB })
                 ))}
 
-                <div>
-                    <label htmlFor="winners">Winners:</label>
-                    <div className="winners-input">
-                        <input
+                <Box>
+                    <FormControl>
+                        <InputLabel id="winners">Winners:</InputLabel>
+                        <Select
                             value={winners}
-                            list="player_list"
                             onInput={(e) => onWinnerChangeACB(e)}
                             onFocus={onWinnerFocusACB}
                             onBlur={(e) => onWinnerBlurACB(e)}
-                        />
-                        <datalist id="player_list">
-                            {formInputValues.map(({ num, player_value }) => { return (<option key={num} value={player_value} />) })}
-                        </datalist>
-                    </div>
-                </div>
-                <div className="notes">
-                    <label htmlFor="notes">Match notes:</label>
-                    <div className="notes-input">
-                        <input
-                            placeholder="Match notes"
-                            value={notes}
-                            type="text"
-                            onChange={(e) => onNotesChangeACB(e)}
-                        />
-                    </div>
-                </div>
+                        >
+                            {formInputValues.map(({ num, player_value }) => { 
+                                return (
+                                    <MenuItem key={num} value={player_value}>{player_value}</MenuItem>
+                                ) 
+                            })}
+                        </Select>
+                    </FormControl>
+                </Box>
+                <Box>
+                    <FormControl>
+                        <InputLabel id="notes">Match notes:</InputLabel>
+                        <div className="notes-input">
+                            <Input
+                                value={notes}
+                                type="text"
+                                onChange={(e) => onNotesChangeACB(e)}
+                            />
+                        </div>
+                    </FormControl>
+                </Box>
             </form>
             <button onClick={onClickAddPlayerACB}>Add player</button>
             <button onClick={onClickCreateMatchACB}>Create match</button>
