@@ -94,3 +94,28 @@
 .MuiToolbar > div {
     padding-inline: 5px;
 }
+
+#matchCreator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.player-input-group {
+    flex-direction: column;
+    display: flex;
+}
+
+#matchCreator > form > div {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.matchInfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
