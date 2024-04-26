@@ -1,9 +1,9 @@
-import { observer } from "mobx-react-lite"
-import React from "react"
-import { NavbarView } from "../views/navbarView.tsx"
-import { LeaderBoardModel } from "../model/LeaderboardModel.ts"
-import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth"
-import { auth } from "../Firebase.ts"
+import { observer } from "mobx-react-lite";
+import React from "react";
+import { NavbarView } from "../views/navbarView.tsx";
+import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { auth } from "../Firebase.ts";
 
 const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {
     const provider = new GoogleAuthProvider();

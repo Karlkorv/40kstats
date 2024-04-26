@@ -8,12 +8,11 @@ import { Match } from "../model/match";
 
 const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
     function addDummyMatch() {
-        model.addMatch(new Match(
+        model.matches = [new Match(
             ["Janne", "Johan"],
             [FACTIONS.ADEPTUS_MECHANICUS, FACTIONS.AELDARI],
             ["Janne"],
-            [10, 0], [0, 0])
-        );
+            [10, 0], [0, 0], undefined, undefined, "Notes test"), ...model.matches]
     }
 
     function matchClicked(match: Match) {

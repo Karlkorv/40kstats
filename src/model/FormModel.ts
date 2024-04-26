@@ -3,6 +3,7 @@ import { Match } from "./match";
 export class MatchCreatorInput {
     
     constructor(
+        date: Date,
         formInputValues: Array<{label: string, num: string, type: string, player_value: string, faction_value: string, p_points: number, s_points: number}>, 
         numOfPlayers: number, 
         focusedValue: string,
@@ -11,6 +12,7 @@ export class MatchCreatorInput {
         matchID?: string,
         userID?: string,
     ) {
+        this.date = date;
         this.formInputValues = formInputValues;
         this.numOfPlayers = numOfPlayers;
         this.focusedValue = focusedValue;
@@ -21,6 +23,7 @@ export class MatchCreatorInput {
         
     }
     
+    date: Date
     formInputValues: Array<{label: string, num: string, type: string, player_value: string, faction_value: string, p_points: number, s_points: number}>
     numOfPlayers: number
     focusedValue: string
@@ -52,6 +55,7 @@ export function matchToMatchCreatorInput(match: Match){
 }
 
 export var DEFAULT_CREATE_MATCH : MatchCreatorInput = { 
+    date: new Date(),
     formInputValues: [
         { label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, 
         { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }

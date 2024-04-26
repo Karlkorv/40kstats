@@ -65,6 +65,17 @@
     cursor: pointer;
 }
 
+.player-input-group {
+    padding-top: 10px;
+}
+
+.player-input-group > div {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: table;
+    vertical-align: middle;
+}
+
 .navbar {
     padding-bottom: 10px;
     border-color: black;

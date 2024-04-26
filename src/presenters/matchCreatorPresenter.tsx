@@ -3,9 +3,13 @@ import { Match } from "../model/match.ts"
 import React from "react";
 import { MatchCreatorView } from "../views/matchCreatorView";
 import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
+import { FACTIONS } from "../model/factions.ts";
 
 const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
+    const options = Object.values(FACTIONS)
+
     function createNewMatch() {
+        let date = model.matchUnderCreation.date;
         let players = model.matchUnderCreation.formInputValues.map(({ player_value }) => (player_value));
         console.log(players)
         let factions = model.matchUnderCreation.formInputValues.map(({ faction_value }) => (faction_value));
@@ -19,7 +23,7 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         if (factions.some((faction) => (faction === ""))) { alert("Please fill in all Factions") }
         if (winners === "") { alert("Please pick the winner") }
         if (!(players.some((player) => (player === "")) || factions.some((faction) => (faction === "") || winners === ""))) {
-            model.addMatch(new Match(players, factions, [winners], p_points, s_points, undefined, userID, notes, matchID));
+            model.addMatch(new Match(players, factions, [winners], p_points, s_points, date, userID, notes, matchID));
             window.location.hash = "";
             console.log("Match created");
         }
@@ -35,7 +39,9 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
     }
 
     function handleFactionChange(e, index) {
-        model.handleFactionChange(e, index);
+        if (options.includes(e.target.value) || e.target.value === "") { 
+            model.handleFactionChange(e, index);
+        }
     }
 
     function onClickRemovePlayer() {
@@ -90,13 +96,20 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         model.handleNotesChange(e);
     }
 
+    function handleDateChange(e) {
+        model.handleDateChange(e.$d);
+    }
+
 
     return (
         <div>
             {<MatchCreatorView
                 formInputValues={model.matchUnderCreation.formInputValues}
+                user={model.user}
                 winners={model.matchUnderCreation.winners}
                 notes={model.matchUnderCreation.notes}
+                date={model.matchUnderCreation.date}
+
                 createNewMatch={createNewMatch}
                 handleCancelClick={handleCancelClick}
                 onClickRemovePlayer={onClickRemovePlayer}
@@ -110,7 +123,7 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
                 handleWinnerFocus={handleWinnerFocus}
                 handleWinnerBlur={handleWinnerBlur}
                 handleNotesChange={handleNotesChange}
-                user={model.user}>
+                handleDateChange={handleDateChange}>
             </MatchCreatorView>}
         </div >
     )
