@@ -180,7 +180,6 @@ export class LeaderBoardModel {
     }
 
     @action startMatchCreation() {
-        this.matchUnderCreation = DEFAULT_CREATE_MATCH;
         this.matchUnderCreation.userID = this.user?.uid;
     }
 
