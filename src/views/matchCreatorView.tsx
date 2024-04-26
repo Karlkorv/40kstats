@@ -1,7 +1,7 @@
 import React from "react"
 import { Match } from "../model/match.ts";
 import { FACTIONS } from "../model/factions.ts"
-import { Box, FormControl, FormHelperText, Input, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box, Button, ButtonGroup, FormControl, FormHelperText, Input, InputLabel, MenuItem, OutlinedInput, Select } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker/"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -78,15 +78,16 @@ export function MatchCreatorView({ formInputValues, winners, notes, date, create
             <div className="player-input-group">
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl>
-                        <InputLabel required={true}>Player {num}:</InputLabel>
-                            <Input
-                                key={index}
-                                type={type || "text"}
-                                id={label}
-                                value={player_value || ""}
-                                onChange={(e) => onNameChange(e, index)}
-                            />
-                            <FormHelperText id={"player" + player_value}></FormHelperText>
+                        <InputLabel id={"player_"+num}>Player {num}</InputLabel>
+                        <OutlinedInput
+                            key={index}
+                            id={"player_"+num}
+                            label={"Player"+num}
+                            type={type || "text"}
+                            value={player_value || ""}
+                            onChange={(e) => onNameChange(e, index)}
+                        />
+                        <FormHelperText id={"player" + player_value}></FormHelperText>
                     </FormControl>
                 </Box>
 
@@ -97,13 +98,12 @@ export function MatchCreatorView({ formInputValues, winners, notes, date, create
                             key={index}
                             id={label}
                             labelId={"faction_"+num}
-                            label="Faction"
+                            label={"Faction"+num}
                             value={faction_value}
                             autoComplete="off"
                             onChange={(e) => onListChange(e, index)}
                             onFocus={onFocus}
                             onBlur={(e) => onBlur(e, index)}
-                            notched={true}
                         >   
                             <MenuItem key={0} value="">None</MenuItem>
                             {/* TODO
@@ -119,11 +119,12 @@ export function MatchCreatorView({ formInputValues, winners, notes, date, create
                 </Box>
                 <Box>
                     <FormControl>
-                        <InputLabel id={"player_"+{index}+"_primary_points"}>Primary Points</InputLabel>
-                        <Input
+                        <InputLabel id={"player_"+index+"_primary_points"}>Primary Points</InputLabel>
+                        <OutlinedInput
                             key={index}
                             type="text"
-                            id={label}
+                            id={"player_"+index+"_primary_points"}
+                            label="Primary Points"
                             value={p_points}
                             onChange={(e) => onPrimaryPointsChange(e, index)}
                         />
@@ -131,14 +132,15 @@ export function MatchCreatorView({ formInputValues, winners, notes, date, create
                 </Box>
                 <Box>
                     <FormControl>
-                        <InputLabel id={"player_"+{index}+"_secondary_points"}>Secondary Points</InputLabel>
-                            <Input
-                                key={index}
-                                type="text"
-                                id={label}
-                                value={s_points}
-                                onChange={(e) => onSecondaryPointsChange(e, index)}
-                            />
+                        <InputLabel id={"player_"+index+"_secondary_points"}>Secondary Points</InputLabel>
+                        <OutlinedInput
+                            key={index}
+                            type="text"
+                            id={"player_"+index+"_secondary_points"}
+                            label="Secondary Points"
+                            value={s_points}
+                            onChange={(e) => onSecondaryPointsChange(e, index)}
+                        />
                     </FormControl>
                 </Box>
                 {index >= 2 && <div><button onClick={(e) => deleteField(e)}>X</button></div>}
@@ -157,10 +159,9 @@ export function MatchCreatorView({ formInputValues, winners, notes, date, create
     return (
         <div>
             <form>
-                <Box>
-                    <InputLabel>Match date:</InputLabel>
+                <Box sx={{paddingTop: 10/8}}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker value={dayjs(date)} onChange={handleDateChangeACB}/>
+                        <DatePicker value={dayjs(date)} onChange={handleDateChangeACB} label="Match Date:"/>
                     </LocalizationProvider>
                 </Box>
 
@@ -168,8 +169,8 @@ export function MatchCreatorView({ formInputValues, winners, notes, date, create
                     PlayerInput({ objValue: obj, onNameChange: handleNameChangeACB, index: index, deleteField: handleDeleteFieldACB, onListChange: handleListChangeACB, onFocus: handleFocusACB, onBlur: handleBlurACB, onPrimaryPointsChange: onPrimaryPointsChangeACB, onSecondaryPointsChange: onSecondaryPointsChangeACB })
                 ))}
 
-                <Box>
-                    <FormControl>
+                <Box sx={{ minWidth: 120, maxWidth: 200}}>
+                    <FormControl fullWidth>
                         <InputLabel id="winners">Winners:</InputLabel>
                         <Select
                             value={winners}
@@ -185,22 +186,23 @@ export function MatchCreatorView({ formInputValues, winners, notes, date, create
                         </Select>
                     </FormControl>
                 </Box>
-                <Box>
+                <Box sx={{paddingTop: 10/8}}>
                     <FormControl>
-                        <InputLabel id="notes">Match notes:</InputLabel>
-                        <div className="notes-input">
-                            <Input
-                                value={notes}
-                                type="text"
-                                onChange={(e) => onNotesChangeACB(e)}
-                            />
-                        </div>
+                        <InputLabel id="notes">Match Notes:</InputLabel>
+                        <OutlinedInput
+                            value={notes}
+                            label="Match Notes"
+                            type="text"
+                            onChange={(e) => onNotesChangeACB(e)}
+                        />
                     </FormControl>
                 </Box>
             </form>
-            <button onClick={onClickAddPlayerACB}>Add player</button>
-            <button onClick={onClickCreateMatchACB}>Create match</button>
-            <button onClick={onClickCancelACB}>Cancel</button>
+            <ButtonGroup variant="contained">
+                <Button onClick={onClickAddPlayerACB}>Add player</Button>
+                <Button onClick={onClickCreateMatchACB}>Create match</Button>
+                <Button onClick={onClickCancelACB}>Cancel</Button>
+            </ButtonGroup>
         </div>
     )
 };

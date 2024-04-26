@@ -71,6 +71,7 @@
 
 .player-input-group > div {
     padding-top: 10px;
+    padding-bottom: 10px;
     display: table;
     vertical-align: middle;
 }
