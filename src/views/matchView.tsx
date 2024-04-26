@@ -63,6 +63,12 @@ export function MatchView({ match, deleteMatch, editMatch }: { match: Match, del
             <td>{match.points_secondary[0]}</td>
             <td>{match.points_secondary[1]}</td>
           </tr>
+          {match.notes && match.notes.length > 0 &&
+            <tr id="notes-row">
+              <th>Notes:</th>
+              <td colSpan={2}>{match.notes}</td>
+            </tr>
+          }
         </tbody>
       </table>
       <div id="match-buttons">
