@@ -103,6 +103,8 @@
 }
 
 .player-input-group {
+    margin-left: 100;
+    margin-right: 100;
     flex-direction: column;
     display: flex;
 }
