@@ -1,10 +1,9 @@
 import { Match } from "./match";
 
 export class MatchCreatorInput {
-    
     constructor(
-        formInputValues: Array<{label: string, num: string, type: string, player_value: string, faction_value: string, p_points: number, s_points: number}>, 
-        numOfPlayers: number, 
+        formInputValues: Array<{ label: string, num: string, type: string, player_value: string, faction_value: string, p_points: number, s_points: number }>,
+        numOfPlayers: number,
         focusedValue: string,
         winners: string,
         notes?: string,
@@ -18,10 +17,10 @@ export class MatchCreatorInput {
         this.notes = notes;
         this.matchID = matchID;
         this.userID = userID;
-        
+
     }
-    
-    formInputValues: Array<{label: string, num: string, type: string, player_value: string, faction_value: string, p_points: number, s_points: number}>
+
+    formInputValues: Array<{ label: string, num: string, type: string, player_value: string, faction_value: string, p_points: number, s_points: number }>
     numOfPlayers: number
     focusedValue: string
     winners: string
@@ -30,7 +29,7 @@ export class MatchCreatorInput {
     userID: string | undefined
 }
 
-export function matchToMatchCreatorInput(match: Match){
+export function matchToMatchCreatorInput(match: Match) {
     const formInputValues = match.players.map((player, index) => ({
         label: `mPlayer${index + 1}`,
         num: `${index + 1}`,
@@ -51,14 +50,14 @@ export function matchToMatchCreatorInput(match: Match){
     return new MatchCreatorInput(formInputValues, numOfPlayers, focusedValue, winners, notes, matchID, userID);
 }
 
-export var DEFAULT_CREATE_MATCH : MatchCreatorInput = { 
+export var DEFAULT_CREATE_MATCH: MatchCreatorInput = {
     formInputValues: [
-        { label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }, 
+        { label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 },
         { label: "mPlayer2", num: "2", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 }
-    ], 
-    numOfPlayers: 2, 
-    focusedValue: "", 
-    winners: "", 
+    ],
+    numOfPlayers: 2,
+    focusedValue: "",
+    winners: "",
     notes: "",
     matchID: undefined,
     userID: undefined

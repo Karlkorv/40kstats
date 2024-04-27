@@ -72,7 +72,7 @@
     display: flex;
 }
 
-.navbar > div {
+.navbar>div {
     padding-inline: 5px;
 }
 
@@ -80,6 +80,6 @@
     border-radius: 5px;
 }
 
-.MuiToolbar > div {
+.MuiToolbar>div {
     padding-inline: 5px;
 }

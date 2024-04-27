@@ -14,6 +14,7 @@ export class LeaderBoardModel {
     @observable currentMatch: Match | undefined = undefined
     @observable gettingCurrentMatch: boolean = false
     @observable user: User | null = null;
+    @observable usernameInput: string = "";
     @observable totalMatches: number = 0
     @observable username: string | null = null;
     @observable isValidUserName: boolean | null = null;
@@ -42,6 +43,10 @@ export class LeaderBoardModel {
         })
     }
 
+    @action setUsernameInput(username: string) {
+        this.usernameInput = username;
+    }
+
     @action createUserName(username: string) {
         if (this.username) {
             return;
@@ -57,7 +62,7 @@ export class LeaderBoardModel {
     @action checkUsername(username: string) {
         userExists(username).then((result) => {
             runInAction(() => {
-                this.isValidUserName = result!;
+                this.isValidUserName = !result;
             })
         })
     }
@@ -99,9 +104,13 @@ export class LeaderBoardModel {
         });
     }
 
-    @action setUser(user: User | null) {
+    setUser(user: User | null) {
         this.user = user;
-        this.matchUnderCreation.userID = user?.uid;
+        getUsername().then((result) => {
+            runInAction(() => {
+                this.username = result;
+            })
+        })
     }
 
     @action userLoggedOut() {

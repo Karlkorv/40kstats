@@ -139,7 +139,7 @@ export function getUsername() {
     const userRef = collection(db, "users");
 
     return getDoc(doc(userRef, auth.currentUser.uid)).then((doc) => {
-        if (!doc.exists) {
+        if (!doc.exists()) {
             return null;
         }
         console.log("Got username from firebase:", doc.data())
@@ -149,7 +149,6 @@ export function getUsername() {
             console.log("Error: No username: ", error);
             return "";
         }
-        //return doc.data()!.username_display; // If the doc exists there will be a username
     })
 }
 
