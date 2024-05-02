@@ -40,7 +40,6 @@ export function MatchCreatorView({
 }) {
     function onClickCreateMatchACB(evt) {
         createNewMatch();
-        console.log("Creating Match");
     }
     function onClickCancelACB() {
         handleCancelClick();
@@ -96,6 +95,7 @@ export function MatchCreatorView({
     }
 
     function onWinnerChangeACB(e) {
+        console.log("changing winner to " + e.target.value);
         handleWinnerChange(e);
     }
 
@@ -131,7 +131,7 @@ export function MatchCreatorView({
             s_points,
         } = objValue;
         return (
-            <Box className="player-input-group" sx={{paddingRight: 10/8}}>
+            <Box className="player-input-group" sx={{ paddingRight: 10 / 8 }}>
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl>
                         <InputLabel id={"player_" + num}>
@@ -296,41 +296,48 @@ export function MatchCreatorView({
                     </LocalizationProvider>
                 </Box>
 
-                <Box className="players" sx={{display: "inline-flex"}}>
+                <Box className="players" sx={{ display: "inline-flex" }}>
                     {formInputValues.map((obj, index) =>
                         PlayerInput({
-                        objValue: obj,
-                        onNameChange: handleNameChangeACB,
-                        index: index,
-                        onListChange: handleListChangeACB,
-                        onFocus: handleFocusACB,
-                        onBlur: handleBlurACB,
-                        onPrimaryPointsChange: onPrimaryPointsChangeACB,
-                        onSecondaryPointsChange: onSecondaryPointsChangeACB,
-                    })
+                            objValue: obj,
+                            onNameChange: handleNameChangeACB,
+                            index: index,
+                            onListChange: handleListChangeACB,
+                            onFocus: handleFocusACB,
+                            onBlur: handleBlurACB,
+                            onPrimaryPointsChange: onPrimaryPointsChangeACB,
+                            onSecondaryPointsChange: onSecondaryPointsChangeACB,
+                        })
                     )}
                 </Box>
 
                 <Box className="matchInfo">
-                    <Box sx={{ minWidth: 120, maxWidth: 200}}>
+                    <Box sx={{ minWidth: 120, maxWidth: 200 }}>
                         <FormControl fullWidth>
                             <InputLabel id="winners">Winners:</InputLabel>
                             <Select
                                 value={winners}
                                 label="Winners:"
-                                onInput={(e) => onWinnerChangeACB(e)}
+                                onChange={onWinnerChangeACB}
                                 onFocus={onWinnerFocusACB}
                                 onBlur={(e) => onWinnerBlurACB(e)}
                             >
-                                {formInputValues.map(({ num, player_value }) => { 
-                                    return (
-                                        <MenuItem key={num} value={player_value}>{player_value}</MenuItem>
-                                    ) 
-                                })}
+                                {formInputValues.map(
+                                    ({ num, player_value }) => {
+                                        return (
+                                            <MenuItem
+                                                key={num}
+                                                value={player_value}
+                                            >
+                                                {player_value}
+                                            </MenuItem>
+                                        );
+                                    }
+                                )}
                             </Select>
                         </FormControl>
                     </Box>
-    
+
                     <Box className="notes">
                         <FormControl>
                             <InputLabel id="notes">Match Notes:</InputLabel>
@@ -343,7 +350,6 @@ export function MatchCreatorView({
                         </FormControl>
                     </Box>
                 </Box>
-
             </form>
             <ButtonGroup variant="contained">
                 <Button onClick={onClickCreateMatchACB}>Create match</Button>
