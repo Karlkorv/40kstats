@@ -4,6 +4,7 @@ import { action, makeAutoObservable, makeObservable, observable, runInAction } f
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
 import { MatchCreatorInput, DEFAULT_CREATE_MATCH } from "./FormModel.ts";
+import { Alert } from "@mui/material";
 
 export class LeaderBoardModel {
     ready: boolean = false;
@@ -45,21 +46,26 @@ export class LeaderBoardModel {
 
     @action setUsernameInput(username: string) {
         this.usernameInput = username;
+        this.checkUsername(username)
     }
 
-    @action createUserName(username: string) {
+    @action createUserName() {
         if (this.username) {
             return;
         }
 
-        addUserName(username).then(() => {
+        addUserName(this.usernameInput).then(() => {
             runInAction(() => {
-                this.username = username;
+                this.username = this.usernameInput;
             })
-        })
+        }).catch((error) => { console.log("Tried to create invalid username: " + error) })
     }
 
     @action checkUsername(username: string) {
+        if (username.length == 0) {
+            this.isValidUserName = false;
+            return;
+        }
         userExists(username).then((result) => {
             runInAction(() => {
                 this.isValidUserName = !result;
@@ -229,7 +235,7 @@ export class LeaderBoardModel {
     @action handleFactionChange(e, index) {
         let tempVar = { ...this.matchUnderCreation };
         let inputVal = e.target.value;
-        tempVar.formInputValues[index].faction_value = inputVal; 
+        tempVar.formInputValues[index].faction_value = inputVal;
         this.matchUnderCreation = tempVar;
     }
 

@@ -17,6 +17,7 @@ export function NavbarView({
     validUsername,
     handleHomeButtonClick,
     handleCreateMatchButtonClick,
+    handleUsernameConfirm,
     handleLoginButtonClick,
     handleLogoutButtonClick,
     handleUsernameChange,
@@ -35,6 +36,36 @@ export function NavbarView({
 
     function onLogoutButtonClick() {
         handleLogoutButtonClick();
+    }
+
+    function onConfirmClick() {
+        handleUsernameConfirm;
+    }
+
+    function renderUsernameCreation() {
+        if (username || !user) {
+            return;
+        }
+        return (
+            <div>
+                <TextField
+                    size="small"
+                    color="secondary"
+                    onInput={handleUsernameChange}
+                    error={validUsername}
+                    label="Enter a unique username"
+                    variant="filled"
+                />
+                <Button
+                    id="username-confirm-button"
+                    onClick={handleUsernameConfirm}
+                    variant="contained"
+                    size="small"
+                >
+                    {validUsername ? "Confirm username" : "Invalid username"}
+                </Button>
+            </div>
+        );
     }
 
     return (
@@ -56,12 +87,7 @@ export function NavbarView({
                             {(user && "Create Match") ||
                                 (!user && "Sign in to create match")}
                         </Button>
-                        <TextField
-                            color="primary"
-                            onChange={handleUsernameChange}
-                            error={validUsername}
-                            label="Enter a unique username"
-                        />
+                        {renderUsernameCreation()}
                     </div>
                     {!user && (
                         <div className="login-button">
@@ -73,13 +99,11 @@ export function NavbarView({
                             </Button>
                         </div>
                     )}
-
                     {user && (
                         <div
                             style={{ display: "flex" }}
                             className="logout-button"
                         >
-                            <Button>Enter a username</Button>
                             <div
                                 style={{
                                     display: "flex",

@@ -18,7 +18,14 @@ const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {
     );
 
     function handleUsernameChange(e) {
+        if (!e.target.value) {
+            return;
+        }
         model.setUsernameInput(e.target.value);
+    }
+
+    function handleUsernameConfirm() {
+        model.createUserName();
     }
 
     function handleCreateMatchButtonClick() {
@@ -45,6 +52,7 @@ const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {
                 username={model.username}
                 validUsername={model.isValidUserName}
                 handleHomeButtonClick={handleHomeButtonClick}
+                handleUsernameConfirm={handleUsernameConfirm}
                 handleCreateMatchButtonClick={handleCreateMatchButtonClick}
                 handleLoginButtonClick={handleLoginButtonClick}
                 handleLogoutButtonClick={handleLogoutButtonClick}
