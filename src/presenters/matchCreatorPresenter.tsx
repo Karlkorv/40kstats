@@ -170,6 +170,7 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
                     handleWinnerBlur={handleWinnerBlur}
                     handleNotesChange={handleNotesChange}
                     handleDateChange={handleDateChange}
+                    usernames={model.usernames}
                 ></MatchCreatorView>
             }
         </div>

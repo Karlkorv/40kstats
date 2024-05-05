@@ -2,6 +2,7 @@ import React from "react";
 import { Match } from "../model/match.ts";
 import { FACTIONS } from "../model/factions.ts";
 import {
+    Autocomplete,
     Box,
     Button,
     ButtonGroup,
@@ -12,6 +13,7 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
+    TextField,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker/";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -37,6 +39,7 @@ export function MatchCreatorView({
     handleNotesChange,
     user,
     handleDateChange,
+    usernames,
 }) {
     function onClickCreateMatchACB(evt) {
         createNewMatch();
@@ -134,16 +137,16 @@ export function MatchCreatorView({
             <Box className="player-input-group" sx={{ paddingRight: 10 / 8 }}>
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl>
-                        <InputLabel id={"player_" + num}>
-                            Player {num}
-                        </InputLabel>
-                        <OutlinedInput
+                        <Autocomplete
+                            renderInput={(params) => (
+                                <TextField {...params} label="Select user" />
+                            )}
                             key={index}
                             id={"player_" + num}
-                            label={"Player" + num}
-                            type={type || "text"}
+                            options={usernames}
                             value={player_value || ""}
                             onChange={(e) => onNameChange(e, index)}
+                            disableClearable
                         />
                         <FormHelperText
                             id={"player" + player_value}
