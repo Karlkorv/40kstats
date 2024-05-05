@@ -131,6 +131,19 @@ export function clearPersistence(model: LeaderBoardModel) {
     }
 }
 
+export function getUsernames() {
+    const userRef = collection(db, "users")
+
+    const q = query(userRef)
+    return getDocs(q).then((snapshot) => {
+        const usernames: string[] = []
+        snapshot.forEach((doc) => {
+            usernames.push(doc.data().username_display)
+        })
+        return usernames
+    })
+}
+
 export function getUsername() {
     if (!auth.currentUser) {
         return Promise.resolve(null);

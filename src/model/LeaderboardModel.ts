@@ -1,5 +1,5 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, deleteMatchFromFirestore, auth, getUsername, userExists, addUserName } from "../Firebase.ts";
+import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, deleteMatchFromFirestore, auth, getUsername, userExists, addUserName, getUsernames } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
@@ -18,6 +18,7 @@ export class LeaderBoardModel {
     @observable usernameInput: string = "";
     @observable totalMatches: number = 0
     @observable username: string | null = null;
+    @observable usernames: string[];
     @observable isValidUserName: boolean | null = null;
 
     constructor() {
@@ -41,12 +42,21 @@ export class LeaderBoardModel {
             }, (error) => {
                 console.log("Error when resolving promise: ", error)
             })
+            this.getUsernamesFromfirestore()
         })
     }
 
     @action setUsernameInput(username: string) {
         this.usernameInput = username;
         this.checkUsername(username)
+    }
+
+    @action getUsernamesFromfirestore() {
+        getUsernames().then((usernames) => {
+            runInAction(() => {
+                this.usernames = usernames;
+            })
+        })
     }
 
     @action createUserName() {
