@@ -65,6 +65,17 @@
     cursor: pointer;
 }
 
+.player-input-group {
+    padding-top: 10px;
+}
+
+.player-input-group > div {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: table;
+    vertical-align: middle;
+}
+
 .navbar {
     padding-bottom: 10px;
     border-color: black;
@@ -82,4 +93,31 @@
 
 .MuiToolbar>div {
     padding-inline: 5px;
+}
+
+#matchCreator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.player-input-group {
+    margin-left: 100;
+    margin-right: 100;
+    flex-direction: column;
+    display: flex;
+}
+
+#matchCreator > form > div {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.matchInfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }

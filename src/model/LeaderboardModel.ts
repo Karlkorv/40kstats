@@ -229,8 +229,7 @@ export class LeaderBoardModel {
     @action handleFactionChange(e, index) {
         let tempVar = { ...this.matchUnderCreation };
         let inputVal = e.target.value;
-        const options = Object.values(FACTIONS)
-        if (options.includes(inputVal)) { tempVar.formInputValues[index].faction_value = inputVal; }
+        tempVar.formInputValues[index].faction_value = inputVal; 
         this.matchUnderCreation = tempVar;
     }
 
@@ -279,6 +278,12 @@ export class LeaderBoardModel {
     @action handleNotesChange(e) {
         let tempVar = { ...this.matchUnderCreation };
         tempVar.notes = e.target.value;
+        this.matchUnderCreation = tempVar;
+    }
+
+    @action handleDateChange(e) {
+        let tempVar = { ...this.matchUnderCreation };
+        tempVar.date = e;
         this.matchUnderCreation = tempVar;
     }
 
