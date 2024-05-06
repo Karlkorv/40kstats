@@ -78,17 +78,6 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         }
     }
 
-    function handleFocus(e) {
-        model.handleFocus(e);
-        e.target.value = "";
-    }
-
-    function handleBlur(e, index) {
-        if (e.target.value === "") {
-            model.handleBlur(e, index);
-        }
-    }
-
     function onPrimaryPointsChange(e, index) {
         if (
             !isNaN(Number(e.target.value)) &&
@@ -161,8 +150,6 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
                     handleCancelClick={handleCancelClick}
                     handlePlayerNameChange={handlePlayerNameChange}
                     handleFactionChange={handleFactionChange}
-                    handleFocus={handleFocus}
-                    handleBlur={handleBlur}
                     onPrimaryPointsChange={onPrimaryPointsChange}
                     onSecondaryPointsChange={onSecondaryPointsChange}
                     handleWinnerChange={handleWinnerChange}

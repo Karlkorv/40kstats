@@ -29,8 +29,6 @@ export function MatchCreatorView({
     handleCancelClick,
     handlePlayerNameChange,
     handleFactionChange,
-    handleFocus,
-    handleBlur,
     onPrimaryPointsChange,
     onSecondaryPointsChange,
     handleWinnerChange,
@@ -55,14 +53,6 @@ export function MatchCreatorView({
 
     const handleListChangeACB = (e, index) => {
         handleFactionChange(e, index);
-    };
-
-    const handleFocusACB = (e) => {
-        handleFocus(e);
-    };
-
-    const handleBlurACB = (e, index) => {
-        handleBlur(e, index);
     };
 
     const handleDateChangeACB = (e) => {
@@ -119,8 +109,6 @@ export function MatchCreatorView({
         onNameChange,
         index,
         onListChange,
-        onFocus,
-        onBlur,
         onPrimaryPointsChange,
         onSecondaryPointsChange,
     }) {
@@ -143,10 +131,12 @@ export function MatchCreatorView({
                             )}
                             key={index}
                             id={"player_" + num}
+                            sx={{ width: 200 }}
                             options={usernames}
                             value={player_value || ""}
                             onChange={(e) => onNameChange(e, index)}
                             disableClearable
+                            clearOnBlur={false}
                         />
                         <FormHelperText
                             id={"player" + player_value}
@@ -167,8 +157,6 @@ export function MatchCreatorView({
                             value={faction_value}
                             autoComplete="off"
                             onChange={(e) => onListChange(e, index)}
-                            onFocus={onFocus}
-                            onBlur={(e) => onBlur(e, index)}
                         >
                             <MenuItem key={0} value="">
                                 None
@@ -306,8 +294,6 @@ export function MatchCreatorView({
                             onNameChange: handleNameChangeACB,
                             index: index,
                             onListChange: handleListChangeACB,
-                            onFocus: handleFocusACB,
-                            onBlur: handleBlurACB,
                             onPrimaryPointsChange: onPrimaryPointsChangeACB,
                             onSecondaryPointsChange: onSecondaryPointsChangeACB,
                         })
