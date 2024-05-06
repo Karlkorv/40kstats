@@ -18,7 +18,7 @@ export class LeaderBoardModel {
     @observable usernameInput: string = "";
     @observable totalMatches: number = 0
     @observable username: string | null = null;
-    @observable usernames: string[];
+    @observable usernames: string[] = [];
     @observable isValidUserName: boolean | null = null;
 
     constructor() {

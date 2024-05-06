@@ -1,6 +1,5 @@
-import React from "react";
 import { Match } from "../model/match.ts";
-import { FACTIONS } from "../model/factions.ts";
+import { FACTIONS, FACTIONS_ARRAY } from "../model/factions.ts";
 import {
     Autocomplete,
     Box,
@@ -19,6 +18,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker/";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import React from "react";
 
 export function MatchCreatorView({
     formInputValues,
@@ -126,6 +126,7 @@ export function MatchCreatorView({
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl>
                         <Autocomplete
+                            freeSolo={true}
                             renderInput={(params) => (
                                 <TextField {...params} label="Select user" />
                             )}
@@ -136,7 +137,6 @@ export function MatchCreatorView({
                             value={player_value || ""}
                             onChange={(e) => onNameChange(e, index)}
                             disableClearable
-                            clearOnBlur={false}
                         />
                         <FormHelperText
                             id={"player" + player_value}
@@ -146,31 +146,16 @@ export function MatchCreatorView({
 
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl fullWidth>
-                        <InputLabel id={"faction_" + num}>
-                            Faction {num}:
-                        </InputLabel>
-                        <Select
+                        <Autocomplete
                             key={index}
                             id={label}
-                            labelId={"faction_" + num}
-                            label={"Faction" + num}
-                            value={faction_value}
-                            autoComplete="off"
+                            options={FACTIONS_ARRAY}
+                            defaultValue={FACTIONS.ADEPTUS_MECHANICUS}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Faction" />
+                            )}
                             onChange={(e) => onListChange(e, index)}
-                        >
-                            <MenuItem key={0} value="">
-                                None
-                            </MenuItem>
-                            {/* TODO
-                                See if there is any way to not have to create a new list 
-                                for every Player Input, so that they can share the same <datalist>
-                            */}
-                            {Object.values(FACTIONS).map((faction, index) => (
-                                <MenuItem key={index} value={faction}>
-                                    {faction}
-                                </MenuItem>
-                            ))}
-                        </Select>
+                        />
                     </FormControl>
                 </Box>
                 <Box>
@@ -281,6 +266,7 @@ export function MatchCreatorView({
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             value={dayjs(date)}
+                            defaultValue={dayjs(date)}
                             onChange={handleDateChangeACB}
                             label="Match Date:"
                         />
