@@ -1,7 +1,7 @@
-import React from "react";
 import { Match } from "../model/match.ts";
-import { FACTIONS } from "../model/factions.ts";
+import { FACTIONS, FACTIONS_ARRAY } from "../model/factions.ts";
 import {
+    Autocomplete,
     Box,
     Button,
     ButtonGroup,
@@ -12,11 +12,13 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
+    TextField,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker/";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import React from "react";
 
 export function MatchCreatorView({
     formInputValues,
@@ -27,8 +29,6 @@ export function MatchCreatorView({
     handleCancelClick,
     handlePlayerNameChange,
     handleFactionChange,
-    handleFocus,
-    handleBlur,
     onPrimaryPointsChange,
     onSecondaryPointsChange,
     handleWinnerChange,
@@ -37,10 +37,10 @@ export function MatchCreatorView({
     handleNotesChange,
     user,
     handleDateChange,
+    usernames,
 }) {
     function onClickCreateMatchACB(evt) {
         createNewMatch();
-        console.log("Creating Match");
     }
     function onClickCancelACB() {
         handleCancelClick();
@@ -53,14 +53,6 @@ export function MatchCreatorView({
 
     const handleListChangeACB = (e, index) => {
         handleFactionChange(e, index);
-    };
-
-    const handleFocusACB = (e) => {
-        handleFocus(e);
-    };
-
-    const handleBlurACB = (e, index) => {
-        handleBlur(e, index);
     };
 
     const handleDateChangeACB = (e) => {
@@ -96,6 +88,7 @@ export function MatchCreatorView({
     }
 
     function onWinnerChangeACB(e) {
+        console.log("changing winner to " + e.target.value);
         handleWinnerChange(e);
     }
 
@@ -116,8 +109,6 @@ export function MatchCreatorView({
         onNameChange,
         index,
         onListChange,
-        onFocus,
-        onBlur,
         onPrimaryPointsChange,
         onSecondaryPointsChange,
     }) {
@@ -131,19 +122,21 @@ export function MatchCreatorView({
             s_points,
         } = objValue;
         return (
-            <div className="player-input-group">
+            <Box className="player-input-group" sx={{ paddingRight: 10 / 8 }}>
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl>
-                        <InputLabel id={"player_" + num}>
-                            Player {num}
-                        </InputLabel>
-                        <OutlinedInput
+                        <Autocomplete
+                            freeSolo={true}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Select user" />
+                            )}
                             key={index}
                             id={"player_" + num}
-                            label={"Player" + num}
-                            type={type || "text"}
+                            sx={{ width: 200 }}
+                            options={usernames}
                             value={player_value || ""}
                             onChange={(e) => onNameChange(e, index)}
+                            disableClearable
                         />
                         <FormHelperText
                             id={"player" + player_value}
@@ -153,33 +146,16 @@ export function MatchCreatorView({
 
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl fullWidth>
-                        <InputLabel id={"faction_" + num}>
-                            Faction {num}:
-                        </InputLabel>
-                        <Select
+                        <Autocomplete
                             key={index}
                             id={label}
-                            labelId={"faction_" + num}
-                            label={"Faction" + num}
-                            value={faction_value}
-                            autoComplete="off"
+                            options={FACTIONS_ARRAY}
+                            defaultValue={FACTIONS.ADEPTUS_MECHANICUS}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Faction" />
+                            )}
                             onChange={(e) => onListChange(e, index)}
-                            onFocus={onFocus}
-                            onBlur={(e) => onBlur(e, index)}
-                        >
-                            <MenuItem key={0} value="">
-                                None
-                            </MenuItem>
-                            {/* TODO
-                                See if there is any way to not have to create a new list 
-                                for every Player Input, so that they can share the same <datalist>
-                            */}
-                            {Object.values(FACTIONS).map((faction, index) => (
-                                <MenuItem key={index} value={faction}>
-                                    {faction}
-                                </MenuItem>
-                            ))}
-                        </Select>
+                        />
                     </FormControl>
                 </Box>
                 <Box>
@@ -271,7 +247,7 @@ export function MatchCreatorView({
                         </Button>
                     </FormControl>
                 </Box>
-            </div>
+            </Box>
         );
     }
 
@@ -284,60 +260,70 @@ export function MatchCreatorView({
     }
 
     return (
-        <div>
+        <div id="matchCreator">
             <form>
                 <Box sx={{ paddingTop: 10 / 8 }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             value={dayjs(date)}
+                            defaultValue={dayjs(date)}
                             onChange={handleDateChangeACB}
                             label="Match Date:"
                         />
                     </LocalizationProvider>
                 </Box>
 
-                {formInputValues.map((obj, index) =>
-                    PlayerInput({
-                        objValue: obj,
-                        onNameChange: handleNameChangeACB,
-                        index: index,
-                        onListChange: handleListChangeACB,
-                        onFocus: handleFocusACB,
-                        onBlur: handleBlurACB,
-                        onPrimaryPointsChange: onPrimaryPointsChangeACB,
-                        onSecondaryPointsChange: onSecondaryPointsChangeACB,
-                    })
-                )}
-
-                <Box sx={{ minWidth: 120, maxWidth: 200 }}>
-                    <FormControl fullWidth>
-                        <InputLabel id="winners">Winners:</InputLabel>
-                        <Select
-                            value={winners}
-                            onInput={(e) => onWinnerChangeACB(e)}
-                            onFocus={onWinnerFocusACB}
-                            onBlur={(e) => onWinnerBlurACB(e)}
-                        >
-                            {formInputValues.map(({ num, player_value }) => {
-                                return (
-                                    <MenuItem key={num} value={player_value}>
-                                        {player_value}
-                                    </MenuItem>
-                                );
-                            })}
-                        </Select>
-                    </FormControl>
+                <Box className="players" sx={{ display: "inline-flex" }}>
+                    {formInputValues.map((obj, index) =>
+                        PlayerInput({
+                            objValue: obj,
+                            onNameChange: handleNameChangeACB,
+                            index: index,
+                            onListChange: handleListChangeACB,
+                            onPrimaryPointsChange: onPrimaryPointsChangeACB,
+                            onSecondaryPointsChange: onSecondaryPointsChangeACB,
+                        })
+                    )}
                 </Box>
-                <Box sx={{ paddingTop: 10 / 8 }}>
-                    <FormControl>
-                        <InputLabel id="notes">Match Notes:</InputLabel>
-                        <OutlinedInput
-                            value={notes}
-                            label="Match Notes"
-                            type="text"
-                            onChange={(e) => onNotesChangeACB(e)}
-                        />
-                    </FormControl>
+
+                <Box className="matchInfo">
+                    <Box sx={{ minWidth: 120, maxWidth: 200 }}>
+                        <FormControl fullWidth>
+                            <InputLabel id="winners">Winners:</InputLabel>
+                            <Select
+                                value={winners}
+                                label="Winners:"
+                                onChange={onWinnerChangeACB}
+                                onFocus={onWinnerFocusACB}
+                                onBlur={(e) => onWinnerBlurACB(e)}
+                            >
+                                {formInputValues.map(
+                                    ({ num, player_value }) => {
+                                        return (
+                                            <MenuItem
+                                                key={num}
+                                                value={player_value}
+                                            >
+                                                {player_value}
+                                            </MenuItem>
+                                        );
+                                    }
+                                )}
+                            </Select>
+                        </FormControl>
+                    </Box>
+
+                    <Box className="notes">
+                        <FormControl>
+                            <InputLabel id="notes">Match Notes:</InputLabel>
+                            <OutlinedInput
+                                value={notes}
+                                label="Match Notes"
+                                type="text"
+                                onChange={(e) => onNotesChangeACB(e)}
+                            />
+                        </FormControl>
+                    </Box>
                 </Box>
             </form>
             <ButtonGroup variant="contained">

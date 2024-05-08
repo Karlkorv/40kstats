@@ -83,7 +83,7 @@
     display: flex;
 }
 
-.navbar > div {
+.navbar>div {
     padding-inline: 5px;
 }
 
@@ -91,6 +91,33 @@
     border-radius: 5px;
 }
 
-.MuiToolbar > div {
+.MuiToolbar>div {
     padding-inline: 5px;
+}
+
+#matchCreator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.player-input-group {
+    margin-left: 100;
+    margin-right: 100;
+    flex-direction: column;
+    display: flex;
+}
+
+#matchCreator > form > div {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.matchInfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }

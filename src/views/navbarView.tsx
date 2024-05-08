@@ -1,50 +1,140 @@
-import React from "react"
-import { IconButton, Button, AppBar, Toolbar } from "@mui/material";
+import React from "react";
+import {
+    IconButton,
+    Button,
+    AppBar,
+    Toolbar,
+    Typography,
+    Input,
+    TextField,
+} from "@mui/material";
 import { Home } from "@mui/icons-material";
 import { trace } from "mobx";
 
-export function NavbarView({ user, handleHomeButtonClick, handleCreateMatchButtonClick, handleLoginButtonClick, handleLogoutButtonClick }) {
-    function onHomeButtonClickACB(e) {
+export function NavbarView({
+    user,
+    username,
+    validUsername,
+    handleHomeButtonClick,
+    handleCreateMatchButtonClick,
+    handleUsernameConfirm,
+    handleLoginButtonClick,
+    handleLogoutButtonClick,
+    handleUsernameChange,
+}) {
+    function onHomeButtonClickACB() {
         handleHomeButtonClick();
     }
 
-    function onCreateMatchButtonClick(e) {
+    function onCreateMatchButtonClick() {
         handleCreateMatchButtonClick();
     }
 
-    function onLoginButtonClick(e) {
+    function onLoginButtonClick() {
         handleLoginButtonClick();
     }
 
-    function onLogoutButtonClick(e) {
+    function onLogoutButtonClick() {
         handleLogoutButtonClick();
+    }
+
+    function onConfirmClick() {
+        handleUsernameConfirm;
+    }
+
+    function renderUsernameCreation() {
+        if (username || !user) {
+            return;
+        }
+        return (
+            <div>
+                <TextField
+                    size="small"
+                    color="secondary"
+                    onInput={handleUsernameChange}
+                    error={validUsername}
+                    label="Enter a unique username"
+                    variant="filled"
+                />
+                <Button
+                    id="username-confirm-button"
+                    onClick={handleUsernameConfirm}
+                    variant="contained"
+                    size="small"
+                >
+                    {validUsername ? "Confirm username" : "Invalid username"}
+                </Button>
+            </div>
+        );
     }
 
     return (
         <div className="navbar">
             <AppBar className="MuiAppBar" position="sticky">
-                <Toolbar className="MuiToolbar">
-                    <div className="home-button">
-                        <IconButton onClick={(e) => onHomeButtonClickACB(e)}>
+                <Toolbar
+                    className="MuiToolbar"
+                    style={{ justifyContent: "space-between" }}
+                >
+                    <div className="left-buttons">
+                        <IconButton onClick={() => onHomeButtonClickACB()}>
                             <Home />
                         </IconButton>
+                        <Button
+                            variant="contained"
+                            disabled={!user}
+                            onClick={() => onCreateMatchButtonClick()}
+                        >
+                            {(user && "Create Match") ||
+                                (!user && "Sign in to create match")}
+                        </Button>
+                        {renderUsernameCreation()}
                     </div>
-                    <div className="create-match-button">
-                        <Button variant="contained" disabled={!user} onClick={(e) => onCreateMatchButtonClick(e)}>
-                            {user && "Create Match" || !user && "Sign in to create match"}
-                        </Button>
-                    </div>
-                    {!user && <div className="login-button">
-                        <Button variant="contained" onClick={(e) => onLoginButtonClick(e)}>
-                            Login
-                        </Button>
-                    </div>}
-
-                    {user && <div className="logout-button">
-                        <Button variant="contained" onClick={(e) => onLogoutButtonClick(e)}>
-                            Logout
-                        </Button>
-                    </div>}
+                    {!user && (
+                        <div className="login-button">
+                            <Button
+                                variant="contained"
+                                onClick={() => onLoginButtonClick()}
+                            >
+                                Login
+                            </Button>
+                        </div>
+                    )}
+                    {user && (
+                        <div
+                            style={{ display: "flex" }}
+                            className="logout-button"
+                        >
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                }}
+                            >
+                                <Typography
+                                    variant="caption"
+                                    style={{
+                                        marginRight: "8px",
+                                        marginTop: "2px",
+                                        color: "lightgray",
+                                        width: "70%",
+                                        fontSize: "0.6rem",
+                                    }}
+                                >
+                                    Logged in as{" "}
+                                    {username ||
+                                        user.displayName + " (No username)"}
+                                </Typography>
+                                <Button
+                                    onClick={handleLogoutButtonClick}
+                                    variant="contained"
+                                    color="primary"
+                                    size="small"
+                                >
+                                    Logout
+                                </Button>
+                            </div>
+                        </div>
+                    )}
                 </Toolbar>
             </AppBar>
         </div>

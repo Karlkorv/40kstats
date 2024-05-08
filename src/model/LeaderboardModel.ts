@@ -1,9 +1,10 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, deleteMatchFromFirestore, auth, getUsername, userExists, addUserName } from "../Firebase.ts";
+import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, deleteMatchFromFirestore, auth, getUsername, userExists, addUserName, getUsernames } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
 import { MatchCreatorInput, DEFAULT_CREATE_MATCH } from "./FormModel.ts";
+import { Alert } from "@mui/material";
 
 export class LeaderBoardModel {
     ready: boolean = false;
@@ -14,8 +15,10 @@ export class LeaderBoardModel {
     @observable currentMatch: Match | undefined = undefined
     @observable gettingCurrentMatch: boolean = false
     @observable user: User | null = null;
+    @observable usernameInput: string = "";
     @observable totalMatches: number = 0
     @observable username: string | null = null;
+    @observable usernames: string[] = [];
     @observable isValidUserName: boolean | null = null;
 
     constructor() {
@@ -39,25 +42,43 @@ export class LeaderBoardModel {
             }, (error) => {
                 console.log("Error when resolving promise: ", error)
             })
+            this.getUsernamesFromfirestore()
         })
     }
 
-    @action createUserName(username: string) {
-        if (this.username) {
-            return;
-        }
+    @action setUsernameInput(username: string) {
+        this.usernameInput = username;
+        this.checkUsername(username)
+    }
 
-        addUserName(username).then(() => {
+    @action getUsernamesFromfirestore() {
+        getUsernames().then((usernames) => {
             runInAction(() => {
-                this.username = username;
+                this.usernames = usernames;
             })
         })
     }
 
+    @action createUserName() {
+        if (this.username) {
+            return;
+        }
+
+        addUserName(this.usernameInput).then(() => {
+            runInAction(() => {
+                this.username = this.usernameInput;
+            })
+        }).catch((error) => { console.log("Tried to create invalid username: " + error) })
+    }
+
     @action checkUsername(username: string) {
+        if (username.length == 0) {
+            this.isValidUserName = false;
+            return;
+        }
         userExists(username).then((result) => {
             runInAction(() => {
-                this.isValidUserName = result!;
+                this.isValidUserName = !result;
             })
         })
     }
@@ -99,9 +120,13 @@ export class LeaderBoardModel {
         });
     }
 
-    @action setUser(user: User | null) {
+    setUser(user: User | null) {
         this.user = user;
-        this.matchUnderCreation.userID = user?.uid;
+        getUsername().then((result) => {
+            runInAction(() => {
+                this.username = result;
+            })
+        })
     }
 
     @action userLoggedOut() {
@@ -180,7 +205,6 @@ export class LeaderBoardModel {
     }
 
     @action startMatchCreation() {
-        this.matchUnderCreation = DEFAULT_CREATE_MATCH;
         this.matchUnderCreation.userID = this.user?.uid;
     }
 
@@ -221,7 +245,7 @@ export class LeaderBoardModel {
     @action handleFactionChange(e, index) {
         let tempVar = { ...this.matchUnderCreation };
         let inputVal = e.target.value;
-        tempVar.formInputValues[index].faction_value = inputVal; 
+        tempVar.formInputValues[index].faction_value = inputVal;
         this.matchUnderCreation = tempVar;
     }
 
