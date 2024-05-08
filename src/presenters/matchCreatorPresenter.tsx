@@ -65,16 +65,16 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
     }
 
     function handlePlayerNameChange(e, index) {
-        if (e.target.value.length > 20) {
+        if (e.length > 20) {
             alert("Name too long!");
         } else {
             model.handlePlayerInputFieldChange(e, index);
         }
     }
 
-    function handleFactionChange(e, index) {
-        if (options.includes(e.target.value) || e.target.value === "") {
-            model.handleFactionChange(e, index);
+    function handleFactionChange(value, index) {
+        if (options.includes(value) || value === "") {
+            model.handleFactionChange(value, index);
         }
     }
 

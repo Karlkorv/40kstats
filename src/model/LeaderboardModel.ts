@@ -237,14 +237,14 @@ export class LeaderBoardModel {
 
     @action handlePlayerInputFieldChange(e, index) {
         let tempVar: MatchCreatorInput = { ...this.matchUnderCreation };
-        let inputVal = e.target.value;
+        let inputVal = e;
         tempVar.formInputValues[index].player_value = inputVal;
         this.matchUnderCreation = tempVar;
     }
 
     @action handleFactionChange(e, index) {
         let tempVar = { ...this.matchUnderCreation };
-        let inputVal = e.target.value;
+        let inputVal = e;
         tempVar.formInputValues[index].faction_value = inputVal;
         this.matchUnderCreation = tempVar;
     }

@@ -47,12 +47,12 @@ export function MatchCreatorView({
         window.location.hash = "#/";
     }
 
-    const handleNameChangeACB = (e, index) => {
-        handlePlayerNameChange(e, index);
+    const handleNameChangeACB = (value, index) => {
+        handlePlayerNameChange(value, index);
     };
 
-    const handleListChangeACB = (e, index) => {
-        handleFactionChange(e, index);
+    const handleListChangeACB = (value, index) => {
+        handleFactionChange(value, index);
     };
 
     const handleDateChangeACB = (e) => {
@@ -128,14 +128,20 @@ export function MatchCreatorView({
                         <Autocomplete
                             freeSolo={true}
                             renderInput={(params) => (
-                                <TextField {...params} label="Select user" />
+                                <TextField
+                                    {...params}
+                                    label="Select user"
+                                    onChange={(e) =>
+                                        onNameChange(e.target.value, index)
+                                    }
+                                />
                             )}
                             key={index}
                             id={"player_" + num}
                             sx={{ width: 200 }}
                             options={usernames}
                             value={player_value || ""}
-                            onChange={(e) => onNameChange(e, index)}
+                            onChange={(_e, value) => onNameChange(value, index)}
                             disableClearable
                         />
                         <FormHelperText
@@ -151,10 +157,11 @@ export function MatchCreatorView({
                             id={label}
                             options={FACTIONS_ARRAY}
                             defaultValue={FACTIONS.ADEPTUS_MECHANICUS}
+                            value={faction_value || FACTIONS.ADEPTUS_MECHANICUS}
                             renderInput={(params) => (
                                 <TextField {...params} label="Faction" />
                             )}
-                            onChange={(e) => onListChange(e, index)}
+                            onChange={(_e, value) => onListChange(value, index)}
                         />
                     </FormControl>
                 </Box>
