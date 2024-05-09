@@ -104,23 +104,73 @@ export function MatchCreatorView({
         handleNotesChange(e);
     }
 
-    function PlayerInput({
-        objValue,
-        onNameChange,
-        index,
-        onListChange,
-        onPrimaryPointsChange,
-        onSecondaryPointsChange,
-    }) {
-        const {
-            label,
-            num,
-            type,
-            player_value,
-            faction_value,
-            p_points,
-            s_points,
-        } = objValue;
+    function renderPoints(isPrimary: boolean, index: number) {
+        return (
+            <FormControl>
+                <div className="points-box">
+                    <Button
+                        className="points-button"
+                        size="small"
+                        variant="outlined"
+                        onClick={() =>
+                            handlePointsButtonClick(-1, index, isPrimary)
+                        }
+                    >
+                        -1
+                    </Button>
+                    <OutlinedInput
+                        key={index}
+                        type="text"
+                        id={
+                            "player_" + index + isPrimary
+                                ? "_primary_points"
+                                : "_secondary_points"
+                        }
+                        value={
+                            isPrimary
+                                ? formInputValues[index].p_points
+                                : formInputValues[index].s_points
+                        }
+                        onChange={(e) =>
+                            isPrimary
+                                ? onPrimaryPointsChangeACB(e, index)
+                                : onSecondaryPointsChangeACB(e, index)
+                        }
+                    />
+                    <Button
+                        className="points-button"
+                        variant="outlined"
+                        onClick={() =>
+                            handlePointsButtonClick(1, index, isPrimary)
+                        }
+                    >
+                        +1
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        className="points-button"
+                        onClick={() =>
+                            handlePointsButtonClick(3, index, isPrimary)
+                        }
+                    >
+                        +3
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        className="points-button"
+                        onClick={() =>
+                            handlePointsButtonClick(5, index, isPrimary)
+                        }
+                    >
+                        +5
+                    </Button>
+                </div>
+            </FormControl>
+        );
+    }
+
+    function PlayerInput({ objValue, onNameChange, index, onListChange }) {
+        const { label, num, type, player_value, faction_value } = objValue;
         return (
             <Box className="player-input-group" sx={{ paddingRight: 10 / 8 }}>
                 <Box sx={{ minWidth: 120 }}>
@@ -165,95 +215,8 @@ export function MatchCreatorView({
                         />
                     </FormControl>
                 </Box>
-                <Box>
-                    <FormControl>
-                        <InputLabel id={"player_" + index + "_primary_points"}>
-                            Primary Points
-                        </InputLabel>
-                        <Button
-                            variant="outlined"
-                            onClick={() =>
-                                handlePointsButtonClick(-1, index, true)
-                            }
-                        >
-                            -1
-                        </Button>
-                        <OutlinedInput
-                            key={index}
-                            type="text"
-                            id={"player_" + index + "_primary_points"}
-                            label="Primary Points"
-                            value={p_points}
-                            onChange={(e) => onPrimaryPointsChange(e, index)}
-                        />
-                        <Button
-                            onClick={() =>
-                                handlePointsButtonClick(1, index, true)
-                            }
-                        >
-                            +1
-                        </Button>
-                        <Button
-                            onClick={() =>
-                                handlePointsButtonClick(3, index, true)
-                            }
-                        >
-                            +3
-                        </Button>
-                        <Button
-                            onClick={() =>
-                                handlePointsButtonClick(5, index, true)
-                            }
-                        >
-                            +5
-                        </Button>
-                    </FormControl>
-                </Box>
-                <Box>
-                    <FormControl>
-                        <InputLabel
-                            id={"player_" + index + "_secondary_points"}
-                        >
-                            Secondary Points
-                        </InputLabel>
-                        <button
-                            onClick={() =>
-                                handlePointsButtonClick(-1, index, false)
-                            }
-                        >
-                            -1
-                        </button>
-                        <OutlinedInput
-                            key={index}
-                            type="text"
-                            id={"player_" + index + "_secondary_points"}
-                            label="Secondary Points"
-                            value={s_points}
-                            onChange={(e) => onSecondaryPointsChange(e, index)}
-                        />
-                        <Button
-                            onClick={() =>
-                                handlePointsButtonClick(1, index, false)
-                            }
-                        >
-                            +1
-                        </Button>
-                        <Button
-                            onClick={() =>
-                                handlePointsButtonClick(3, index, false)
-                            }
-                        >
-                            +3
-                        </Button>
-                        <Button
-                            onClick={() =>
-                                handlePointsButtonClick(5, index, false)
-                            }
-                        >
-                            +5
-                        </Button>
-                    </FormControl>
-                </Box>
+                {renderPoints(true, index)}
+                {renderPoints(false, index)}
             </Box>
         );
     }
@@ -287,8 +250,6 @@ export function MatchCreatorView({
                             onNameChange: handleNameChangeACB,
                             index: index,
                             onListChange: handleListChangeACB,
-                            onPrimaryPointsChange: onPrimaryPointsChangeACB,
-                            onSecondaryPointsChange: onSecondaryPointsChangeACB,
                         })
                     )}
                 </Box>
