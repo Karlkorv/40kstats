@@ -12,6 +12,13 @@
     width: 100%;
 }
 
+
+.left-buttons {
+    display: flex;
+    vertical-align: middle;
+    position: relative;
+}
+
 /* #table-wrapper {
     border: 1px solid black;
 } */

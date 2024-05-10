@@ -76,12 +76,26 @@ export function NavbarView({
                     style={{ justifyContent: "space-between" }}
                 >
                     <div className="left-buttons">
-                        <IconButton onClick={() => onHomeButtonClickACB()}>
-                            <Home />
-                        </IconButton>
+                        <div
+                            id="titletext"
+                            style={{ marginRight: "30px", cursor: "pointer" }}
+                            onClick={onHomeButtonClickACB}
+                        >
+                            <Typography color={"black"} variant="h4">
+                                40kstats
+                            </Typography>
+                            <Typography color={"lightgrey"} variant="subtitle2">
+                                a 40k match tracker
+                            </Typography>
+                        </div>
                         <Button
                             variant="contained"
                             disabled={!user}
+                            size="small"
+                            style={{
+                                height: "50%",
+                                marginTop: "5%",
+                            }}
                             onClick={() => onCreateMatchButtonClick()}
                         >
                             {(user && "Create Match") ||
