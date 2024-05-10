@@ -2,6 +2,7 @@ import { firebaseConfig } from './firebaseConfig.ts';
 import { initializeApp } from 'firebase/app';
 import { Match } from './model/match.ts';
 import { getAuth } from 'firebase/auth';
+import { getDatabase, onDisconnect, onValue, ref } from "firebase/database"
 import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc, updateDoc, initializeFirestore, writeBatch } from 'firebase/firestore';
 import { LeaderBoardModel } from './model/LeaderboardModel.ts';
 import { runInAction } from 'mobx';
@@ -15,6 +16,7 @@ initializeFirestore(app, {
 const db = getFirestore(app);
 const matchRef = collection(db, "matches");
 const persistenceRef = collection(db, "persistence");
+export const connectionRef = ref(getDatabase(), ".info/connected");
 export const auth = getAuth(app);
 
 export function getLatestMatches(amount: number) {

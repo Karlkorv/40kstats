@@ -141,6 +141,7 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         <div>
             {
                 <MatchCreatorView
+                    connected={model.connected}
                     formInputValues={model.matchUnderCreation.formInputValues}
                     user={model.user}
                     winners={model.matchUnderCreation.winners}

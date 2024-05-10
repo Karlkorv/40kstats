@@ -14,6 +14,8 @@ import "./style.css";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorView from "./views/errorView.tsx";
 import { Navbar } from "./presenters/navbarPresenter.tsx";
+import { Alert, CircularProgress, Slide } from "@mui/material";
+import { Check } from "@mui/icons-material";
 
 export const App = observer(({ model }: { model: LeaderBoardModel }) => {
     function makeRouter(model: LeaderBoardModel) {
@@ -36,11 +38,30 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
     }
     return (
         <div>
-            <ErrorBoundary fallback={ErrorView()}>
+            <ErrorBoundary fallback={<ErrorView />}>
                 <div>
                     <Navbar model={model} />
                 </div>
                 <RouterProvider router={makeRouter(model)} />
+                <Slide
+                    direction="up"
+                    in={!model.connected}
+                    mountOnEnter
+                    unmountOnExit
+                    timeout={{ exit: 1500 }}
+                >
+                    <Alert
+                        id="connectionAlert"
+                        severity={model.connected ? "success" : "error"}
+                        icon={
+                            model.connected ? <Check /> : <CircularProgress />
+                        }
+                    >
+                        {!model.connected
+                            ? "Connection lost, Reconnecting"
+                            : "Reconnected"}
+                    </Alert>
+                </Slide>
                 <LatestMatches model={model} />
             </ErrorBoundary>
         </div>
