@@ -1,6 +1,6 @@
 import React from "react";
 import { Match } from "../model/match.ts";
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, Button, ButtonGroup, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 export function MatchView({ match, deleteMatch, editMatch }: { match: Match, deleteMatch: any, editMatch: any }) {
   function deleteMatchACB() {
@@ -46,38 +46,40 @@ export function MatchView({ match, deleteMatch, editMatch }: { match: Match, del
   return (
     <div id="match-wrapper">
       <h1>Winner: {match.winners[0]}</h1>
-      <Table>
-        {renderWinnerRow(match)}
-        <TableBody>
-          <TableRow id="faction-row">
-            <TableCell style={{ borderBottom: "none", borderRight:"1px solid rgba(224, 224, 224, 1)"}}>Faction</TableCell>
-            <TableCell>{match.factions[0]}</TableCell>
-            <TableCell>{match.factions[1]}</TableCell>
-          </TableRow>
-          <TableRow id="p-points-row">
-            <TableCell style={{borderBottom: "none", borderTop:"none", borderRight:"1px solid rgba(224, 224, 224, 1)"}}>Primary Points</TableCell>
-            <TableCell>{match.points_primary[0]}</TableCell>
-            <TableCell>{match.points_primary[1]}</TableCell>
-          </TableRow>
-          <TableRow id="s-points-row">
-            <TableCell style={{borderRight:"1px solid rgba(224, 224, 224, 1)"}}>Secondary Points</TableCell>
-            <TableCell>{match.points_secondary[0]}</TableCell>
-            <TableCell>{match.points_secondary[1]}</TableCell>
-          </TableRow>
-          {match.notes && match.notes.length > 0 &&
-            <tr id="notes-row">
-              <th>Notes:</th>
-              <td colSpan={2}>{match.notes}</td>
-            </tr>
-          }
-        </TableBody>
-      </Table>
-      <div id="match-buttons">
-        <button onClick={() => { editMatchACB() }}>Edit</button>
-        <button onClick={() => { window.location.hash = "#/"; }}>Back</button>
-        <button onClick={() => { deleteMatchACB(), new Audio("/audio/dino-noise.m4a").play() }}>Delete match</button>
-        <button>Share match</button>
-      </div>
+      <Box className="table-class">
+        <Table style={{margin:"auto", justifyContent:"center", alignItems:"center"}}>
+          {renderWinnerRow(match)}
+          <TableBody>
+            <TableRow id="faction-row">
+              <TableCell style={{ borderBottom: "none", borderRight:"1px solid rgba(224, 224, 224, 1)", fontWeight:"bold"}}>Faction</TableCell>
+              <TableCell style={{borderRight: "1px solid rgba(224, 224, 224, 1)"}}>{match.factions[0]}</TableCell>
+              <TableCell>{match.factions[1]}</TableCell>
+            </TableRow>
+            <TableRow id="p-points-row">
+              <TableCell style={{borderBottom: "none", borderTop:"none", borderRight:"1px solid rgba(224, 224, 224, 1)", fontWeight:"bold"}}>Primary Points</TableCell>
+              <TableCell style={{borderRight: "1px solid rgba(224, 224, 224, 1)"}}>{match.points_primary[0]}</TableCell>
+              <TableCell>{match.points_primary[1]}</TableCell>
+            </TableRow>
+            <TableRow id="s-points-row">
+              <TableCell style={{borderRight:"1px solid rgba(224, 224, 224, 1)", fontWeight:"bold"}}>Secondary Points</TableCell>
+              <TableCell style={{borderRight: "1px solid rgba(224, 224, 224, 1)"}}>{match.points_secondary[0]}</TableCell>
+              <TableCell>{match.points_secondary[1]}</TableCell>
+            </TableRow>
+            {match.notes && match.notes.length > 0 &&
+              <tr id="notes-row">
+                <th>Notes:</th>
+                <td colSpan={2}>{match.notes}</td>
+              </tr>
+            }
+          </TableBody>
+        </Table>
+      </Box>
+      <ButtonGroup variant="contained" id="match-buttons">
+        <Button onClick={() => { editMatchACB() }}>Edit</Button>
+        <Button onClick={() => { window.location.hash = "#/"; }}>Back</Button>
+        <Button onClick={() => { deleteMatchACB(), new Audio("/audio/dino-noise.m4a").play() }}>Delete match</Button>
+        <Button>Share match</Button>
+      </ButtonGroup>
     </div>
   );
 }
