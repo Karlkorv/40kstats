@@ -24,6 +24,11 @@ const columns : GridColDef[] = [
     },
     {
         field: "player_2",
+        headerName: "Player 2",
+        flex: 1
+    },
+    {
+        field: "faction_2",
         headerName: "Faction 2",
         flex: 1
     },
@@ -65,8 +70,8 @@ export function LastestMatchesView({
         moreMatches(10)
     }
 
-    function matchRowClickedACB(e) {
-        matchClicked(e);
+    function matchRowClickedACB(matchID) {
+        matchClicked(matchID);
     }
     function matchRenderCB(match: Match) {
         return (
@@ -80,7 +85,7 @@ export function LastestMatchesView({
     return (
         <div>
             <button disabled={!user} onClick={dummyMatchClickedACB}>Add dummy match</button>
-            <DataGrid rows={matches.map(matchRenderCB)} columns={columns} disableColumnResize disableColumnMenu onRowClick={matchRowClickedACB}>
+            <DataGrid rows={matches.map(matchRenderCB)} columns={columns} disableColumnResize disableColumnMenu disableRowSelectionOnClick rowSelection onRowClick={(row) => matchRowClickedACB(row.id)}>
             </DataGrid>
         </div >
     )
