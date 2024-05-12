@@ -3,6 +3,30 @@ import { Match } from "../model/match.ts"
 import { toJS } from "mobx"
 import { User } from "firebase/auth";
 import { styled, Table, TableCell, TableHead, TableRow } from "@mui/material"
+import { DataGrid, GridColDef } from "@mui/x-data-grid"
+
+const columns : GridColDef[] = [
+    {
+        field: "date",
+        headerName: "Date"
+    },
+    {
+        field: "player_1",
+        headerName: "Player 1"
+    },
+    {
+        field: "faction_1",
+        headerName: "Faction 1"
+    },
+    {
+        field: "player_2",
+        headerName: "Faction 2"
+    },
+    {
+        field: "winner",
+        headerName: "Winner"
+    },
+]
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -35,20 +59,12 @@ export function LastestMatchesView({
         moreMatches(10)
     }
 
+    function matchRowClickedACB(e) {
+        matchClicked(e);
+    }
     function matchRenderCB(match: Match) {
-        function matchRowClickedACB(e) {
-            e.preventDefault();
-            matchClicked(match);
-        }
         return (
-            <StyledTableRow className="matchRow" key={match.matchID || match.date.getTime()} onClick={matchRowClickedACB}>
-                <TableCell>{match.getDateString()}</TableCell>
-                <TableCell>{match.players[0]}</TableCell>
-                <TableCell>{match.factions[0]}</TableCell>
-                <TableCell>{match.players[1]}</TableCell>
-                <TableCell>{match.factions[1]}</TableCell>
-                <TableCell>{match.winners}</TableCell>
-            </StyledTableRow>
+            { id: match.matchID, date: match.date, player_1: match.players[0], faction_1: match.factions[0], player_2: match.players[1], faction_2: match.factions[1], winner: match.winners[0]}
         )
     }
     console.log(toJS(matches));
@@ -58,27 +74,8 @@ export function LastestMatchesView({
     return (
         <div>
             <button disabled={!user} onClick={dummyMatchClickedACB}>Add dummy match</button>
-            <Table id="table-wrapper">
-                <div id="table-scroll">
-                        <TableHead id="table-header">
-                            <TableRow>
-                                    <TableCell>Date</TableCell>
-                                    <TableCell>Player 1</TableCell>
-                                    <TableCell>Faction 1</TableCell>
-                                    <TableCell>Player 2</TableCell>
-                                    <TableCell>Faction 2</TableCell>
-                                    <TableCell>Winner</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <tbody>
-                            {matches.map(matchRenderCB)}
-                        </tbody>
-                </div>
-                <div id="matches-more">
-                    <p>Showing {matches.length} / {totalMatches} Matches</p>
-                    <button onClick={moreMatchesACB}>More</button>
-                </div>
-            </Table>
+            <DataGrid rows={matches.map(matchRenderCB)} columns={columns} disableColumnResize disableColumnMenu onRowClick={matchRowClickedACB}>
+            </DataGrid>
         </div >
     )
 }

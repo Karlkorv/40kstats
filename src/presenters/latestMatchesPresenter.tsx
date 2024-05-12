@@ -12,7 +12,9 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
             ["Janne", "Johan"],
             [FACTIONS.ADEPTUS_MECHANICUS, FACTIONS.AELDARI],
             ["Janne"],
-            [10, 0], [0, 0], undefined, undefined, "Notes test"), ...model.matches]
+            [10, 0], [0, 0], undefined, undefined, "Notes test", Math.random().toString()
+            ), 
+            ...model.matches]
     }
 
     function matchClicked(match: Match) {
