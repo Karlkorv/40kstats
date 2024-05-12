@@ -138,6 +138,7 @@
 }
 
 .table-class {
-    outline: 2px solid black;
+    outline: 1px solid black;
     border-radius: 10px;
+    overflow: auto;
 }
