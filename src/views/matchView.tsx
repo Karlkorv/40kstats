@@ -1,6 +1,6 @@
 import React from "react";
 import { Match } from "../model/match.ts";
-import { Box, Button, ButtonGroup, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, Button, ButtonGroup, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 
 export function MatchView({ match, deleteMatch, editMatch }: { match: Match, deleteMatch: any, editMatch: any }) {
   function deleteMatchACB() {
@@ -45,7 +45,7 @@ export function MatchView({ match, deleteMatch, editMatch }: { match: Match, del
   }
   return (
     <div id="match-wrapper">
-      <h1>Winner: {match.winners[0]}</h1>
+      <Typography fontSize={50}>Winner: {match.winners[0]}</Typography>
       <Box className="table-class">
         <Table style={{margin:"auto", justifyContent:"center", alignItems:"center"}}>
           {renderWinnerRow(match)}
