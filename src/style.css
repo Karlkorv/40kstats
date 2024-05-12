@@ -120,6 +120,8 @@
     margin-right: 100;
     flex-direction: column;
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #matchCreator > form > div {
@@ -133,4 +135,10 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+.players {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

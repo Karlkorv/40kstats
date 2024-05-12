@@ -108,17 +108,19 @@ export function MatchCreatorView({
         return (
             <FormControl>
                 <div className="points-box">
-                    <Button
-                        className="points-button"
-                        size="small"
-                        variant="outlined"
-                        onClick={() =>
-                            handlePointsButtonClick(-1, index, isPrimary)
-                        }
-                    >
-                        -1
-                    </Button>
-                    <OutlinedInput
+                    <ButtonGroup>
+                        <Button
+                            className="points-button"
+                            size="small"
+                            variant="outlined"
+                            onClick={() =>
+                                handlePointsButtonClick(-1, index, isPrimary)
+                            }
+                        >
+                            -1
+                        </Button>
+                    </ButtonGroup>
+                    <OutlinedInput sx={{maxWidth: 100}}
                         key={index}
                         type="text"
                         id={
@@ -137,33 +139,35 @@ export function MatchCreatorView({
                                 : onSecondaryPointsChangeACB(e, index)
                         }
                     />
-                    <Button
-                        className="points-button"
-                        variant="outlined"
-                        onClick={() =>
-                            handlePointsButtonClick(1, index, isPrimary)
-                        }
-                    >
-                        +1
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        className="points-button"
-                        onClick={() =>
-                            handlePointsButtonClick(3, index, isPrimary)
-                        }
-                    >
-                        +3
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        className="points-button"
-                        onClick={() =>
-                            handlePointsButtonClick(5, index, isPrimary)
-                        }
-                    >
-                        +5
-                    </Button>
+                    <ButtonGroup>
+                        <Button
+                            className="points-button"
+                            variant="outlined"
+                            onClick={() =>
+                                handlePointsButtonClick(1, index, isPrimary)
+                            }
+                        >
+                            +1
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            className="points-button"
+                            onClick={() =>
+                                handlePointsButtonClick(3, index, isPrimary)
+                            }
+                        >
+                            +3
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            className="points-button"
+                            onClick={() =>
+                                handlePointsButtonClick(5, index, isPrimary)
+                            }
+                        >
+                            +5
+                        </Button>
+                    </ButtonGroup>
                 </div>
             </FormControl>
         );
@@ -200,7 +204,7 @@ export function MatchCreatorView({
                     </FormControl>
                 </Box>
 
-                <Box sx={{ minWidth: 120 }}>
+                <Box sx={{ minWidth: 300 }}>
                     <FormControl fullWidth>
                         <Autocomplete
                             key={index}
@@ -243,7 +247,7 @@ export function MatchCreatorView({
                     </LocalizationProvider>
                 </Box>
 
-                <Box className="players" sx={{ display: "inline-flex" }}>
+                <Box className="players">
                     {formInputValues.map((obj, index) =>
                         PlayerInput({
                             objValue: obj,
@@ -255,7 +259,7 @@ export function MatchCreatorView({
                 </Box>
 
                 <Box className="matchInfo">
-                    <Box sx={{ minWidth: 120, maxWidth: 200 }}>
+                    <Box sx={{ minWidth: 120, maxWidth: 200, padding:10/8 }}>
                         <FormControl fullWidth>
                             <InputLabel id="winners">Winners:</InputLabel>
                             <Select
