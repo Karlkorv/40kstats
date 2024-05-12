@@ -2,8 +2,9 @@ import React from "react"
 import { Match } from "../model/match.ts"
 import { toJS } from "mobx"
 import { User } from "firebase/auth";
-import { styled, Table, TableCell, TableHead, TableRow } from "@mui/material"
+import { Box, styled, Table, TableCell, TableHead, TableRow } from "@mui/material"
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
+import HighlightAltIcon from "@mui/icons-material/HighlightAlt";
 import dayjs from 'dayjs';
 
 const columns : GridColDef[] = [
@@ -37,6 +38,17 @@ const columns : GridColDef[] = [
         headerName: "Winner",
         flex: 1
     },
+    {
+        field: "select-icon",
+        headerName:"",
+        renderCell: (params) => {
+            return (
+                <Box display="flex" justifyContent="center" alignItems="center" height={50}>
+                    <HighlightAltIcon/>
+                </Box>
+            )
+        }
+    }
 ]
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -85,7 +97,7 @@ export function LastestMatchesView({
     return (
         <div>
             <button disabled={!user} onClick={dummyMatchClickedACB}>Add dummy match</button>
-            <DataGrid sx={{maxHeight:500, '& .MuiDataGrid.cell:focus, & .MuiDataGrid-cell:focus-within': {outline: 'none'}}} rows={matches.map(matchRenderCB)} columns={columns} disableColumnResize disableColumnMenu disableRowSelectionOnClick rowSelection={false} hideFooter onRowClick={(row) => matchRowClickedACB(row.id)} onCellClick={(params, e) => e.stopPropagation()}>
+            <DataGrid sx={{maxHeight:500, '& .MuiDataGrid.cell:focus, & .MuiDataGrid-cell:focus-within': {outline: 'none'}}} rows={matches.map(matchRenderCB)} columns={columns} disableColumnResize disableColumnMenu disableRowSelectionOnClick rowSelection={false} hideFooter onRowClick={(row) => matchRowClickedACB(row.id)}>
             </DataGrid>
         </div >
     )
