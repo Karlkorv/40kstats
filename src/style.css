@@ -61,7 +61,7 @@
 
 #match-wrapper table tr td {
     text-align: right;
-    outline: 1px solid rgb(165, 164, 164);
+    border-right: 1px solid rgba(224, 224, 224, 1);
     padding: 10px
 }
 
