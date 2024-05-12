@@ -85,7 +85,7 @@ export function LastestMatchesView({
     return (
         <div>
             <button disabled={!user} onClick={dummyMatchClickedACB}>Add dummy match</button>
-            <DataGrid rows={matches.map(matchRenderCB)} columns={columns} disableColumnResize disableColumnMenu disableRowSelectionOnClick rowSelection onRowClick={(row) => matchRowClickedACB(row.id)}>
+            <DataGrid sx={{maxHeight:500, '& .MuiDataGrid.cell:focus, & .MuiDataGrid-cell:focus-within': {outline: 'none'}}} rows={matches.map(matchRenderCB)} columns={columns} disableColumnResize disableColumnMenu disableRowSelectionOnClick rowSelection={false} hideFooter onRowClick={(row) => matchRowClickedACB(row.id)} onCellClick={(params, e) => e.stopPropagation()}>
             </DataGrid>
         </div >
     )
