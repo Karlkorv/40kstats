@@ -2,6 +2,13 @@ import React from "react"
 import { Match } from "../model/match.ts"
 import { toJS } from "mobx"
 import { User } from "firebase/auth";
+import { styled, Table, TableCell, TableHead, TableRow } from "@mui/material"
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+      },
+}))
 
 export function LastestMatchesView({
     addDummyMatch,
@@ -34,14 +41,14 @@ export function LastestMatchesView({
             matchClicked(match);
         }
         return (
-            <tr className="matchRow" key={match.matchID || match.date.getTime()} onClick={matchRowClickedACB}>
-                <td>{match.getDateString()}</td>
-                <td>{match.players[0]}</td>
-                <td>{match.factions[0]}</td>
-                <td>{match.players[1]}</td>
-                <td>{match.factions[1]}</td>
-                <td>{match.winners}</td>
-            </tr>
+            <StyledTableRow className="matchRow" key={match.matchID || match.date.getTime()} onClick={matchRowClickedACB}>
+                <TableCell>{match.getDateString()}</TableCell>
+                <TableCell>{match.players[0]}</TableCell>
+                <TableCell>{match.factions[0]}</TableCell>
+                <TableCell>{match.players[1]}</TableCell>
+                <TableCell>{match.factions[1]}</TableCell>
+                <TableCell>{match.winners}</TableCell>
+            </StyledTableRow>
         )
     }
     console.log(toJS(matches));
@@ -51,41 +58,27 @@ export function LastestMatchesView({
     return (
         <div>
             <button disabled={!user} onClick={dummyMatchClickedACB}>Add dummy match</button>
-            <div id="table-wrapper">
+            <Table id="table-wrapper">
                 <div id="table-scroll">
-                    <table>
-                        <thead id="table-header">
-                            <tr>
-                                <th><span>
-                                    Date
-                                </span></th>
-                                <th><span>
-                                    Player 1
-                                </span></th>
-                                <th><span>
-                                    Faction 1
-                                </span></th>
-                                <th><span>
-                                    Player 2
-                                </span></th>
-                                <th><span>
-                                    Faction 2
-                                </span></th>
-                                <th><span>
-                                    Winner
-                                </span></th>
-                            </tr>
-                        </thead>
+                        <TableHead id="table-header">
+                            <TableRow>
+                                    <TableCell>Date</TableCell>
+                                    <TableCell>Player 1</TableCell>
+                                    <TableCell>Faction 1</TableCell>
+                                    <TableCell>Player 2</TableCell>
+                                    <TableCell>Faction 2</TableCell>
+                                    <TableCell>Winner</TableCell>
+                            </TableRow>
+                        </TableHead>
                         <tbody>
                             {matches.map(matchRenderCB)}
                         </tbody>
-                    </table>
                 </div>
                 <div id="matches-more">
                     <p>Showing {matches.length} / {totalMatches} Matches</p>
                     <button onClick={moreMatchesACB}>More</button>
                 </div>
-            </div>
+            </Table>
         </div >
     )
 }
