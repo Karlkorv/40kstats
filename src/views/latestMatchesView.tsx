@@ -4,27 +4,33 @@ import { toJS } from "mobx"
 import { User } from "firebase/auth";
 import { styled, Table, TableCell, TableHead, TableRow } from "@mui/material"
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
+import dayjs from 'dayjs';
 
 const columns : GridColDef[] = [
     {
         field: "date",
-        headerName: "Date"
+        headerName: "Date",
+        flex: 1
     },
     {
         field: "player_1",
-        headerName: "Player 1"
+        headerName: "Player 1",
+        flex: 1
     },
     {
         field: "faction_1",
-        headerName: "Faction 1"
+        headerName: "Faction 1",
+        flex: 1
     },
     {
         field: "player_2",
-        headerName: "Faction 2"
+        headerName: "Faction 2",
+        flex: 1
     },
     {
         field: "winner",
-        headerName: "Winner"
+        headerName: "Winner",
+        flex: 1
     },
 ]
 
@@ -64,7 +70,7 @@ export function LastestMatchesView({
     }
     function matchRenderCB(match: Match) {
         return (
-            { id: match.matchID, date: match.date, player_1: match.players[0], faction_1: match.factions[0], player_2: match.players[1], faction_2: match.factions[1], winner: match.winners[0]}
+            { id: match.matchID, date: dayjs(match.date).format("YYYY/MM/DD"), player_1: match.players[0], faction_1: match.factions[0], player_2: match.players[1], faction_2: match.factions[1], winner: match.winners[0]}
         )
     }
     console.log(toJS(matches));
