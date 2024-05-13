@@ -5,6 +5,7 @@ import {
     Box,
     Button,
     ButtonGroup,
+    FilledInput,
     FormControl,
     FormHelperText,
     Input,
@@ -120,7 +121,8 @@ export function MatchCreatorView({
                             -1
                         </Button>
                     </ButtonGroup>
-                    <OutlinedInput sx={{maxWidth: 100}}
+                    <OutlinedInput
+                        sx={{ maxWidth: 100 }}
                         key={index}
                         type="text"
                         id={
@@ -221,6 +223,17 @@ export function MatchCreatorView({
                 </Box>
                 {renderPoints(true, index)}
                 {renderPoints(false, index)}
+                <FormControl style={{ margin: "10px" }}>
+                    <InputLabel htmlFor="totalPoints">Total points:</InputLabel>
+                    <OutlinedInput
+                        id="totalPoints"
+                        disabled={true}
+                        value={
+                            formInputValues[index].p_points +
+                            formInputValues[index].s_points
+                        }
+                    />
+                </FormControl>
             </Box>
         );
     }
@@ -259,7 +272,7 @@ export function MatchCreatorView({
                 </Box>
 
                 <Box className="matchInfo">
-                    <Box sx={{ minWidth: 120, maxWidth: 200, padding:10/8 }}>
+                    <Box sx={{ minWidth: 120, maxWidth: 200, padding: 10 / 8 }}>
                         <FormControl fullWidth>
                             <InputLabel id="winners">Winners:</InputLabel>
                             <Select

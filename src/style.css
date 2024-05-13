@@ -68,14 +68,8 @@
 .points-box {
     /* Align content in a row */
     display: flex;
-}
-
-.points-button {
-    /* TODO: Något här är funky asså */
-    height: 50%;
-    position: fixed;
-    margin: 10px;
-    padding: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
 .player-input-group {
