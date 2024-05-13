@@ -6,7 +6,7 @@ import { getDatabase, onDisconnect, onValue, ref } from "firebase/database"
 import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc, updateDoc, initializeFirestore, writeBatch } from 'firebase/firestore';
 import { LeaderBoardModel } from './model/LeaderboardModel.ts';
 import { runInAction } from 'mobx';
-import { DEFAULT_CREATE_MATCH } from './model/FormModel.ts';
+import { DEFAULT_CREATE_MATCH, MatchCreatorInput } from './model/FormModel.ts';
 // Initialize Firebase
 
 const app = initializeApp(firebaseConfig);
@@ -35,6 +35,8 @@ export function persistenceToModel(persistence: any, model: LeaderBoardModel) {
         model.setMatchUnderCreation(DEFAULT_CREATE_MATCH);
         return;
     }
+
+    persistence.date = new Date(persistence.date); // To convert to JS date object
 
     model.readFromPersistence(persistence);
 }
@@ -67,6 +69,9 @@ export function loadFromFirebase(model: LeaderBoardModel) {
 
 export function connectToFirebase(model: LeaderBoardModel, watchFunction) {
     watchFunction(() => model.matchUnderCreation, () => {
+        if (isInvalidMatch(model.matchUnderCreation)) {
+            return;
+        }
         model.startPersistenceWrite();
         saveToFirebase(model)
     });
@@ -77,6 +82,16 @@ export function connectToFirebase(model: LeaderBoardModel, watchFunction) {
         model.setUser(user);
         loadFromFirebase(model);
     });
+}
+
+function isInvalidMatch(match: MatchCreatorInput) {
+    return match.notes == "" && match.winners == "" &&
+        match.formInputValues[0].p_points == 0 &&
+        match.formInputValues[0].s_points == 0 &&
+        match.formInputValues[1].p_points == 0 &&
+        match.formInputValues[1].p_points == 0 &&
+        match.formInputValues[0].player_value == "" &&
+        match.formInputValues[1].player_value == ""
 }
 
 export function getMatchById(matchId: string) {
