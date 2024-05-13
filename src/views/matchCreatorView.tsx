@@ -1,10 +1,16 @@
 import { Match } from "../model/match.ts";
 import { FACTIONS, FACTIONS_ARRAY } from "../model/factions.ts";
 import {
+    Alert,
     Autocomplete,
     Box,
     Button,
     ButtonGroup,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     FormControl,
     FormHelperText,
     Input,
@@ -13,6 +19,7 @@ import {
     OutlinedInput,
     Select,
     TextField,
+    Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker/";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -22,10 +29,13 @@ import React from "react";
 
 export function MatchCreatorView({
     connected,
+    persistenceData,
     formInputValues,
     winners,
     notes,
     date,
+    overwriteFromPersistence,
+    clearPersistence,
     createNewMatch,
     handleCancelClick,
     handlePlayerNameChange,
@@ -46,6 +56,14 @@ export function MatchCreatorView({
     function onClickCancelACB() {
         handleCancelClick();
         window.location.hash = "#/";
+    }
+
+    function overwriteFromPersistenceACB() {
+        overwriteFromPersistence();
+    }
+
+    function clearPersistenceACB() {
+        clearPersistence();
     }
 
     const handleNameChangeACB = (value, index) => {
@@ -89,7 +107,6 @@ export function MatchCreatorView({
     }
 
     function onWinnerChangeACB(e) {
-        console.log("changing winner to " + e.target.value);
         handleWinnerChange(e);
     }
 
@@ -103,6 +120,63 @@ export function MatchCreatorView({
 
     function onNotesChangeACB(e) {
         handleNotesChange(e);
+    }
+
+    function renderSyncAlert(persistenceData) {
+        if (persistenceData.oldMatch) {
+            return (
+                <div>
+                    <Dialog open={persistenceData.oldMatch}>
+                        <DialogContent>
+                            <Typography>
+                                Found an unfinished match, overwrite current
+                                match?
+                            </Typography>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={overwriteFromPersistenceACB}>
+                                Yes
+                            </Button>
+                            <Button onClick={clearPersistenceACB}>No</Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
+            );
+        }
+
+        if (persistenceData.writing) {
+            return (
+                <div id="syncingAlert">
+                    <CircularProgress
+                        style={{ padding: "10px", color: "gray" }}
+                    />
+                    <Typography style={{ color: "gray" }}>
+                        Syncing...
+                    </Typography>
+                </div>
+            );
+        }
+
+        if (!persistenceData.lastWritten) {
+            return (
+                <div id="syncingAlert">
+                    <Typography>Not synced</Typography>
+                </div>
+            );
+        }
+
+        const lastSyncedAgo = dayjs().diff(
+            persistenceData.lastWritten,
+            "minutes"
+        );
+
+        return (
+            <div id="syncingAlert">
+                <Typography>
+                    Last synced: {lastSyncedAgo} minutes ago
+                </Typography>
+            </div>
+        );
     }
 
     function PlayerInput({
@@ -269,6 +343,7 @@ export function MatchCreatorView({
 
     return (
         <div id="matchCreator">
+            {renderSyncAlert(persistenceData)}
             <form>
                 <Box sx={{ paddingTop: 10 / 8 }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>

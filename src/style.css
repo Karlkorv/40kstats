@@ -74,6 +74,16 @@
     padding: 10px;
 }
 
+#syncingAlert{
+    display: flex;
+    height: 25px;
+    justify-content: right;
+    align-items: center;
+    position: relative;
+    left: 25%;
+    color: gray;
+}
+
 .matchRow {
     margin: 5px;
     height: 30px;
