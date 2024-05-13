@@ -10,7 +10,7 @@ import { onValue } from "firebase/database";
 export class LeaderBoardModel {
     ready: boolean = false;
     @observable loading = false
-    @observable connected = false
+    @observable connected = true
     @observable error = undefined
     @observable matches: Match[] = []
     @observable matchUnderCreation: MatchCreatorInput = DEFAULT_CREATE_MATCH;
@@ -21,6 +21,17 @@ export class LeaderBoardModel {
     @observable totalMatches: number = 0
     @observable username: string | null = null;
     @observable usernames: string[] = [];
+
+    @observable persistenceData: {
+        writing: boolean,
+        lastWritten: Date | null,
+        oldMatch: MatchCreatorInput | null,
+    } = {
+            writing: false,
+            lastWritten: null,
+            oldMatch: null,
+        }
+
     @observable isValidUserName: boolean | null = null;
 
     constructor() {
@@ -51,6 +62,25 @@ export class LeaderBoardModel {
             })
             this.getUsernamesFromfirestore()
         })
+    }
+
+    @action logPersistenceWrite() {
+        this.persistenceData.lastWritten = new Date();
+        this.persistenceData.writing = false;
+    }
+
+    @action startPersistenceWrite() {
+        this.persistenceData.writing = true;
+    }
+
+    @action readFromPersistence(oldMatch: MatchCreatorInput) {
+        this.persistenceData.oldMatch = oldMatch;
+    }
+
+    @action clearPersistenceData() {
+        this.persistenceData.oldMatch = null;
+        this.persistenceData.lastWritten = null;
+        this.persistenceData.writing = false;
     }
 
     @action setConnection(connected: boolean) {

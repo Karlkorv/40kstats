@@ -36,7 +36,7 @@ export function persistenceToModel(persistence: any, model: LeaderBoardModel) {
         return;
     }
 
-    model.setMatchUnderCreation(persistence);
+    model.readFromPersistence(persistence);
 }
 
 export function saveToFirebase(model: LeaderBoardModel) {
@@ -45,6 +45,7 @@ export function saveToFirebase(model: LeaderBoardModel) {
     }
 
     setDoc(doc(persistenceRef, model.user.uid), modelToPersistence(model)).then(() => {
+        model.logPersistenceWrite();
         console.log("Persistence written to firebase")
     });
 }
@@ -65,7 +66,10 @@ export function loadFromFirebase(model: LeaderBoardModel) {
 }
 
 export function connectToFirebase(model: LeaderBoardModel, watchFunction) {
-    watchFunction(() => model.matchUnderCreation, () => saveToFirebase(model));
+    watchFunction(() => model.matchUnderCreation, () => {
+        model.startPersistenceWrite();
+        saveToFirebase(model)
+    });
     auth.onAuthStateChanged((user) => {
         if (!user) {
             model.userLoggedOut();

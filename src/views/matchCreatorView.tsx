@@ -5,6 +5,7 @@ import {
     Box,
     Button,
     ButtonGroup,
+    CircularProgress,
     FormControl,
     FormHelperText,
     Input,
@@ -13,6 +14,7 @@ import {
     OutlinedInput,
     Select,
     TextField,
+    Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker/";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -22,6 +24,7 @@ import React from "react";
 
 export function MatchCreatorView({
     connected,
+    persistenceData,
     formInputValues,
     winners,
     notes,
@@ -103,6 +106,40 @@ export function MatchCreatorView({
 
     function onNotesChangeACB(e) {
         handleNotesChange(e);
+    }
+
+    function renderSyncAlert(persistenceData) {
+        if (persistenceData.writing) {
+            return (
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <CircularProgress
+                        style={{ padding: "10px", color: "gray" }}
+                    />
+                    <Typography style={{ color: "gray" }}>
+                        Syncing...
+                    </Typography>
+                </div>
+            );
+        }
+
+        if (!persistenceData.lastWritten) {
+            return <span>Not synced</span>;
+        }
+
+        const lastSyncedAgo = dayjs().diff(
+            persistenceData.lastWritten,
+            "minutes"
+        );
+
+        return (
+            <Typography>Last synced: {lastSyncedAgo} minutes ago</Typography>
+        );
     }
 
     function PlayerInput({
@@ -269,6 +306,7 @@ export function MatchCreatorView({
 
     return (
         <div id="matchCreator">
+            {renderSyncAlert(persistenceData)}
             <form>
                 <Box sx={{ paddingTop: 10 / 8 }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
