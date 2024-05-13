@@ -53,7 +53,7 @@ export function matchToMatchCreatorInput(match: Match) {
     return new MatchCreatorInput(new Date(), formInputValues, numOfPlayers, focusedValue, winners, notes, matchID, userID);
 }
 
-export var DEFAULT_CREATE_MATCH: MatchCreatorInput = {
+export const DEFAULT_CREATE_MATCH: MatchCreatorInput = {
     date: new Date(),
     formInputValues: [
         { label: "mPlayer1", num: "1", type: "text", player_value: "", faction_value: "", p_points: 0, s_points: 0 },

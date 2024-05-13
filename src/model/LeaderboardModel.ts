@@ -10,7 +10,7 @@ import { onValue } from "firebase/database";
 export class LeaderBoardModel {
     ready: boolean = false;
     @observable loading = false
-    @observable connected = false
+    @observable connected = true
     @observable error = undefined
     @observable matches: Match[] = []
     @observable matchUnderCreation: MatchCreatorInput = DEFAULT_CREATE_MATCH;
@@ -21,6 +21,17 @@ export class LeaderBoardModel {
     @observable totalMatches: number = 0
     @observable username: string | null = null;
     @observable usernames: string[] = [];
+
+    @observable persistenceData: {
+        writing: boolean,
+        lastWritten: Date | null,
+        oldMatch: MatchCreatorInput | null,
+    } = {
+            writing: false,
+            lastWritten: null,
+            oldMatch: null,
+        }
+
     @observable isValidUserName: boolean | null = null;
 
     constructor() {
@@ -51,6 +62,58 @@ export class LeaderBoardModel {
             })
             this.getUsernamesFromfirestore()
         })
+    }
+
+    @action logPersistenceWrite() {
+        const tempVar = {
+            writing: false,
+            lastWritten: new Date(),
+            oldMatch: null,
+        }
+
+        this.persistenceData = tempVar;
+    }
+
+    @action startPersistenceWrite() {
+        const tempVar = {
+            writing: true,
+            lastWritten: null,
+            oldMatch: null,
+        }
+
+        this.persistenceData = tempVar;
+    }
+
+    @action readFromPersistence(oldMatch: MatchCreatorInput) {
+        const tempVar = {
+            writing: this.persistenceData.writing,
+            lastWritten: this.persistenceData.lastWritten,
+            oldMatch: oldMatch,
+        }
+
+        this.persistenceData = tempVar;
+    }
+
+    @action overwriteFromPersistence() {
+        const tempVar = {
+            writing: false,
+            lastWritten: null,
+            oldMatch: null,
+        }
+
+        this.matchUnderCreation = this.persistenceData.oldMatch!;
+        this.persistenceData = tempVar;
+    }
+
+    @action clearPersistenceData() {
+        const tempVar = {
+            writing: false,
+            lastWritten: null,
+            oldMatch: null,
+        }
+
+        this.persistenceData = tempVar;
+        clearPersistence(this);
     }
 
     @action setConnection(connected: boolean) {
@@ -220,7 +283,9 @@ export class LeaderBoardModel {
     }
 
     @action cancelMatchCreation() {
+        this.persistenceData = { writing: false, lastWritten: null, oldMatch: this.matchUnderCreation };
         this.matchUnderCreation = DEFAULT_CREATE_MATCH;
+        clearPersistence(this);
     }
 
     @action addPlayerToForm() {
