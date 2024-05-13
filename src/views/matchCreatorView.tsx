@@ -1,11 +1,16 @@
 import { Match } from "../model/match.ts";
 import { FACTIONS, FACTIONS_ARRAY } from "../model/factions.ts";
 import {
+    Alert,
     Autocomplete,
     Box,
     Button,
     ButtonGroup,
     CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     FormControl,
     FormHelperText,
     Input,
@@ -29,6 +34,8 @@ export function MatchCreatorView({
     winners,
     notes,
     date,
+    overwriteFromPersistence,
+    clearPersistence,
     createNewMatch,
     handleCancelClick,
     handlePlayerNameChange,
@@ -49,6 +56,14 @@ export function MatchCreatorView({
     function onClickCancelACB() {
         handleCancelClick();
         window.location.hash = "#/";
+    }
+
+    function overwriteFromPersistenceACB() {
+        overwriteFromPersistence();
+    }
+
+    function clearPersistenceACB() {
+        clearPersistence();
     }
 
     const handleNameChangeACB = (value, index) => {
@@ -92,7 +107,6 @@ export function MatchCreatorView({
     }
 
     function onWinnerChangeACB(e) {
-        console.log("changing winner to " + e.target.value);
         handleWinnerChange(e);
     }
 
@@ -109,6 +123,27 @@ export function MatchCreatorView({
     }
 
     function renderSyncAlert(persistenceData) {
+        if (persistenceData.oldMatch) {
+            return (
+                <div>
+                    <Dialog open={persistenceData.oldMatch}>
+                        <DialogContent>
+                            <Typography>
+                                Found an unfinished match, overwrite current
+                                match?
+                            </Typography>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={overwriteFromPersistenceACB}>
+                                Yes
+                            </Button>
+                            <Button onClick={clearPersistenceACB}>No</Button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
+            );
+        }
+
         if (persistenceData.writing) {
             return (
                 <div id="syncingAlert">

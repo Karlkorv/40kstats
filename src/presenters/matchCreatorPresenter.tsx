@@ -4,6 +4,7 @@ import React from "react";
 import { MatchCreatorView } from "../views/matchCreatorView";
 import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
 import { FACTIONS } from "../model/factions.ts";
+import { clearPersistence } from "../Firebase.ts";
 
 const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
     const options = Object.values(FACTIONS);
@@ -13,7 +14,6 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         let players = model.matchUnderCreation.formInputValues.map(
             ({ player_value }) => player_value
         );
-        console.log(players);
         let factions = model.matchUnderCreation.formInputValues.map(
             ({ faction_value }) => faction_value
         );
@@ -62,6 +62,10 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
 
     function handleCancelClick() {
         model.cancelMatchCreation();
+    }
+
+    function overwriteFromPersistence() {
+        model.overwriteFromPersistence();
     }
 
     function handlePlayerNameChange(e, index) {
@@ -133,6 +137,10 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         model.handleNotesChange(e);
     }
 
+    function clearModelPersistence() {
+        model.clearPersistenceData();
+    }
+
     function handleDateChange(e) {
         model.handleDateChange(e.$d);
     }
@@ -148,6 +156,8 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
                     winners={model.matchUnderCreation.winners}
                     notes={model.matchUnderCreation.notes}
                     date={model.matchUnderCreation.date}
+                    overwriteFromPersistence={overwriteFromPersistence}
+                    clearPersistence={clearModelPersistence}
                     createNewMatch={createNewMatch}
                     handleCancelClick={handleCancelClick}
                     handlePlayerNameChange={handlePlayerNameChange}

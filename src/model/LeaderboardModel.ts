@@ -90,12 +90,30 @@ export class LeaderBoardModel {
             lastWritten: this.persistenceData.lastWritten,
             oldMatch: oldMatch,
         }
+
+        this.persistenceData = tempVar;
+    }
+
+    @action overwriteFromPersistence() {
+        const tempVar = {
+            writing: false,
+            lastWritten: null,
+            oldMatch: null,
+        }
+
+        this.matchUnderCreation = this.persistenceData.oldMatch!;
+        this.persistenceData = tempVar;
     }
 
     @action clearPersistenceData() {
-        this.persistenceData.oldMatch = null;
-        this.persistenceData.lastWritten = null;
-        this.persistenceData.writing = false;
+        const tempVar = {
+            writing: false,
+            lastWritten: null,
+            oldMatch: null,
+        }
+
+        this.persistenceData = tempVar;
+        clearPersistence(this);
     }
 
     @action setConnection(connected: boolean) {
@@ -265,9 +283,9 @@ export class LeaderBoardModel {
     }
 
     @action cancelMatchCreation() {
+        this.persistenceData = { writing: false, lastWritten: null, oldMatch: this.matchUnderCreation };
         this.matchUnderCreation = DEFAULT_CREATE_MATCH;
         clearPersistence(this);
-        this.persistenceData = { writing: false, lastWritten: null, oldMatch: null };
     }
 
     @action addPlayerToForm() {

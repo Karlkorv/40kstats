@@ -36,7 +36,7 @@ export function persistenceToModel(persistence: any, model: LeaderBoardModel) {
         return;
     }
 
-    persistence.date = new Date(persistence.date); // To convert to JS date object
+    persistence.date = persistence.date.toDate()
 
     model.readFromPersistence(persistence);
 }
@@ -176,7 +176,6 @@ export function getUsername() {
         if (!doc.exists()) {
             return null;
         }
-        console.log("Got username from firebase:", doc.data())
         try {
             return doc.data()!.username_display;
         } catch (error) {
