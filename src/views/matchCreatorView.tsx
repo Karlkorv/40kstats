@@ -22,6 +22,7 @@ import dayjs from "dayjs";
 import React from "react";
 
 export function MatchCreatorView({
+    connected,
     formInputValues,
     winners,
     notes,
@@ -312,7 +313,9 @@ export function MatchCreatorView({
                 </Box>
             </form>
             <ButtonGroup variant="contained">
-                <Button onClick={onClickCreateMatchACB}>Create match</Button>
+                <Button disabled={!connected} onClick={onClickCreateMatchACB}>
+                    {connected ? "Create Match" : "Not connected"}
+                </Button>
                 <Button onClick={onClickCancelACB}>Cancel</Button>
             </ButtonGroup>
         </div>

@@ -1,14 +1,16 @@
 import { Match } from "./match.ts";
-import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, deleteMatchFromFirestore, auth, getUsername, userExists, addUserName, getUsernames } from "../Firebase.ts";
+import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, deleteMatchFromFirestore, auth, getUsername, userExists, addUserName, getUsernames, connectionRef } from "../Firebase.ts";
 import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
 import { FACTIONS } from "./factions.ts"
 import { User } from "firebase/auth";
 import { MatchCreatorInput, DEFAULT_CREATE_MATCH } from "./FormModel.ts";
 import { Alert } from "@mui/material";
+import { onValue } from "firebase/database";
 
 export class LeaderBoardModel {
     ready: boolean = false;
     @observable loading = false
+    @observable connected = false
     @observable error = undefined
     @observable matches: Match[] = []
     @observable matchUnderCreation: MatchCreatorInput = DEFAULT_CREATE_MATCH;
@@ -22,6 +24,11 @@ export class LeaderBoardModel {
     @observable isValidUserName: boolean | null = null;
 
     constructor() {
+        onValue(connectionRef, (snapshot) => {
+            runInAction(() => {
+                this.setConnection(snapshot.val());
+            })
+        })
 
         makeObservable(this);
         this.matches = [];
@@ -44,6 +51,10 @@ export class LeaderBoardModel {
             })
             this.getUsernamesFromfirestore()
         })
+    }
+
+    @action setConnection(connected: boolean) {
+        this.connected = connected;
     }
 
     @action setUsernameInput(username: string) {
