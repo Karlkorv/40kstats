@@ -266,6 +266,8 @@ export class LeaderBoardModel {
 
     @action cancelMatchCreation() {
         this.matchUnderCreation = DEFAULT_CREATE_MATCH;
+        clearPersistence(this);
+        this.persistenceData = { writing: false, lastWritten: null, oldMatch: null };
     }
 
     @action addPlayerToForm() {
