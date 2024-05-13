@@ -6,6 +6,8 @@
     margin-top: 20px;
     border: 1px solid black;
     border-radius: 5px;
+    width: fit-content;
+    max-height: 500px;
 }
 
 #table-wrapper table {
@@ -25,6 +27,12 @@
 
 #table-header {
     display: table-header-group;
+    background-color: black;
+    color:white;
+}
+
+#table-header > * > * {
+    color:white;
 }
 
 #winner-cell {

@@ -6,12 +6,12 @@ import { LeaderBoardModel } from "../model/LeaderboardModel";
 import { Match } from "../model/match";
 
 const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
-    function matchClicked(match: Match) {
-        if (!match.matchID) {
-            console.error("Match does not have an id");
+    function matchClicked(id: string) {
+        if (!model.matches.find((match) => match.matchID === id)) {
+            console.error("Match does not exist.");
             return;
         }
-        window.location.hash = "#/match/" + match.matchID;
+        window.location.hash = "#/match/" + id;
     }
 
     function loadMoreMatches(amt?: number) {
