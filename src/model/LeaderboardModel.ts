@@ -65,16 +65,31 @@ export class LeaderBoardModel {
     }
 
     @action logPersistenceWrite() {
-        this.persistenceData.lastWritten = new Date();
-        this.persistenceData.writing = false;
+        const tempVar = {
+            writing: false,
+            lastWritten: new Date(),
+            oldMatch: null,
+        }
+
+        this.persistenceData = tempVar;
     }
 
     @action startPersistenceWrite() {
-        this.persistenceData.writing = true;
+        const tempVar = {
+            writing: true,
+            lastWritten: null,
+            oldMatch: null,
+        }
+
+        this.persistenceData = tempVar;
     }
 
     @action readFromPersistence(oldMatch: MatchCreatorInput) {
-        this.persistenceData.oldMatch = oldMatch;
+        const tempVar = {
+            writing: this.persistenceData.writing,
+            lastWritten: this.persistenceData.lastWritten,
+            oldMatch: oldMatch,
+        }
     }
 
     @action clearPersistenceData() {

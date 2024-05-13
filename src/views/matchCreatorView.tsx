@@ -111,13 +111,7 @@ export function MatchCreatorView({
     function renderSyncAlert(persistenceData) {
         if (persistenceData.writing) {
             return (
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                    }}
-                >
+                <div id="syncingAlert">
                     <CircularProgress
                         style={{ padding: "10px", color: "gray" }}
                     />
@@ -129,7 +123,11 @@ export function MatchCreatorView({
         }
 
         if (!persistenceData.lastWritten) {
-            return <span>Not synced</span>;
+            return (
+                <div id="syncingAlert">
+                    <Typography>Not synced</Typography>
+                </div>
+            );
         }
 
         const lastSyncedAgo = dayjs().diff(
@@ -138,7 +136,11 @@ export function MatchCreatorView({
         );
 
         return (
-            <Typography>Last synced: {lastSyncedAgo} minutes ago</Typography>
+            <div id="syncingAlert">
+                <Typography>
+                    Last synced: {lastSyncedAgo} minutes ago
+                </Typography>
+            </div>
         );
     }
 
