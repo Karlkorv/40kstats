@@ -45,10 +45,11 @@
     align-items: center;
     border: 1px solid black;
     border-radius: 5px;
+    justify-content: center;
 }
 
-#match-wrapper table {
-    width: 100%;
+#match-wrapper Table {
+    margin:auto;
 }
 
 #match-wrapper table thead {
@@ -57,19 +58,13 @@
 
 #match-buttons {
     /*Place div to the left of parent container*/
-    position: relative;
-    left: 20%;
+    position: center;
     margin: 10px;
 
-    /*Space out buttons with relative distance*/
-    display: flex;
-    justify-content: space-between;
-    width: 45%;
 }
 
 #match-wrapper table tr td {
     text-align: right;
-    outline: 1px solid rgb(165, 164, 164);
     padding: 10px
 }
 
@@ -90,6 +85,10 @@
     position: relative;
     left: 25%;
     color: gray;
+}
+
+#player-row > * > *{
+    font-weight: bold;
 }
 
 .matchRow {
@@ -169,4 +168,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.table-class {
+    outline: 1px solid black;
+    border-radius: 10px;
+    overflow: auto;
 }
