@@ -4,24 +4,18 @@ import { toJS } from "mobx";
 import { User } from "firebase/auth";
 
 export function LastestMatchesView({
-    addDummyMatch,
     matchClicked,
     matches,
     moreMatches,
     totalMatches,
     user,
 }: {
-    addDummyMatch: () => void;
     matchClicked: (match: Match) => void;
     matches: Match[];
     moreMatches: (amt?: number) => void;
     totalMatches: number;
     user: User | null;
 }) {
-    function dummyMatchClickedACB() {
-        addDummyMatch();
-    }
-
     function moreMatchesACB() {
         moreMatches(10);
     }
@@ -49,9 +43,6 @@ export function LastestMatchesView({
 
     return (
         <div>
-            <button disabled={!user} onClick={dummyMatchClickedACB}>
-                Add dummy match
-            </button>
             <div id="table-wrapper">
                 <div id="table-scroll">
                     <table>
