@@ -76,6 +76,7 @@
 
 #syncingAlert{
     display: flex;
+    height: 25px;
     justify-content: right;
     align-items: center;
     position: relative;
