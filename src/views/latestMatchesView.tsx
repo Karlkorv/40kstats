@@ -45,22 +45,6 @@ const columns: GridColDef[] = [
         headerName: "Winner",
         flex: 1,
     },
-    {
-        field: "select-icon",
-        headerName: "",
-        renderCell: (params) => {
-            return (
-                <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    height={50}
-                >
-                    <HighlightAltIcon />
-                </Box>
-            );
-        },
-    },
 ];
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -108,7 +92,7 @@ export function LastestMatchesView({
                     maxHeight: 500,
                     "& .MuiDataGrid.cell:focus, & .MuiDataGrid-cell:focus-within":
                         { outline: "none" },
-                    "& .MuiDataGrid-row:hover": {cursor: "pointer"}
+                    "& .MuiDataGrid-row:hover": { cursor: "pointer" },
                 }}
                 rows={matches.map(matchRenderCB)}
                 columns={columns}
