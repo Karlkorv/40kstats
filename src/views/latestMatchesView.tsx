@@ -108,6 +108,7 @@ export function LastestMatchesView({
                     maxHeight: 500,
                     "& .MuiDataGrid.cell:focus, & .MuiDataGrid-cell:focus-within":
                         { outline: "none" },
+                    "& .MuiDataGrid-row:hover": {cursor: "pointer"}
                 }}
                 rows={matches.map(matchRenderCB)}
                 columns={columns}
