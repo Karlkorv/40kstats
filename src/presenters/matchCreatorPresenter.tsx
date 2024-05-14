@@ -4,7 +4,6 @@ import React from "react";
 import { MatchCreatorView } from "../views/matchCreatorView";
 import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
 import { FACTIONS } from "../model/factions.ts";
-import { clearPersistence } from "../Firebase.ts";
 
 const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
     const options = Object.values(FACTIONS);

@@ -1,9 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { FACTIONS } from "../model/factions";
 import { LastestMatchesView } from "../views/LatestMatchesView";
 import { LeaderBoardModel } from "../model/LeaderboardModel";
-import { Match } from "../model/match";
 
 const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
     function matchClicked(id: string) {
@@ -16,10 +14,6 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
 
     function loadMoreMatches(amt?: number) {
         model.getMoreMatches(amt);
-    }
-
-    if (model.loading) {
-        return <div>Loading...</div>;
     }
 
     if (model.error) {

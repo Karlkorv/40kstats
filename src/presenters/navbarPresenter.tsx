@@ -3,7 +3,7 @@ import React from "react";
 import { NavbarView } from "../views/navbarView.tsx";
 import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import { auth, getUsername } from "../Firebase.ts";
+import { auth } from "../Firebase.ts";
 import { reaction } from "mobx";
 
 const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {

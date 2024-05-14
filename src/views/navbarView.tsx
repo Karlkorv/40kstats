@@ -1,15 +1,5 @@
 import React from "react";
-import {
-    IconButton,
-    Button,
-    AppBar,
-    Toolbar,
-    Typography,
-    Input,
-    TextField,
-} from "@mui/material";
-import { Home } from "@mui/icons-material";
-import { trace } from "mobx";
+import { Button, AppBar, Toolbar, Typography, TextField } from "@mui/material";
 
 export function NavbarView({
     user,

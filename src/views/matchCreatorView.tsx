@@ -1,20 +1,15 @@
-import { Match } from "../model/match.ts";
 import { FACTIONS, FACTIONS_ARRAY } from "../model/factions.ts";
 import {
-    Alert,
     Autocomplete,
     Box,
     Button,
     ButtonGroup,
-    FilledInput,
     CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle,
     FormControl,
     FormHelperText,
-    Input,
     InputLabel,
     MenuItem,
     OutlinedInput,
@@ -192,8 +187,8 @@ export function MatchCreatorView({
             </FormControl>
         );
     }
-  
-      function renderSyncAlert(persistenceData) {
+
+    function renderSyncAlert(persistenceData) {
         if (persistenceData.oldMatch) {
             return (
                 <div>

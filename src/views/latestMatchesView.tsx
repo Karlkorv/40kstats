@@ -1,17 +1,8 @@
 import React from "react";
 import { Match } from "../model/match.ts";
-import { toJS } from "mobx";
 import { User } from "firebase/auth";
-import {
-    Box,
-    styled,
-    Table,
-    TableCell,
-    TableHead,
-    TableRow,
-} from "@mui/material";
+import { styled, TableRow } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import HighlightAltIcon from "@mui/icons-material/HighlightAlt";
 import dayjs from "dayjs";
 
 const columns: GridColDef[] = [

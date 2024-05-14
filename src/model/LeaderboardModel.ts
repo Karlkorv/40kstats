@@ -1,10 +1,8 @@
 import { Match } from "./match.ts";
 import { addMatchToFirestore, clearPersistence, getLatestMatches, getMatchById, getTotalMatchesFromFirestore, deleteMatchFromFirestore, auth, getUsername, userExists, addUserName, getUsernames, connectionRef } from "../Firebase.ts";
-import { action, makeAutoObservable, makeObservable, observable, runInAction } from "mobx";
-import { FACTIONS } from "./factions.ts"
+import { action, makeObservable, observable, runInAction } from "mobx";
 import { User } from "firebase/auth";
 import { MatchCreatorInput, DEFAULT_CREATE_MATCH } from "./FormModel.ts";
-import { Alert } from "@mui/material";
 import { onValue } from "firebase/database";
 
 export class LeaderBoardModel {
@@ -264,12 +262,12 @@ export class LeaderBoardModel {
             addMatchToFirestore(match).then((id) => {
                 runInAction(() => {
                     match.setId(id!);
-                    clearPersistence(this);     
+                    clearPersistence(this);
                     this.matches = [match, ...this.matches];
                     this.totalMatches++;
                 })
             });
-        // If matchID exists, it means we are editing an existing match
+            // If matchID exists, it means we are editing an existing match
         } else {
             let index = this.matches.findIndex(((matchInArray) => matchInArray.matchID === match.matchID))
             let tempVar = [...this.matches];

@@ -4,10 +4,7 @@ import { MatchView } from "../views/matchView.tsx";
 import { Match } from "../model/match.ts";
 import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
 import { useParams } from "react-router-dom";
-import {
-    MatchCreatorInput,
-    matchToMatchCreatorInput,
-} from "../model/FormModel.ts";
+import { matchToMatchCreatorInput } from "../model/FormModel.ts";
 
 const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
     const { matchId } = useParams();
