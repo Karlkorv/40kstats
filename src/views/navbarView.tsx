@@ -75,13 +75,29 @@ export function NavbarView({
                     className="MuiToolbar"
                     style={{ justifyContent: "space-between" }}
                 >
-                    <div className="left-buttons">
+                    <div
+                        className="left-buttons"
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <img
+                            src="public/adeptus-mechanicus.svg"
+                            alt="Website image"
+                            style={{
+                                height: "50px",
+                                width: "50px",
+                                padding: "5px",
+                            }}
+                        />
                         <div
                             id="titletext"
                             style={{ marginRight: "30px", cursor: "pointer" }}
                             onClick={onHomeButtonClickACB}
                         >
-                            <Typography color={"black"} variant="h4">
+                            <Typography color={"lightgrey"} variant="h4">
                                 40kstats
                             </Typography>
                             <Typography color={"lightgrey"} variant="subtitle2">
@@ -92,10 +108,6 @@ export function NavbarView({
                             variant="contained"
                             disabled={!user}
                             size="small"
-                            style={{
-                                height: "50%",
-                                marginTop: "5%",
-                            }}
                             onClick={() => onCreateMatchButtonClick()}
                         >
                             {(user && "Create Match") ||
