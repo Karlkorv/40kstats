@@ -39,7 +39,7 @@ export function NavbarView({
     }
 
     function onConfirmClick() {
-        handleUsernameConfirm;
+        handleUsernameConfirm();
     }
 
     function renderUsernameCreation() {
@@ -58,7 +58,7 @@ export function NavbarView({
                 />
                 <Button
                     id="username-confirm-button"
-                    onClick={handleUsernameConfirm}
+                    onClick={onConfirmClick}
                     variant="contained"
                     size="small"
                 >
@@ -139,7 +139,7 @@ export function NavbarView({
                                         user.displayName + " (No username)"}
                                 </Typography>
                                 <Button
-                                    onClick={handleLogoutButtonClick}
+                                    onClick={onLogoutButtonClick}
                                     variant="contained"
                                     color="primary"
                                     size="small"

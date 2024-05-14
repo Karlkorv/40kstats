@@ -1,4 +1,5 @@
 export const FACTIONS = {
+    SELECT_FACTION: "Select Faction",
     SPACE_MARINES: "Space Marines",
     BLACK_TEMPLARS: "Black Templars",
     BLOOD_ANGELS: "Blood Angels",
@@ -29,6 +30,7 @@ export const FACTIONS = {
 }
 
 export const FACTIONS_ARRAY = [
+    "Select Faction",
     "Space Marines",
     "Black Templars",
     "Blood Angels",

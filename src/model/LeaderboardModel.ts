@@ -8,10 +8,8 @@ import { Alert } from "@mui/material";
 import { onValue } from "firebase/database";
 
 export class LeaderBoardModel {
-    ready: boolean = false;
-    @observable loading = false
+    readyToExport: boolean = false;
     @observable connected = true
-    @observable error = undefined
     @observable matches: Match[] = []
     @observable matchUnderCreation: MatchCreatorInput = DEFAULT_CREATE_MATCH;
     @observable currentMatch: Match | undefined = undefined
@@ -21,6 +19,12 @@ export class LeaderBoardModel {
     @observable totalMatches: number = 0
     @observable username: string | null = null;
     @observable usernames: string[] = [];
+    @observable isValidUserName: boolean | null = null;
+
+    @observable gettingMatches: boolean = true
+    @observable gettingUser: boolean = true
+    @observable gettingUsername: boolean = false
+    @observable error: any = null
 
     @observable persistenceData: {
         writing: boolean,
@@ -32,7 +36,8 @@ export class LeaderBoardModel {
             oldMatch: null,
         }
 
-    @observable isValidUserName: boolean | null = null;
+
+
 
     constructor() {
         onValue(connectionRef, (snapshot) => {
@@ -51,16 +56,20 @@ export class LeaderBoardModel {
 
         auth.onAuthStateChanged(() => {
             runInAction(() => {
+                this.gettingUsername = (auth.currentUser != null);
+
                 this.setUser(auth.currentUser);
+                this.gettingUser = false;
             });
             getUsername().then((result) => {
                 runInAction(() => {
                     this.username = result;
+                    this.gettingUsername = false;
                 })
             }, (error) => {
                 console.log("Error when resolving promise: ", error)
             })
-            this.getUsernamesFromfirestore()
+            this.getUsernamesFromfirestore() // TODO: Debounce this when typing
         })
     }
 
@@ -158,7 +167,7 @@ export class LeaderBoardModel {
     }
 
     @action private getLatestMatchesFromFirestore() {
-        this.loading = true;
+        this.gettingMatches = true;
         getLatestMatches(50).then((querySnapshot) => {
             runInAction(() => {
                 querySnapshot.forEach((doc) => {
@@ -183,13 +192,13 @@ export class LeaderBoardModel {
             });
         }).catch((error) => {
             runInAction(() => {
-                this.loading = false;
+                this.gettingMatches = false;
                 console.error("Error reading from firestore:", error);
                 this.error = error;
             });
         }).finally(() => {
             runInAction(() => {
-                this.loading = false;
+                this.gettingMatches = false;
             })
         });
     }
