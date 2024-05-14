@@ -84,7 +84,7 @@ export function NavbarView({
                         }}
                     >
                         <img
-                            src="public/adeptus-mechanicus.svg"
+                            src="/adeptus-mechanicus.svg"
                             alt="Website image"
                             style={{
                                 height: "50px",
