@@ -42,7 +42,7 @@ export function persistenceToModel(persistence: any, model: LeaderBoardModel) {
 }
 
 export function saveToFirebase(model: LeaderBoardModel) {
-    if (!model.ready || !model.user) {
+    if (!model.readyToExport || !model.user) {
         return;
     }
 
@@ -53,7 +53,7 @@ export function saveToFirebase(model: LeaderBoardModel) {
 }
 
 export function loadFromFirebase(model: LeaderBoardModel) {
-    model.ready = false;
+    model.readyToExport = false;
     if (!model.user) {
         console.log("Tried to read persistence from firebase without user")
         return;
@@ -63,7 +63,7 @@ export function loadFromFirebase(model: LeaderBoardModel) {
         persistenceToModel(doc.data(), model);
         console.log("Persistence read from firebase")
     }).then(() => {
-        model.ready = true;
+        model.readyToExport = true;
     });
 }
 

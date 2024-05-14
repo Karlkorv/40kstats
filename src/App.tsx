@@ -36,6 +36,22 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
         ];
         return createHashRouter(routes);
     }
+
+    if (model.gettingMatches || model.gettingUser || model.gettingUsername) {
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100vh",
+                }}
+            >
+                <CircularProgress />
+            </div>
+        );
+    }
+
     return (
         <div>
             <ErrorBoundary fallback={<ErrorView />}>
