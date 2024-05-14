@@ -194,7 +194,7 @@ export class LeaderBoardModel {
         });
     }
 
-    setUser(user: User | null) {
+    @action setUser(user: User | null) {
         this.user = user;
         getUsername().then((result) => {
             runInAction(() => {
@@ -252,18 +252,24 @@ export class LeaderBoardModel {
         }
         match.setUserID(this.user?.uid);
         if (!match.matchID) {
-            this.matches = [match, ...this.matches];
-            this.totalMatches++;
+            addMatchToFirestore(match).then((id) => {
+                runInAction(() => {
+                    match.setId(id!);
+                    clearPersistence(this);     
+                    this.matches = [match, ...this.matches];
+                    this.totalMatches++;
+                })
+            });
+        // If matchID exists, it means we are editing an existing match
         } else {
             let index = this.matches.findIndex(((matchInArray) => matchInArray.matchID === match.matchID))
             let tempVar = [...this.matches];
             tempVar[index] = match;
             this.matches = tempVar;
+            addMatchToFirestore(match).then((id) => {
+                clearPersistence(this);
+            });
         }
-        addMatchToFirestore(match).then((id) => {
-            match.setId(id!);
-            clearPersistence(this);
-        })
         this.matchUnderCreation = DEFAULT_CREATE_MATCH;
     }
 

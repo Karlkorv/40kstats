@@ -91,7 +91,7 @@ export function LastestMatchesView({
     }
     function matchRenderCB(match: Match) {
         return {
-            id: match.matchID,
+            id: match.matchID || "tempID",
             date: dayjs(match.date).format("YYYY/MM/DD"),
             player_1: match.players[0],
             faction_1: match.factions[0],
