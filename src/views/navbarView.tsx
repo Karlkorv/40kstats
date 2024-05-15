@@ -7,9 +7,9 @@ import {
     TextField,
     FormHelperText,
     FormControl,
-    Input,
-    InputLabel,
+    IconButton,
 } from "@mui/material";
+import HelpIcon from "@mui/icons-material/Help";
 
 export function NavbarView({
     user,
@@ -23,6 +23,7 @@ export function NavbarView({
     handleLoginButtonClick,
     handleLogoutButtonClick,
     handleUsernameChange,
+    handleHelpButtonClick,
 }) {
     function onHomeButtonClickACB() {
         handleHomeButtonClick();
@@ -42,6 +43,10 @@ export function NavbarView({
 
     function onConfirmClick() {
         handleUsernameConfirm();
+    }
+
+    function onHelpButtonClick() {
+        handleHelpButtonClick();
     }
 
     function renderUsernameCreation() {
@@ -107,26 +112,40 @@ export function NavbarView({
                             paddingRight: "10px",
                         }}
                     >
-                        <img
-                            src="/adeptus-mechanicus.svg"
-                            alt="Website image"
-                            style={{
-                                height: "50px",
-                                width: "50px",
-                            }}
-                        />
                         <div
                             id="titletext"
-                            style={{ cursor: "pointer" }}
+                            style={{
+                                cursor: "pointer",
+                                justifyContent: "inherit",
+                                display: "flex",
+                                alignItems: "inherit",
+                            }}
                             onClick={onHomeButtonClickACB}
                         >
-                            <Typography color={"lightgrey"} variant="h4">
-                                40kstats
-                            </Typography>
-                            <Typography color={"lightgrey"} variant="subtitle2">
-                                a 40k match tracker
-                            </Typography>
+                            <img
+                                src="/adeptus-mechanicus.svg"
+                                alt="Website image"
+                                style={{
+                                    height: "50px",
+                                    width: "50px",
+                                    padding: "5px",
+                                }}
+                            />
+                            <div style={{ margin: "2px" }}>
+                                <Typography color={"lightgrey"} variant="h4">
+                                    40kstats
+                                </Typography>
+                                <Typography
+                                    color={"lightgrey"}
+                                    variant="subtitle2"
+                                >
+                                    a 40k match tracker
+                                </Typography>
+                            </div>
                         </div>
+                        <IconButton onClick={() => onHelpButtonClick()}>
+                            <HelpIcon />
+                        </IconButton>
                         <Button
                             variant="contained"
                             disabled={!user}

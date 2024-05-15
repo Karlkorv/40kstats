@@ -24,6 +24,7 @@ import {
     ThemeProvider,
 } from "@mui/material";
 import { Check } from "@mui/icons-material";
+import { HelpButtonDialog } from "./presenters/helpButtonDialogPresenter.tsx";
 
 export const App = observer(({ model }: { model: LeaderBoardModel }) => {
     function makeRouter(model: LeaderBoardModel) {
@@ -104,6 +105,7 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
                         </Alert>
                     </Slide>
                     <LatestMatches model={model} />
+                    <HelpButtonDialog model={model}/>
                 </ErrorBoundary>
             </ThemeProvider>
         </div>

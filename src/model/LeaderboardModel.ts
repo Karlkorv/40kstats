@@ -19,6 +19,7 @@ export class LeaderBoardModel {
     @observable usernames: string[] = [];
     @observable isValidUserName: boolean | null = null;
     @observable usernameExists: boolean = false;
+    @observable helpTextOpen: boolean = false;
 
     @observable gettingMatches: boolean = true
     @observable gettingUser: boolean = true
@@ -444,5 +445,13 @@ export class LeaderBoardModel {
 
     getMatches(): Match[] {
         return this.matches || []
+    }
+
+    @action handleCloseDialog() {
+        this.helpTextOpen = false;
+    }
+
+    @action handleDialogClick() {
+        this.helpTextOpen = !this.helpTextOpen;
     }
 }
