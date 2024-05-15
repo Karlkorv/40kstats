@@ -5,15 +5,17 @@ import {
     Toolbar,
     Typography,
     TextField,
-    Box,
+    FormHelperText,
+    FormControl,
     IconButton,
 } from "@mui/material";
 import HelpIcon from "@mui/icons-material/Help";
-import { HelpButtonDialog } from "../presenters/helpButtonDialogPresenter";
 
 export function NavbarView({
     user,
     username,
+    usernameInput,
+    usernameExists,
     validUsername,
     handleHomeButtonClick,
     handleCreateMatchButtonClick,
@@ -52,22 +54,42 @@ export function NavbarView({
             return;
         }
         return (
-            <div>
-                <TextField
-                    size="small"
-                    color="secondary"
-                    onInput={handleUsernameChange}
-                    error={validUsername}
-                    label="Enter a unique username"
-                    variant="filled"
-                />
+            <div
+                style={{
+                    display: "flex",
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    gap: "10px",
+                }}
+            >
+                <FormControl>
+                    <TextField
+                        id="username-input"
+                        size="small"
+                        color="secondary"
+                        onInput={handleUsernameChange}
+                        label="Username"
+                        variant="filled"
+                    />
+                    <FormHelperText style={{ color: "white" }}>
+                        {usernameInput.length < 3 && usernameInput.length > 0
+                            ? "Username too short"
+                            : usernameInput.length > 20
+                            ? "Username too long"
+                            : usernameExists
+                            ? "Username already exists"
+                            : ""}
+                    </FormHelperText>
+                </FormControl>
                 <Button
+                    sx={{ position: "relative" }}
                     id="username-confirm-button"
                     onClick={onConfirmClick}
                     variant="contained"
                     size="small"
+                    disabled={!validUsername}
                 >
-                    {validUsername ? "Confirm username" : "Invalid username"}
+                    Confirm Username
                 </Button>
             </div>
         );
@@ -86,6 +108,8 @@ export function NavbarView({
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
+                            gap: "10px",
+                            paddingRight: "10px",
                         }}
                     >
                         <div

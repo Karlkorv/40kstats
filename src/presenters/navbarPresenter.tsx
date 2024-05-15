@@ -19,7 +19,7 @@ const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {
     );
 
     function handleUsernameChange(e) {
-        if (!e.target.value) {
+        if (!(e.target.value === "") && !e.target.value) {
             return;
         }
         model.setUsernameInput(e.target.value);
@@ -60,6 +60,8 @@ const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {
             <NavbarView
                 user={model.user}
                 username={model.username}
+                usernameInput={model.usernameInput}
+                usernameExists={model.usernameExists}
                 validUsername={model.isValidUserName}
                 handleHomeButtonClick={handleHomeButtonClick}
                 handleUsernameConfirm={handleUsernameConfirm}

@@ -18,6 +18,7 @@ export class LeaderBoardModel {
     @observable username: string | null = null;
     @observable usernames: string[] = [];
     @observable isValidUserName: boolean | null = null;
+    @observable usernameExists: boolean = false;
     @observable helpTextOpen: boolean = false;
 
     @observable gettingMatches: boolean = true
@@ -154,13 +155,15 @@ export class LeaderBoardModel {
     }
 
     @action checkUsername(username: string) {
-        if (username.length == 0) {
+        if (username.length < 3 || username.length > 20) {
             this.isValidUserName = false;
+            this.usernameExists = false;
             return;
         }
         userExists(username).then((result) => {
             runInAction(() => {
                 this.isValidUserName = !result;
+                this.usernameExists = result;
             })
         })
     }
@@ -444,11 +447,11 @@ export class LeaderBoardModel {
         return this.matches || []
     }
 
-    @action handleCloseDialog(){
+    @action handleCloseDialog() {
         this.helpTextOpen = false;
     }
 
-    @action handleDialogClick(){
+    @action handleDialogClick() {
         this.helpTextOpen = !this.helpTextOpen;
     }
 }
