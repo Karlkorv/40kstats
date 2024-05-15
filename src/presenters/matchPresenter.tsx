@@ -80,6 +80,7 @@ const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
             {renderMetaInfo()}
             <MatchView
                 match={model.currentMatch}
+                currentUser={model.user?.uid}
                 deleteMatch={deleteMatch}
                 editMatch={editMatch}
             />
