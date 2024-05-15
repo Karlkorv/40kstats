@@ -13,7 +13,6 @@ import {
     Typography,
 } from "@mui/material";
 
-
 export function MatchView({
     match,
     currentUser,
@@ -25,7 +24,7 @@ export function MatchView({
     deleteMatch: any;
     editMatch: any;
 }) {
-    const disabled : boolean = match.userID !== currentUser;
+    const disabled: boolean = match.userID !== currentUser;
 
     function deleteMatchACB() {
         console.log("Deleting match with ID: " + match.matchID);
@@ -148,20 +147,34 @@ export function MatchView({
                             <TableCell>{match.points_secondary[1]}</TableCell>
                         </TableRow>
                         {match.notes && match.notes.length > 0 && (
-                            <tr id="notes-row">
-                                <th>Notes:</th>
-                                <td colSpan={2}>{match.notes}</td>
-                            </tr>
+                            <TableRow>
+                                <TableCell
+                                    style={{
+                                        borderRight:
+                                            "1px solid rgba(224, 224, 224, 1)",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    Notes
+                                </TableCell>
+                                <TableCell>{match.notes}</TableCell>
+                            </TableRow>
                         )}
                     </TableBody>
                 </Table>
             </Box>
             <ButtonGroup variant="contained" id="match-buttons">
-                <Tooltip title={disabled ? "You can only edit matches created by you." : ""}>
+                <Tooltip
+                    title={
+                        disabled
+                            ? "You can only edit matches created by you."
+                            : ""
+                    }
+                >
                     <span>
                         <Button
                             disabled={disabled}
-                            style={disabled ? {pointerEvents:"none"} : {} }
+                            style={disabled ? { pointerEvents: "none" } : {}}
                             onClick={() => {
                                 editMatchACB();
                             }}
@@ -177,7 +190,13 @@ export function MatchView({
                 >
                     Back
                 </Button>
-                <Tooltip title={disabled ? "You can only delete matches created by you." : ""}>
+                <Tooltip
+                    title={
+                        disabled
+                            ? "You can only delete matches created by you."
+                            : ""
+                    }
+                >
                     <span>
                         <Button
                             disabled={match.userID !== currentUser}

@@ -115,7 +115,8 @@ export function addMatchToFirestore(match: Match) {
         points_secondary: match.points_secondary,
         points_total: match.points_total,
         userID: match.userID,
-        matchID: match.matchID
+        matchID: match.matchID,
+        notes: match.notes
     }
 
     if (match.matchID !== undefined) {

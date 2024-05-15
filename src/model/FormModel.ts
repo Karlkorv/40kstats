@@ -43,6 +43,7 @@ export function matchToMatchCreatorInput(match: Match) {
         s_points: match.points_secondary[index],
     }));
 
+    const date = match.date ? new Date(match.date) : new Date();
     const numOfPlayers = match.players.length;
     const focusedValue = "";
     const winners = match.winners[0];
@@ -50,7 +51,7 @@ export function matchToMatchCreatorInput(match: Match) {
     const matchID = match.matchID;
     const userID = match.userID;
 
-    return new MatchCreatorInput(new Date(), formInputValues, numOfPlayers, focusedValue, winners, notes, matchID, userID);
+    return new MatchCreatorInput(date, formInputValues, numOfPlayers, focusedValue, winners, notes, matchID, userID);
 }
 
 export const DEFAULT_CREATE_MATCH: MatchCreatorInput = {
