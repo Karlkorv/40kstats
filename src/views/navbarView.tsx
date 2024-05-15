@@ -39,7 +39,7 @@ export function NavbarView({
             return;
         }
         return (
-            <div>
+            <div style={{display:"flex", paddingLeft:10, paddingRight:10}}>
                 <TextField
                     size="small"
                     color="secondary"
@@ -49,6 +49,7 @@ export function NavbarView({
                     variant="filled"
                 />
                 <Button
+                    sx={{position:"relative"}}
                     id="username-confirm-button"
                     onClick={onConfirmClick}
                     variant="contained"
