@@ -1,5 +1,15 @@
 import React from "react";
-import { Button, AppBar, Toolbar, Typography, TextField } from "@mui/material";
+import {
+    Button,
+    AppBar,
+    Toolbar,
+    Typography,
+    TextField,
+    FormHelperText,
+    FormControl,
+    Input,
+    InputLabel,
+} from "@mui/material";
 
 export function NavbarView({
     user,
@@ -39,24 +49,42 @@ export function NavbarView({
             return;
         }
         return (
-            <div style={{display:"flex", paddingLeft:10, paddingRight:10}}>
-                <TextField
-                    size="small"
-                    color="secondary"
-                    onInput={handleUsernameChange}
-                    error={validUsername}
-                    label={usernameInput.length > 20 ? "Username too long" : usernameExists ? "Username already exists" : "Enter a unique username" }
-                    variant="filled"
-                />
+            <div
+                style={{
+                    display: "flex",
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    gap: "10px",
+                }}
+            >
+                <FormControl>
+                    <TextField
+                        id="username-input"
+                        size="small"
+                        color="secondary"
+                        onInput={handleUsernameChange}
+                        label="Username"
+                        variant="filled"
+                    />
+                    <FormHelperText style={{ color: "white" }}>
+                        {usernameInput.length < 3 && usernameInput.length > 0
+                            ? "Username too short"
+                            : usernameInput.length > 20
+                            ? "Username too long"
+                            : usernameExists
+                            ? "Username already exists"
+                            : ""}
+                    </FormHelperText>
+                </FormControl>
                 <Button
-                    sx={{position:"relative"}}
+                    sx={{ position: "relative" }}
                     id="username-confirm-button"
                     onClick={onConfirmClick}
                     variant="contained"
                     size="small"
                     disabled={!validUsername}
                 >
-                    {validUsername ? "Confirm username" : "Invalid username"}
+                    Confirm Username
                 </Button>
             </div>
         );
@@ -75,6 +103,8 @@ export function NavbarView({
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
+                            gap: "10px",
+                            paddingRight: "10px",
                         }}
                     >
                         <img
@@ -83,12 +113,11 @@ export function NavbarView({
                             style={{
                                 height: "50px",
                                 width: "50px",
-                                padding: "5px",
                             }}
                         />
                         <div
                             id="titletext"
-                            style={{ marginRight: "30px", cursor: "pointer" }}
+                            style={{ cursor: "pointer" }}
                             onClick={onHomeButtonClickACB}
                         >
                             <Typography color={"lightgrey"} variant="h4">

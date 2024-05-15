@@ -67,7 +67,7 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
                 contrastText: "#fff",
             },
             secondary: {
-                main: "#f50057",
+                main: "#fff",
             },
         },
     });

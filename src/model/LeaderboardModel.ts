@@ -154,8 +154,9 @@ export class LeaderBoardModel {
     }
 
     @action checkUsername(username: string) {
-        if (username.length == 0 || username.length > 20) {
+        if (username.length < 3 || username.length > 20) {
             this.isValidUserName = false;
+            this.usernameExists = false;
             return;
         }
         userExists(username).then((result) => {
