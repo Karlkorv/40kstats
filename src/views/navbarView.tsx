@@ -1,5 +1,7 @@
 import React from "react";
-import { Button, AppBar, Toolbar, Typography, TextField } from "@mui/material";
+import { Button, AppBar, Toolbar, Typography, TextField, Box, IconButton } from "@mui/material";
+import HelpIcon from "@mui/icons-material/Help";
+import { HelpButtonDialog } from '../presenters/helpButtonDialogPresenter';
 
 export function NavbarView({
     user,
@@ -11,6 +13,7 @@ export function NavbarView({
     handleLoginButtonClick,
     handleLogoutButtonClick,
     handleUsernameChange,
+    handleHelpButtonClick,
 }) {
     function onHomeButtonClickACB() {
         handleHomeButtonClick();
@@ -27,9 +30,13 @@ export function NavbarView({
     function onLogoutButtonClick() {
         handleLogoutButtonClick();
     }
-
+    
     function onConfirmClick() {
         handleUsernameConfirm();
+    }
+
+    function onHelpButtonClick(){
+        handleHelpButtonClick();
     }
 
     function renderUsernameCreation() {
@@ -57,6 +64,7 @@ export function NavbarView({
             </div>
         );
     }
+
 
     return (
         <div className="navbar">
@@ -99,18 +107,23 @@ export function NavbarView({
                             disabled={!user}
                             size="small"
                             onClick={() => onCreateMatchButtonClick()}
-                        >
+                            >
                             {(user && "Create Match") ||
                                 (!user && "Sign in to create match")}
                         </Button>
                         {renderUsernameCreation()}
                     </div>
+
+                    <IconButton onClick={() => onHelpButtonClick()}>
+                        <HelpIcon/>
+                    </IconButton>
+                    
                     {!user && (
                         <div className="login-button">
                             <Button
                                 variant="contained"
                                 onClick={() => onLoginButtonClick()}
-                            >
+                                >
                                 Login
                             </Button>
                         </div>

@@ -5,6 +5,7 @@ import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { auth } from "../Firebase.ts";
 import { reaction } from "mobx";
+import { HelpButtonDialog } from "./helpButtonDialogPresenter.tsx";
 
 const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {
     const provider = new GoogleAuthProvider();
@@ -45,6 +46,15 @@ const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {
         signOut(auth);
     }
 
+    function handleHelpButtonClick() {
+        model.handleDialogClick();
+        return (
+            <HelpButtonDialog model={model}>
+
+            </HelpButtonDialog>
+        )
+    }
+
     return (
         <div>
             <NavbarView
@@ -57,6 +67,7 @@ const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {
                 handleLoginButtonClick={handleLoginButtonClick}
                 handleLogoutButtonClick={handleLogoutButtonClick}
                 handleUsernameChange={handleUsernameChange}
+                handleHelpButtonClick={handleHelpButtonClick}
             />
         </div>
     );
