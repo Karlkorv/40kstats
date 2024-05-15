@@ -51,6 +51,7 @@ const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {
                 user={model.user}
                 username={model.username}
                 usernameInput={model.usernameInput}
+                usernameExists={model.usernameExists}
                 validUsername={model.isValidUserName}
                 handleHomeButtonClick={handleHomeButtonClick}
                 handleUsernameConfirm={handleUsernameConfirm}

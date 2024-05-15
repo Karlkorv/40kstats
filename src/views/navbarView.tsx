@@ -5,6 +5,7 @@ export function NavbarView({
     user,
     username,
     usernameInput,
+    usernameExists,
     validUsername,
     handleHomeButtonClick,
     handleCreateMatchButtonClick,
@@ -44,7 +45,7 @@ export function NavbarView({
                     color="secondary"
                     onInput={handleUsernameChange}
                     error={validUsername}
-                    label={usernameInput.length > 20 ? "Username too long" : "Enter a unique username" }
+                    label={usernameInput.length > 20 ? "Username too long" : usernameExists ? "Username already exists" : "Enter a unique username" }
                     variant="filled"
                 />
                 <Button

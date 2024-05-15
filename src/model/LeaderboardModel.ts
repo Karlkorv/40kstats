@@ -18,6 +18,7 @@ export class LeaderBoardModel {
     @observable username: string | null = null;
     @observable usernames: string[] = [];
     @observable isValidUserName: boolean | null = null;
+    @observable usernameExists: boolean = false;
 
     @observable gettingMatches: boolean = true
     @observable gettingUser: boolean = true
@@ -160,6 +161,7 @@ export class LeaderBoardModel {
         userExists(username).then((result) => {
             runInAction(() => {
                 this.isValidUserName = !result;
+                this.usernameExists = result;
             })
         })
     }
