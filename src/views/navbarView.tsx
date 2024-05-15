@@ -4,6 +4,7 @@ import { Button, AppBar, Toolbar, Typography, TextField } from "@mui/material";
 export function NavbarView({
     user,
     username,
+    usernameInput,
     validUsername,
     handleHomeButtonClick,
     handleCreateMatchButtonClick,
@@ -43,7 +44,7 @@ export function NavbarView({
                     color="secondary"
                     onInput={handleUsernameChange}
                     error={validUsername}
-                    label="Enter a unique username"
+                    label={usernameInput.length > 20 ? "Username too long" : "Enter a unique username" }
                     variant="filled"
                 />
                 <Button
@@ -51,6 +52,7 @@ export function NavbarView({
                     onClick={onConfirmClick}
                     variant="contained"
                     size="small"
+                    disabled={!validUsername}
                 >
                     {validUsername ? "Confirm username" : "Invalid username"}
                 </Button>

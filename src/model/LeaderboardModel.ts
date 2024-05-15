@@ -153,7 +153,7 @@ export class LeaderBoardModel {
     }
 
     @action checkUsername(username: string) {
-        if (username.length == 0) {
+        if (username.length == 0 || username.length > 20) {
             this.isValidUserName = false;
             return;
         }
