@@ -9,18 +9,24 @@ import {
     TableCell,
     TableHead,
     TableRow,
+    Tooltip,
     Typography,
 } from "@mui/material";
 
+
 export function MatchView({
     match,
+    currentUser,
     deleteMatch,
     editMatch,
 }: {
     match: Match;
+    currentUser: any;
     deleteMatch: any;
     editMatch: any;
 }) {
+    const disabled : boolean = match.userID !== currentUser;
+
     function deleteMatchACB() {
         console.log("Deleting match with ID: " + match.matchID);
         deleteMatch(match.matchID);
@@ -151,13 +157,19 @@ export function MatchView({
                 </Table>
             </Box>
             <ButtonGroup variant="contained" id="match-buttons">
-                <Button
-                    onClick={() => {
-                        editMatchACB();
-                    }}
-                >
-                    Edit
-                </Button>
+                <Tooltip title={disabled ? "You can only edit matches created by you." : ""}>
+                    <span>
+                        <Button
+                            disabled={disabled}
+                            style={disabled ? {pointerEvents:"none"} : {} }
+                            onClick={() => {
+                                editMatchACB();
+                            }}
+                        >
+                            Edit
+                        </Button>
+                    </span>
+                </Tooltip>
                 <Button
                     onClick={() => {
                         window.location.hash = "#/";
@@ -165,14 +177,19 @@ export function MatchView({
                 >
                     Back
                 </Button>
-                <Button
-                    onClick={() => {
-                        deleteMatchACB(),
-                            new Audio("/audio/dino-noise.m4a").play();
-                    }}
-                >
-                    Delete match
-                </Button>
+                <Tooltip title={disabled ? "You can only delete matches created by you." : ""}>
+                    <span>
+                        <Button
+                            disabled={match.userID !== currentUser}
+                            onClick={() => {
+                                deleteMatchACB(),
+                                    new Audio("/audio/dino-noise.m4a").play();
+                            }}
+                        >
+                            Delete match
+                        </Button>
+                    </span>
+                </Tooltip>
                 <Button>Share match</Button>
             </ButtonGroup>
         </div>
