@@ -1,7 +1,15 @@
 import React from "react";
-import { Button, AppBar, Toolbar, Typography, TextField, Box, IconButton } from "@mui/material";
+import {
+    Button,
+    AppBar,
+    Toolbar,
+    Typography,
+    TextField,
+    Box,
+    IconButton,
+} from "@mui/material";
 import HelpIcon from "@mui/icons-material/Help";
-import { HelpButtonDialog } from '../presenters/helpButtonDialogPresenter';
+import { HelpButtonDialog } from "../presenters/helpButtonDialogPresenter";
 
 export function NavbarView({
     user,
@@ -30,12 +38,12 @@ export function NavbarView({
     function onLogoutButtonClick() {
         handleLogoutButtonClick();
     }
-    
+
     function onConfirmClick() {
         handleUsernameConfirm();
     }
 
-    function onHelpButtonClick(){
+    function onHelpButtonClick() {
         handleHelpButtonClick();
     }
 
@@ -65,7 +73,6 @@ export function NavbarView({
         );
     }
 
-
     return (
         <div className="navbar">
             <AppBar className="MuiAppBar" position="sticky">
@@ -81,49 +88,57 @@ export function NavbarView({
                             alignItems: "center",
                         }}
                     >
-                        <img
-                            src="/adeptus-mechanicus.svg"
-                            alt="Website image"
-                            style={{
-                                height: "50px",
-                                width: "50px",
-                                padding: "5px",
-                            }}
-                        />
                         <div
                             id="titletext"
-                            style={{ marginRight: "30px", cursor: "pointer" }}
+                            style={{
+                                cursor: "pointer",
+                                justifyContent: "inherit",
+                                display: "flex",
+                                alignItems: "inherit",
+                            }}
                             onClick={onHomeButtonClickACB}
                         >
-                            <Typography color={"lightgrey"} variant="h4">
-                                40kstats
-                            </Typography>
-                            <Typography color={"lightgrey"} variant="subtitle2">
-                                a 40k match tracker
-                            </Typography>
+                            <img
+                                src="/adeptus-mechanicus.svg"
+                                alt="Website image"
+                                style={{
+                                    height: "50px",
+                                    width: "50px",
+                                    padding: "5px",
+                                }}
+                            />
+                            <div style={{ margin: "2px" }}>
+                                <Typography color={"lightgrey"} variant="h4">
+                                    40kstats
+                                </Typography>
+                                <Typography
+                                    color={"lightgrey"}
+                                    variant="subtitle2"
+                                >
+                                    a 40k match tracker
+                                </Typography>
+                            </div>
                         </div>
+                        <IconButton onClick={() => onHelpButtonClick()}>
+                            <HelpIcon />
+                        </IconButton>
                         <Button
                             variant="contained"
                             disabled={!user}
                             size="small"
                             onClick={() => onCreateMatchButtonClick()}
-                            >
+                        >
                             {(user && "Create Match") ||
                                 (!user && "Sign in to create match")}
                         </Button>
                         {renderUsernameCreation()}
                     </div>
-
-                    <IconButton onClick={() => onHelpButtonClick()}>
-                        <HelpIcon/>
-                    </IconButton>
-                    
                     {!user && (
                         <div className="login-button">
                             <Button
                                 variant="contained"
                                 onClick={() => onLoginButtonClick()}
-                                >
+                            >
                                 Login
                             </Button>
                         </div>
