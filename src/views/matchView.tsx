@@ -4,6 +4,9 @@ import {
     Box,
     Button,
     ButtonGroup,
+    Dialog,
+    DialogActions,
+    DialogTitle,
     Table,
     TableBody,
     TableCell,
@@ -16,13 +19,17 @@ import {
 export function MatchView({
     match,
     currentUser,
+    dialogOpen,
     deleteMatch,
     editMatch,
+    handleDeleteDialogClick,
 }: {
     match: Match;
     currentUser: any;
+    dialogOpen: boolean;
     deleteMatch: any;
     editMatch: any;
+    handleDeleteDialogClick: any;
 }) {
     const disabled: boolean = match.userID !== currentUser;
 
@@ -33,6 +40,10 @@ export function MatchView({
 
     function editMatchACB() {
         editMatch(match);
+    }
+
+    function openDialogACB(){
+        handleDeleteDialogClick();
     }
 
     function renderWinnerRow(match: Match) {
@@ -199,16 +210,30 @@ export function MatchView({
                 >
                     <span>
                         <Button
-                            disabled={match.userID !== currentUser}
+                            disabled={disabled}
                             onClick={() => {
-                                deleteMatchACB(),
-                                    new Audio("/audio/dino-noise.m4a").play();
+                                openDialogACB();
                             }}
                         >
                             Delete match
                         </Button>
                     </span>
                 </Tooltip>
+                <Dialog
+                    open={dialogOpen}
+                    onClose={openDialogACB}
+                >
+                    <DialogTitle>Are you sure you want to delete this match?</DialogTitle>
+                    <DialogActions>
+                        <Button onClick={() => {
+                            deleteMatchACB();
+                            openDialogACB();
+                        }}>
+                            Yes
+                        </Button>
+                        <Button onClick={openDialogACB}>No</Button>
+                    </DialogActions>
+                </Dialog>
                 <Button>Share match</Button>
             </ButtonGroup>
         </div>
