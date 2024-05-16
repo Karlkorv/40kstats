@@ -1,7 +1,7 @@
 import React from "react";
 import { Match } from "../model/match.ts";
 import { User } from "firebase/auth";
-import { Box, Button, styled, TableRow } from "@mui/material";
+import { Box, Button, styled, TableRow, Tooltip } from "@mui/material";
 import { DataGrid, GridColDef, GridFilterModel } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 
@@ -91,9 +91,13 @@ export function LastestMatchesView({
     return (
         <div>
             <Box>
-                <Button variant="outlined" disabled={!user} onClick={toggleUserFilter}>
-                    Only show my matches.
-                </Button>
+                <Tooltip title={user ? "" : "You need to sign in."}>
+                    <span>
+                        <Button variant="outlined" disabled={!user} onClick={toggleUserFilter}>
+                            Only show my matches.
+                        </Button>
+                    </span>
+                </Tooltip>
             </Box>
             <DataGrid
                 sx={{
