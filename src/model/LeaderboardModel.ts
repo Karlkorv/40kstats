@@ -21,6 +21,7 @@ export class LeaderBoardModel {
     @observable usernameExists: boolean = false;
     @observable helpTextOpen: boolean = false;
     @observable confirmDeleteDialogOpen : boolean = false;
+    @observable toggleFilter : boolean = false;
 
     @observable gettingMatches: boolean = true
     @observable gettingUser: boolean = true
@@ -458,5 +459,9 @@ export class LeaderBoardModel {
 
     @action handleDeleteDialogClick(){
         this.confirmDeleteDialogOpen = !this.confirmDeleteDialogOpen;
+    }
+
+    @action toggleUserFilter(){
+        this.toggleFilter = !this.toggleFilter;
     }
 }
