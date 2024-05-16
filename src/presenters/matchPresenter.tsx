@@ -62,6 +62,10 @@ const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
         window.location.hash = "#/matchCreator";
     }
 
+    function handleDeleteDialogClick(){
+        model.handleDeleteDialogClick();
+    }
+
     console.log(
         "Rendering match presenter, current match: " + model.currentMatch
     );
@@ -80,9 +84,11 @@ const MatchPresenter = observer(({ model }: { model: LeaderBoardModel }) => {
             {renderMetaInfo()}
             <MatchView
                 match={model.currentMatch}
+                dialogOpen={model.confirmDeleteDialogOpen}
                 currentUser={model.user?.uid}
                 deleteMatch={deleteMatch}
                 editMatch={editMatch}
+                handleDeleteDialogClick={handleDeleteDialogClick}
             />
         </div>
     );
