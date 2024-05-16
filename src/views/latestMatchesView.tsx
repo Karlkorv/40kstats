@@ -1,8 +1,8 @@
 import React from "react";
 import { Match } from "../model/match.ts";
 import { User } from "firebase/auth";
-import { styled, TableRow } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Box, Button, styled, TableRow, Tooltip } from "@mui/material";
+import { DataGrid, GridColDef, GridFilterModel } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 
 const columns: GridColDef[] = [
@@ -36,13 +36,13 @@ const columns: GridColDef[] = [
         headerName: "Winner",
         flex: 1,
     },
+    {
+        field: "creator",
+        headerName: "Creator",
+        flex: 1,
+    }
 ];
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-        backgroundColor: theme.palette.action.hover,
-    },
-}));
 
 export function LastestMatchesView({
     matchClicked,
@@ -50,13 +50,23 @@ export function LastestMatchesView({
     moreMatches,
     totalMatches,
     user,
+    toggleFilter,
+    toggleUserFilter,
 }: {
     matchClicked: (match: string) => void;
     matches: Match[];
     moreMatches: (amt?: number) => void;
     totalMatches: number;
     user: User | null;
+    toggleFilter : boolean;
+    toggleUserFilter: any;
 }) {
+    const userFilter : GridFilterModel = {
+        items: [
+            {id: 1, field: "creator", operator: "equals", value: user?.uid}
+        ]
+    }
+
     function moreMatchesACB() {
         moreMatches(10);
     }
@@ -64,6 +74,7 @@ export function LastestMatchesView({
     function matchRowClickedACB(matchID) {
         matchClicked(matchID);
     }
+
     function matchRenderCB(match: Match) {
         return {
             id: match.matchID || "tempID",
@@ -73,11 +84,21 @@ export function LastestMatchesView({
             player_2: match.players[1],
             faction_2: match.factions[1],
             winner: match.winners[0],
+            creator: match.userID,
         };
     }
 
     return (
         <div>
+            <Box>
+                <Tooltip title={user ? "" : "You need to sign in."}>
+                    <span>
+                        <Button variant="outlined" disabled={!user} onClick={toggleUserFilter}>
+                            Only show my matches.
+                        </Button>
+                    </span>
+                </Tooltip>
+            </Box>
             <DataGrid
                 sx={{
                     maxHeight: 500,
@@ -87,6 +108,10 @@ export function LastestMatchesView({
                 }}
                 rows={matches.map(matchRenderCB)}
                 columns={columns}
+                columnVisibilityModel={{
+                    creator: false,
+                }}
+                filterModel={toggleFilter ? userFilter : {items : []}}
                 disableColumnResize
                 disableColumnMenu
                 disableRowSelectionOnClick
