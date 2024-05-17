@@ -127,6 +127,7 @@ export function MatchCreatorView({
                             className="points-button"
                             size="small"
                             variant="outlined"
+                            disabled={isPrimary ? formInputValues[index].p_points <= 0 : formInputValues[index].s_points <= 0}
                             onClick={() =>
                                 handlePointsButtonClick(-1, index, isPrimary)
                             }
