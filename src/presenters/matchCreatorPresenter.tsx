@@ -21,6 +21,8 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         ({ faction_value }) => faction_value
     );
 
+    const winners = model.matchUnderCreation.winners;
+
     const invalidInput : boolean = (
         players.some((player) => player === "") ||
         factions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "" || winners === "") ||

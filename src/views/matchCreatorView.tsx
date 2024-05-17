@@ -292,7 +292,12 @@ export function MatchCreatorView({
                             defaultValue={FACTIONS.SELECT_FACTION}
                             value={faction_value || FACTIONS.SELECT_FACTION}
                             renderInput={(params) => (
-                                <TextField {...params} label="Faction" />
+                                <TextField 
+                                    {...params} 
+                                    error={faction_value===FACTIONS.SELECT_FACTION || faction_value === ""} 
+                                    helperText={(faction_value===FACTIONS.SELECT_FACTION || faction_value === "") ? "Please select a faction." : ""} 
+                                    label="Faction" 
+                                />
                             )}
                             onChange={(_e, value) => onListChange(value, index)}
                         />
@@ -355,6 +360,7 @@ export function MatchCreatorView({
                             <InputLabel id="winners">Winners:</InputLabel>
                             <Select
                                 value={winners}
+                                error={winners===""}
                                 label="Winners:"
                                 onChange={onWinnerChangeACB}
                                 onFocus={onWinnerFocusACB}
@@ -373,6 +379,7 @@ export function MatchCreatorView({
                                     }
                                 )}
                             </Select>
+                            <FormHelperText>{(winners==="") ? "Please select a winner." : ""}</FormHelperText>
                         </FormControl>
                     </Box>
 
