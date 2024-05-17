@@ -20,8 +20,8 @@ export class LeaderBoardModel {
     @observable isValidUserName: boolean | null = null;
     @observable usernameExists: boolean = false;
     @observable helpTextOpen: boolean = false;
-    @observable confirmDeleteDialogOpen : boolean = false;
-    @observable toggleFilter : boolean = false;
+    @observable confirmDeleteDialogOpen: boolean = false;
+    @observable toggleFilter: boolean = false;
 
     @observable gettingMatches: boolean = true
     @observable gettingUser: boolean = true
@@ -457,11 +457,11 @@ export class LeaderBoardModel {
         this.helpTextOpen = !this.helpTextOpen;
     }
 
-    @action handleDeleteDialogClick(){
+    @action handleDeleteDialogClick() {
         this.confirmDeleteDialogOpen = !this.confirmDeleteDialogOpen;
     }
 
-    @action toggleUserFilter(){
+    @action toggleUserFilter() {
         this.toggleFilter = !this.toggleFilter;
     }
 }

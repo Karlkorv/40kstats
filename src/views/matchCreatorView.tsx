@@ -45,7 +45,9 @@ export function MatchCreatorView({
     user,
     handleDateChange,
     usernames,
+    userDuplicate
 }) {
+
     function onClickCreateMatchACB(evt) {
         createNewMatch();
     }
@@ -127,6 +129,7 @@ export function MatchCreatorView({
                             className="points-button"
                             size="small"
                             variant="outlined"
+                            disabled={isPrimary ? formInputValues[index].p_points <= 0 : formInputValues[index].s_points <= 0}
                             onClick={() =>
                                 handlePointsButtonClick(-1, index, isPrimary)
                             }
@@ -247,6 +250,7 @@ export function MatchCreatorView({
 
     function PlayerInput({ objValue, onNameChange, index, onListChange }) {
         const { label, num, type, player_value, faction_value } = objValue;
+        const usernameWrongLength : boolean = (player_value.length < 3 || player_value.length > 20)
         return (
             <Box className="player-input-group" sx={{ paddingRight: 10 / 8 }}>
                 <Box sx={{ minWidth: 120 }}>
@@ -256,7 +260,9 @@ export function MatchCreatorView({
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Select user"
+                                    error={userDuplicate || usernameWrongLength}
+                                    label="Select player"
+                                    helperText={userDuplicate ? "You can not have the same name for both players" : usernameWrongLength ? "Player name must be between 3 and 20 characters." : ""}
                                     onChange={(e) =>
                                         onNameChange(e.target.value, index)
                                     }
@@ -282,8 +288,8 @@ export function MatchCreatorView({
                             key={index}
                             id={label}
                             options={FACTIONS_ARRAY}
-                            defaultValue={FACTIONS.ADEPTUS_MECHANICUS}
-                            value={faction_value || FACTIONS.ADEPTUS_MECHANICUS}
+                            defaultValue={FACTIONS.SELECT_FACTION}
+                            value={faction_value || FACTIONS.SELECT_FACTION}
                             renderInput={(params) => (
                                 <TextField {...params} label="Faction" />
                             )}
@@ -310,9 +316,9 @@ export function MatchCreatorView({
 
     if (!user) {
         return (
-            <div>
-                <span>You need to be logged in to create a match</span>
-            </div>
+            <Typography sx={{paddingBottom:2, paddingTop:2}}>
+                You need to be logged in to create a match
+            </Typography>
         );
     }
 
@@ -373,9 +379,12 @@ export function MatchCreatorView({
                         <FormControl>
                             <InputLabel id="notes">Match Notes:</InputLabel>
                             <OutlinedInput
+                                sx={{width:1000, minHeight: 150}}
                                 value={notes}
                                 label="Match Notes"
                                 type="text"
+                                multiline
+                                rows={4}
                                 onChange={(e) => onNotesChangeACB(e)}
                             />
                         </FormControl>
