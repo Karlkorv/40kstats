@@ -80,10 +80,7 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
     }
 
     function handlePlayerNameChange(e, index) {
-        if (e.length > 20) {
-        } else {
-            model.handlePlayerInputFieldChange(e, index);
-        }
+        model.handlePlayerInputFieldChange(e, index);
     }
 
     function handleFactionChange(value, index) {
@@ -181,6 +178,7 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
                     handleDateChange={handleDateChange}
                     usernames={model.usernames}
                     userDuplicate={userDuplicate}
+                    usernameWrongLength={usernameWrongLength}
                 ></MatchCreatorView>
             }
         </div>
