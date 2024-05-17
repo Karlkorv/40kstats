@@ -302,7 +302,7 @@ export class LeaderBoardModel {
     }
 
     @action cancelMatchCreation() {
-        this.persistenceData = { writing: false, lastWritten: null, oldMatch: this.matchUnderCreation };
+        this.persistenceData = { writing: false, lastWritten: null, oldMatch: null };
         this.matchUnderCreation = DEFAULT_CREATE_MATCH;
         clearPersistence(this);
     }
