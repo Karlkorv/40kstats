@@ -56,7 +56,8 @@ export function NavbarView({
         return (
             <div
                 style={{
-                    display: "flex",
+                    display:"flex",
+                    alignItems:"center",
                     paddingLeft: 10,
                     paddingRight: 10,
                     gap: "10px",
@@ -72,17 +73,15 @@ export function NavbarView({
                         variant="filled"
                     />
                     <FormHelperText style={{ color: "white" }}>
-                        {usernameInput.length < 3 && usernameInput.length > 0
-                            ? "Username too short"
-                            : usernameInput.length > 20
-                            ? "Username too long"
+                        {(usernameInput.length < 3) ||usernameInput.length > 20
+                            ? "Username must be between 3 and 20 characters long."
                             : usernameExists
                             ? "Username already exists"
                             : ""}
                     </FormHelperText>
                 </FormControl>
                 <Button
-                    sx={{ position: "relative" }}
+                    sx={{marginTop: "-1px"}}
                     id="username-confirm-button"
                     onClick={onConfirmClick}
                     variant="contained"
@@ -172,12 +171,7 @@ export function NavbarView({
                             style={{ display: "flex" }}
                             className="logout-button"
                         >
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                }}
-                            >
+                            <div>
                                 <Typography
                                     variant="caption"
                                     style={{
