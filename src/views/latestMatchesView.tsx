@@ -57,6 +57,7 @@ export function LastestMatchesView({
     moreMatches,
     totalMatches,
     user,
+    username,
     userFilter,
     toggleUserFilter,
     playerFilter,
@@ -68,6 +69,7 @@ export function LastestMatchesView({
     moreMatches: (amt?: number) => void;
     totalMatches: number;
     user: User | null;
+    username : string | null;
     userFilter : boolean;
     toggleUserFilter: any;
     playerFilter: boolean;
@@ -115,10 +117,10 @@ export function LastestMatchesView({
                             
                     </span>
                 </Tooltip>
-                <Tooltip title={user?.uid ? "" : "You need to select a username."}>
+                <Tooltip title={username ? "" : "You need to select a username."}>
                     <span>
                         <FormControlLabel
-                            control={<Switch disabled={!user?.uid} checked={playerFilter} onChange={togglePlayerFilter}/>}
+                            control={<Switch disabled={!username} checked={playerFilter} onChange={togglePlayerFilter}/>}
                             label={"Only show matches played by me."}
                             labelPlacement="bottom"
                         >

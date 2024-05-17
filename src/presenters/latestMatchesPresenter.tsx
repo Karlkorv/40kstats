@@ -41,6 +41,7 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
                     moreMatches={loadMoreMatches}
                     totalMatches={model.totalMatches}
                     user={model.user}
+                    username={model.username}
                     userFilter={model.userFilter}
                     toggleUserFilter={toggleUserFilter}
                     playerFilter={model.playerFilter}
