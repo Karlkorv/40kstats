@@ -14,6 +14,19 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         model.matchUnderCreation.formInputValues[1].player_value.length < 3 || 
         model.matchUnderCreation.formInputValues[1].player_value.length > 20
     );
+    const players = model.matchUnderCreation.formInputValues.map(
+        ({ player_value }) => player_value
+    );
+    const factions = model.matchUnderCreation.formInputValues.map(
+        ({ faction_value }) => faction_value
+    );
+
+    const invalidInput : boolean = (
+        players.some((player) => player === "") ||
+        factions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "" || winners === "") ||
+        userDuplicate ||
+        usernameWrongLength
+    )
 
     function createNewMatch() {
         let date = model.matchUnderCreation.date;
@@ -45,14 +58,7 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         if (userDuplicate){
             alert("Please pick unique player names.")
         }
-        if (
-            !(
-                players.some((player) => player === "") ||
-                factions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "" || winners === "") ||
-                userDuplicate ||
-                usernameWrongLength
-            )
-        ) {
+        if (!invalidInput) {
             model.addMatch(
                 new Match(
                     players,
@@ -178,7 +184,7 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
                     handleDateChange={handleDateChange}
                     usernames={model.usernames}
                     userDuplicate={userDuplicate}
-                    usernameWrongLength={usernameWrongLength}
+                    invalidInput={invalidInput}
                 ></MatchCreatorView>
             }
         </div>

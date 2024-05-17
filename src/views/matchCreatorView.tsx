@@ -46,7 +46,7 @@ export function MatchCreatorView({
     handleDateChange,
     usernames,
     userDuplicate,
-    usernameWrongLength
+    invalidInput
 }) {
 
     function onClickCreateMatchACB(evt) {
@@ -393,7 +393,7 @@ export function MatchCreatorView({
                 </Box>
             </form>
             <ButtonGroup variant="contained">
-                <Button disabled={!connected} onClick={onClickCreateMatchACB}>
+                <Button disabled={!connected || invalidInput} onClick={onClickCreateMatchACB}>
                     {connected ? "Create Match" : "Not connected"}
                 </Button>
                 <Button onClick={onClickCancelACB}>Cancel</Button>
