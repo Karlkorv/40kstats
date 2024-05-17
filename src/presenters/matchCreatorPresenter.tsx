@@ -7,6 +7,7 @@ import { FACTIONS } from "../model/factions.ts";
 
 const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
     const options = Object.values(FACTIONS);
+    const userDuplicate : boolean = (model.matchUnderCreation.formInputValues[0].player_value === model.matchUnderCreation.formInputValues[1].player_value);
 
     function createNewMatch() {
         let date = model.matchUnderCreation.date;
@@ -35,10 +36,14 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         if (winners === "") {
             alert("Please pick the winner");
         }
+        if (userDuplicate){
+            alert("Please pick unique player names.")
+        }
         if (
             !(
                 players.some((player) => player === "") ||
-                factions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "" || winners === "")
+                factions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "" || winners === "") ||
+                userDuplicate
             )
         ) {
             model.addMatch(
@@ -169,6 +174,7 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
                     handleNotesChange={handleNotesChange}
                     handleDateChange={handleDateChange}
                     usernames={model.usernames}
+                    userDuplicate={userDuplicate}
                 ></MatchCreatorView>
             }
         </div>

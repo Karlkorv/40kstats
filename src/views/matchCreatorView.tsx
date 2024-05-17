@@ -45,7 +45,9 @@ export function MatchCreatorView({
     user,
     handleDateChange,
     usernames,
+    userDuplicate
 }) {
+
     function onClickCreateMatchACB(evt) {
         createNewMatch();
     }
@@ -257,7 +259,9 @@ export function MatchCreatorView({
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
+                                    error={userDuplicate}
                                     label="Select user"
+                                    helperText={userDuplicate ? "You can not have the same username for both players" : ""}
                                     onChange={(e) =>
                                         onNameChange(e.target.value, index)
                                     }

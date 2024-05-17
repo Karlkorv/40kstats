@@ -17,6 +17,7 @@ export class LeaderBoardModel {
     @observable totalMatches: number = 0
     @observable username: string | null = null;
     @observable usernames: string[] = [];
+    @observable availableUsernames: string[] = [];
     @observable isValidUserName: boolean | null = null;
     @observable usernameExists: boolean = false;
     @observable helpTextOpen: boolean = false;
@@ -140,6 +141,7 @@ export class LeaderBoardModel {
         getUsernames().then((usernames) => {
             runInAction(() => {
                 this.usernames = usernames;
+                this.availableUsernames = usernames;
             })
         })
     }
