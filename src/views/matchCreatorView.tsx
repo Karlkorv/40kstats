@@ -250,6 +250,7 @@ export function MatchCreatorView({
 
     function PlayerInput({ objValue, onNameChange, index, onListChange }) {
         const { label, num, type, player_value, faction_value } = objValue;
+        const usernameWrongLength : boolean = (player_value.length < 3 || player_value.length > 20)
         return (
             <Box className="player-input-group" sx={{ paddingRight: 10 / 8 }}>
                 <Box sx={{ minWidth: 120 }}>
@@ -259,9 +260,9 @@ export function MatchCreatorView({
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    error={userDuplicate}
+                                    error={userDuplicate || usernameWrongLength}
                                     label="Select player"
-                                    helperText={userDuplicate ? "You can not have the same name for both players" : ""}
+                                    helperText={userDuplicate ? "You can not have the same name for both players" : usernameWrongLength ? "Player name must be between 3 and 20 characters." : ""}
                                     onChange={(e) =>
                                         onNameChange(e.target.value, index)
                                     }

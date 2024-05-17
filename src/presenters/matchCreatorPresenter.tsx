@@ -8,6 +8,12 @@ import { FACTIONS } from "../model/factions.ts";
 const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
     const options = Object.values(FACTIONS);
     const userDuplicate : boolean = (model.matchUnderCreation.formInputValues[0].player_value === model.matchUnderCreation.formInputValues[1].player_value);
+    const usernameWrongLength : boolean = (
+        model.matchUnderCreation.formInputValues[0].player_value.length < 3 || 
+        model.matchUnderCreation.formInputValues[0].player_value.length > 20 ||
+        model.matchUnderCreation.formInputValues[1].player_value.length < 3 || 
+        model.matchUnderCreation.formInputValues[1].player_value.length > 20
+    );
 
     function createNewMatch() {
         let date = model.matchUnderCreation.date;
@@ -43,7 +49,8 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
             !(
                 players.some((player) => player === "") ||
                 factions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "" || winners === "") ||
-                userDuplicate
+                userDuplicate ||
+                usernameWrongLength
             )
         ) {
             model.addMatch(
@@ -74,7 +81,6 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
 
     function handlePlayerNameChange(e, index) {
         if (e.length > 20) {
-            alert("Name too long!");
         } else {
             model.handlePlayerInputFieldChange(e, index);
         }
