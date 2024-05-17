@@ -95,33 +95,32 @@ export function LastestMatchesView({
     
     return (
         <div>
-            <Box>
-                <TextField label="Search players" variant="outlined" onInput={handleSearchInput}>
-
-                </TextField>
-            </Box>
-            <Box sx={{paddingBottom:1}}>
-                    <Tooltip title={user ? "" : "You need to sign in."}>
-                        <span>
-                            <FormControlLabel
-                                control={<Switch disabled={!user} onChange={toggleUserFilter}/>}
-                                label={"Only show matches created by me."}
-                                labelPlacement="bottom"
-                            >
-                            </FormControlLabel>
-                                
-                        </span>
-                    </Tooltip>
-                    <Tooltip title={user?.uid ? "" : "You need to select a username."}>
-                        <span>
-                            <FormControlLabel
-                                control={<Switch disabled={!user?.uid} onChange={togglePlayerFilter}/>}
-                                label={"Only show matches played by me."}
-                                labelPlacement="bottom"
-                            >
-                            </FormControlLabel>
-                        </span>
-                    </Tooltip>
+            <Box sx={{paddingBottom:1, display:"flex", width:"100%"}}>
+                <Tooltip title={user ? "" : "You need to sign in."}>
+                    <span>
+                        <FormControlLabel
+                            control={<Switch disabled={!user} onChange={toggleUserFilter}/>}
+                            label={"Only show matches created by me."}
+                            labelPlacement="bottom"
+                        >
+                        </FormControlLabel>
+                            
+                    </span>
+                </Tooltip>
+                <Tooltip title={user?.uid ? "" : "You need to select a username."}>
+                    <span>
+                        <FormControlLabel
+                            control={<Switch disabled={!user?.uid} onChange={togglePlayerFilter}/>}
+                            label={"Only show matches played by me."}
+                            labelPlacement="bottom"
+                        >
+                        </FormControlLabel>
+                    </span>
+                </Tooltip>
+                <Box sx={{textAlign:"right", marginLeft:"auto"}}>
+                    <TextField label="Search players" variant="outlined" onInput={handleSearchInput}>
+                    </TextField>
+                </Box>
             </Box>
             <DataGrid
                 sx={{
