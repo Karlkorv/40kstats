@@ -1,5 +1,6 @@
 import React from "react";
 import { Match } from "../model/match.ts";
+import copy from "copy-to-clipboard";
 import {
     Box,
     Button,
@@ -42,7 +43,7 @@ export function MatchView({
         editMatch(match);
     }
 
-    function openDialogACB(){
+    function openDialogACB() {
         handleDeleteDialogClick();
     }
 
@@ -81,6 +82,7 @@ export function MatchView({
             </div>
         );
     }
+
     return (
         <div id="match-wrapper">
             <Typography fontSize={50}>Winner: {match.winners[0]}</Typography>
@@ -219,22 +221,30 @@ export function MatchView({
                         </Button>
                     </span>
                 </Tooltip>
-                <Dialog
-                    open={dialogOpen}
-                    onClose={openDialogACB}
-                >
-                    <DialogTitle>Are you sure you want to delete this match?</DialogTitle>
+                <Dialog open={dialogOpen} onClose={openDialogACB}>
+                    <DialogTitle>
+                        Are you sure you want to delete this match?
+                    </DialogTitle>
                     <DialogActions>
-                        <Button onClick={() => {
-                            deleteMatchACB();
-                            openDialogACB();
-                        }}>
+                        <Button
+                            onClick={() => {
+                                deleteMatchACB();
+                                openDialogACB();
+                            }}
+                        >
                             Yes
                         </Button>
                         <Button onClick={openDialogACB}>No</Button>
                     </DialogActions>
                 </Dialog>
-                <Button>Share match</Button>
+                <Button
+                    onClick={() => {
+                        copy(window.location.href);
+                        alert("Match url copied to clipboard");
+                    }}
+                >
+                    Share match
+                </Button>
             </ButtonGroup>
         </div>
     );
