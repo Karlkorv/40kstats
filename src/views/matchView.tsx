@@ -89,6 +89,7 @@ export function MatchView({
             <Box className="table-class">
                 <Table
                     style={{
+                        maxWidth:"1000px",
                         margin: "auto",
                         justifyContent: "center",
                         alignItems: "center",
@@ -160,18 +161,22 @@ export function MatchView({
                             <TableCell>{match.points_secondary[1]}</TableCell>
                         </TableRow>
                         {match.notes && match.notes.length > 0 && (
-                            <TableRow>
-                                <TableCell
-                                    style={{
-                                        borderRight:
-                                            "1px solid rgba(224, 224, 224, 1)",
-                                        fontWeight: "bold",
-                                    }}
-                                >
-                                    Notes
-                                </TableCell>
-                                <TableCell>{match.notes}</TableCell>
-                            </TableRow>
+                            <div>
+                                <TableRow>
+                                    <TableCell
+                                        style={{
+                                            borderRight:
+                                                "1px solid rgba(224, 224, 224, 1)",
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        Notes
+                                    </TableCell>
+                                    <div style={{overflow:"auto", maxHeight:"200px"}}>
+                                        <TableCell>{match.notes}</TableCell>
+                                    </div>
+                                </TableRow>
+                            </div>
                         )}
                     </TableBody>
                 </Table>
