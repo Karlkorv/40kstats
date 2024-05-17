@@ -43,6 +43,7 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
                     user={model.user}
                     userFilter={model.userFilter}
                     toggleUserFilter={toggleUserFilter}
+                    playerFilter={model.playerFilter}
                     togglePlayerFilter={togglePlayerFilter}
                     handleSearchInput={handleSearchInput}
                 />

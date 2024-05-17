@@ -53,6 +53,7 @@ export function LastestMatchesView({
     user,
     userFilter,
     toggleUserFilter,
+    playerFilter,
     togglePlayerFilter,
     handleSearchInput
 }: {
@@ -63,6 +64,7 @@ export function LastestMatchesView({
     user: User | null;
     userFilter : boolean;
     toggleUserFilter: any;
+    playerFilter: boolean;
     togglePlayerFilter : any;
     handleSearchInput : any;
 }) {
@@ -99,7 +101,7 @@ export function LastestMatchesView({
                 <Tooltip title={user ? "" : "You need to sign in."}>
                     <span>
                         <FormControlLabel
-                            control={<Switch disabled={!user} onChange={toggleUserFilter}/>}
+                            control={<Switch disabled={!user} checked={userFilter} onChange={toggleUserFilter}/>}
                             label={"Only show matches created by me."}
                             labelPlacement="bottom"
                         >
@@ -110,7 +112,7 @@ export function LastestMatchesView({
                 <Tooltip title={user?.uid ? "" : "You need to select a username."}>
                     <span>
                         <FormControlLabel
-                            control={<Switch disabled={!user?.uid} onChange={togglePlayerFilter}/>}
+                            control={<Switch disabled={!user?.uid} checked={playerFilter} onChange={togglePlayerFilter}/>}
                             label={"Only show matches played by me."}
                             labelPlacement="bottom"
                         >
