@@ -379,7 +379,7 @@ export function MatchCreatorView({
                                     }
                                 )}
                             </Select>
-                            <FormHelperText>{(winners==="") ? "Please select a winner." : ""}</FormHelperText>
+                            <FormHelperText sx={{color: "#d32f"}}>{(winners==="") ? "Please select a winner." : ""}</FormHelperText>
                         </FormControl>
                     </Box>
 
