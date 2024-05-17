@@ -17,12 +17,11 @@ export class LeaderBoardModel {
     @observable totalMatches: number = 0
     @observable username: string | null = null;
     @observable usernames: string[] = [];
-    @observable availableUsernames: string[] = [];
     @observable isValidUserName: boolean | null = null;
     @observable usernameExists: boolean = false;
     @observable helpTextOpen: boolean = false;
-    @observable confirmDeleteDialogOpen : boolean = false;
-    @observable toggleFilter : boolean = false;
+    @observable confirmDeleteDialogOpen: boolean = false;
+    @observable toggleFilter: boolean = false;
 
     @observable gettingMatches: boolean = true
     @observable gettingUser: boolean = true
@@ -141,7 +140,6 @@ export class LeaderBoardModel {
         getUsernames().then((usernames) => {
             runInAction(() => {
                 this.usernames = usernames;
-                this.availableUsernames = usernames;
             })
         })
     }
@@ -459,11 +457,11 @@ export class LeaderBoardModel {
         this.helpTextOpen = !this.helpTextOpen;
     }
 
-    @action handleDeleteDialogClick(){
+    @action handleDeleteDialogClick() {
         this.confirmDeleteDialogOpen = !this.confirmDeleteDialogOpen;
     }
 
-    @action toggleUserFilter(){
+    @action toggleUserFilter() {
         this.toggleFilter = !this.toggleFilter;
     }
 }
