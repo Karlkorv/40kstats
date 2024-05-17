@@ -23,6 +23,7 @@ export class LeaderBoardModel {
     @observable confirmDeleteDialogOpen: boolean = false;
     @observable userFilter: boolean = false;
     @observable playerFilter: boolean = false;
+    @observable latestMatchesSearchInput : string = ""
 
     @observable gettingMatches: boolean = true
     @observable gettingUser: boolean = true
@@ -447,11 +448,21 @@ export class LeaderBoardModel {
     }
 
     getMatches(): Match[] {
-        if(this.playerFilter) {
-            let tempVar = this.matches;
-            return tempVar.filter((match) => match.players.includes(this.username || "") === true);
+        if(this.latestMatchesSearchInput !== ""){
+            if(this.playerFilter) {
+                let tempVar = this.matches;
+                return tempVar.filter((match) => match.players.includes(this.username || "") === true && match.players.some((player) => player.toUpperCase().includes(this.latestMatchesSearchInput.toUpperCase())) === true);
+            } else {
+                let tempVar = this.matches;
+                return tempVar.filter((match) => match.players.some((player) => player.toUpperCase().includes(this.latestMatchesSearchInput.toUpperCase())) === true);
+            }
         } else {
-            return this.matches || []
+            if(this.playerFilter) {
+                let tempVar = this.matches;
+                return tempVar.filter((match) => match.players.includes(this.username || "") === true && match.players.some((player) => player.toUpperCase().includes(this.latestMatchesSearchInput.toUpperCase())) === true);
+            } else {
+                return this.matches || []
+            }
         }
     }
 
@@ -473,6 +484,10 @@ export class LeaderBoardModel {
 
     @action togglePlayerFilter(){
         this.playerFilter = !this.playerFilter;
+    }
+
+    @action handleSearchInput(e){
+        this.latestMatchesSearchInput = e.target.value;
     }
 
 

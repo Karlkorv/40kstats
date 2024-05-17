@@ -24,6 +24,10 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
         model.togglePlayerFilter();
     }
 
+    function handleSearchInput(e){
+        model.handleSearchInput(e);
+    }
+
     if (model.error) {
         return <div>Error: {model.error}</div>;
     }
@@ -40,6 +44,7 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
                     userFilter={model.userFilter}
                     toggleUserFilter={toggleUserFilter}
                     togglePlayerFilter={togglePlayerFilter}
+                    handleSearchInput={handleSearchInput}
                 />
             </div>
         );

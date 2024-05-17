@@ -1,7 +1,7 @@
 import React from "react";
 import { Match } from "../model/match.ts";
 import { User } from "firebase/auth";
-import { Box, Button, ButtonGroup, FormControl, FormControlLabel, styled, Switch, TableRow, Tooltip } from "@mui/material";
+import { Box, Button, ButtonGroup, FormControl, FormControlLabel, styled, Switch, TableRow, TextField, Tooltip } from "@mui/material";
 import { DataGrid, GridColDef, GridFilterModel, GridLogicOperator } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 import { DataGridPro } from "@mui/x-data-grid-pro";
@@ -53,7 +53,8 @@ export function LastestMatchesView({
     user,
     userFilter,
     toggleUserFilter,
-    togglePlayerFilter
+    togglePlayerFilter,
+    handleSearchInput
 }: {
     matchClicked: (match: string) => void;
     matches: Match[];
@@ -63,6 +64,7 @@ export function LastestMatchesView({
     userFilter : boolean;
     toggleUserFilter: any;
     togglePlayerFilter : any;
+    handleSearchInput : any;
 }) {
     const userFilterModel : GridFilterModel = {
         items: [
@@ -93,6 +95,11 @@ export function LastestMatchesView({
     
     return (
         <div>
+            <Box>
+                <TextField label="Search players" variant="outlined" onInput={handleSearchInput}>
+
+                </TextField>
+            </Box>
             <Box sx={{paddingBottom:1}}>
                     <Tooltip title={user ? "" : "You need to sign in."}>
                         <span>
@@ -106,12 +113,14 @@ export function LastestMatchesView({
                         </span>
                     </Tooltip>
                     <Tooltip title={user?.uid ? "" : "You need to select a username."}>
-                        <FormControlLabel
-                            control={<Switch disabled={!user?.uid} onChange={togglePlayerFilter}/>}
-                            label={"Only show matches played by me."}
-                            labelPlacement="bottom"
-                        >
-                        </FormControlLabel>
+                        <span>
+                            <FormControlLabel
+                                control={<Switch disabled={!user?.uid} onChange={togglePlayerFilter}/>}
+                                label={"Only show matches played by me."}
+                                labelPlacement="bottom"
+                            >
+                            </FormControlLabel>
+                        </span>
                     </Tooltip>
             </Box>
             <DataGrid
