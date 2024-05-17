@@ -1,38 +1,45 @@
 import React from "react";
 import { Match } from "../model/match.ts";
 import { User } from "firebase/auth";
-import { Box, Button, styled, TableRow, Tooltip } from "@mui/material";
-import { DataGrid, GridColDef, GridFilterModel } from "@mui/x-data-grid";
+import { Box, Button, ButtonGroup, FormControl, FormControlLabel, styled, Switch, TableRow, TextField, Tooltip } from "@mui/material";
+import { DataGrid, GridColDef, GridFilterModel, GridLogicOperator } from "@mui/x-data-grid";
 import dayjs from "dayjs";
+import { DataGridPro } from "@mui/x-data-grid-pro";
 
 const columns: GridColDef[] = [
     {
         field: "date",
+        headerClassName: "grid-column-class",
         headerName: "Date",
         flex: 1,
     },
     {
         field: "player_1",
+        headerClassName: "grid-column-class",
         headerName: "Player 1",
         flex: 1,
     },
     {
         field: "faction_1",
+        headerClassName: "grid-column-class",
         headerName: "Faction 1",
         flex: 1,
     },
     {
         field: "player_2",
+        headerClassName: "grid-column-class",
         headerName: "Player 2",
         flex: 1,
     },
     {
         field: "faction_2",
+        headerClassName: "grid-column-class",
         headerName: "Faction 2",
         flex: 1,
     },
     {
         field: "winner",
+        headerClassName: "grid-column-class",
         headerName: "Winner",
         flex: 1,
     },
@@ -50,18 +57,24 @@ export function LastestMatchesView({
     moreMatches,
     totalMatches,
     user,
-    toggleFilter,
+    userFilter,
     toggleUserFilter,
+    playerFilter,
+    togglePlayerFilter,
+    handleSearchInput
 }: {
     matchClicked: (match: string) => void;
     matches: Match[];
     moreMatches: (amt?: number) => void;
     totalMatches: number;
     user: User | null;
-    toggleFilter : boolean;
+    userFilter : boolean;
     toggleUserFilter: any;
+    playerFilter: boolean;
+    togglePlayerFilter : any;
+    handleSearchInput : any;
 }) {
-    const userFilter : GridFilterModel = {
+    const userFilterModel : GridFilterModel = {
         items: [
             {id: 1, field: "creator", operator: "equals", value: user?.uid}
         ]
@@ -87,17 +100,35 @@ export function LastestMatchesView({
             creator: match.userID,
         };
     }
-
+    
     return (
         <div>
-            <Box>
+            <Box sx={{paddingBottom:1, display:"flex", width:"100%"}}>
                 <Tooltip title={user ? "" : "You need to sign in."}>
                     <span>
-                        <Button variant="outlined" disabled={!user} onClick={toggleUserFilter}>
-                            Only show my matches.
-                        </Button>
+                        <FormControlLabel
+                            control={<Switch disabled={!user} checked={userFilter} onChange={toggleUserFilter}/>}
+                            label={"Only show matches created by me."}
+                            labelPlacement="bottom"
+                        >
+                        </FormControlLabel>
+                            
                     </span>
                 </Tooltip>
+                <Tooltip title={user?.uid ? "" : "You need to select a username."}>
+                    <span>
+                        <FormControlLabel
+                            control={<Switch disabled={!user?.uid} checked={playerFilter} onChange={togglePlayerFilter}/>}
+                            label={"Only show matches played by me."}
+                            labelPlacement="bottom"
+                        >
+                        </FormControlLabel>
+                    </span>
+                </Tooltip>
+                <Box sx={{textAlign:"right", marginLeft:"auto"}}>
+                    <TextField label="Search players" color="primary" variant="outlined" onInput={handleSearchInput}>
+                    </TextField>
+                </Box>
             </Box>
             <DataGrid
                 sx={{
@@ -111,7 +142,10 @@ export function LastestMatchesView({
                 columnVisibilityModel={{
                     creator: false,
                 }}
-                filterModel={toggleFilter ? userFilter : {items : []}}
+                filterModel={
+                    userFilter ? userFilterModel : {items : []}
+                }
+                /* filterModel={playerFilterModel} */
                 disableColumnResize
                 disableColumnMenu
                 disableRowSelectionOnClick

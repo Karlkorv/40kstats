@@ -21,7 +21,9 @@ export class LeaderBoardModel {
     @observable usernameExists: boolean = false;
     @observable helpTextOpen: boolean = false;
     @observable confirmDeleteDialogOpen: boolean = false;
-    @observable toggleFilter: boolean = false;
+    @observable userFilter: boolean = false;
+    @observable playerFilter: boolean = false;
+    @observable latestMatchesSearchInput : string = ""
 
     @observable gettingMatches: boolean = true
     @observable gettingUser: boolean = true
@@ -446,7 +448,22 @@ export class LeaderBoardModel {
     }
 
     getMatches(): Match[] {
-        return this.matches || []
+        if(this.latestMatchesSearchInput !== ""){
+            if(this.playerFilter) {
+                let tempVar = this.matches;
+                return tempVar.filter((match) => match.players.includes(this.username || "") === true && match.players.some((player) => player.toUpperCase().includes(this.latestMatchesSearchInput.toUpperCase())) === true);
+            } else {
+                let tempVar = this.matches;
+                return tempVar.filter((match) => match.players.some((player) => player.toUpperCase().includes(this.latestMatchesSearchInput.toUpperCase())) === true);
+            }
+        } else {
+            if(this.playerFilter) {
+                let tempVar = this.matches;
+                return tempVar.filter((match) => match.players.includes(this.username || "") === true && match.players.some((player) => player.toUpperCase().includes(this.latestMatchesSearchInput.toUpperCase())) === true);
+            } else {
+                return this.matches || []
+            }
+        }
     }
 
     @action handleCloseDialog() {
@@ -462,6 +479,16 @@ export class LeaderBoardModel {
     }
 
     @action toggleUserFilter() {
-        this.toggleFilter = !this.toggleFilter;
+        this.userFilter = !this.userFilter;
     }
+
+    @action togglePlayerFilter(){
+        this.playerFilter = !this.playerFilter;
+    }
+
+    @action handleSearchInput(e){
+        this.latestMatchesSearchInput = e.target.value;
+    }
+
+
 }
