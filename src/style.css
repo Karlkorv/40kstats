@@ -175,3 +175,19 @@
     border-radius: 10px;
     overflow: auto;
 }
+
+.grid-column-class {
+    font-weight: bold !important;
+}
+
+div.MuiDataGrid-columnHeaderTitle {
+    font-weight: bold;
+    color:#ffffff
+}
+
+div.MuiDataGrid-columnHeader {
+    background-color: #9c1116;
+}
+
+div.MuiDataGrid-row {
+}

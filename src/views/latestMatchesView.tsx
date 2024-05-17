@@ -9,31 +9,37 @@ import { DataGridPro } from "@mui/x-data-grid-pro";
 const columns: GridColDef[] = [
     {
         field: "date",
+        headerClassName: "grid-column-class",
         headerName: "Date",
         flex: 1,
     },
     {
         field: "player_1",
+        headerClassName: "grid-column-class",
         headerName: "Player 1",
         flex: 1,
     },
     {
         field: "faction_1",
+        headerClassName: "grid-column-class",
         headerName: "Faction 1",
         flex: 1,
     },
     {
         field: "player_2",
+        headerClassName: "grid-column-class",
         headerName: "Player 2",
         flex: 1,
     },
     {
         field: "faction_2",
+        headerClassName: "grid-column-class",
         headerName: "Faction 2",
         flex: 1,
     },
     {
         field: "winner",
+        headerClassName: "grid-column-class",
         headerName: "Winner",
         flex: 1,
     },
@@ -120,7 +126,7 @@ export function LastestMatchesView({
                     </span>
                 </Tooltip>
                 <Box sx={{textAlign:"right", marginLeft:"auto"}}>
-                    <TextField label="Search players" variant="outlined" onInput={handleSearchInput}>
+                    <TextField label="Search players" color="primary" variant="outlined" onInput={handleSearchInput}>
                     </TextField>
                 </Box>
             </Box>
