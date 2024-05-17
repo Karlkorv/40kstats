@@ -316,9 +316,9 @@ export function MatchCreatorView({
 
     if (!user) {
         return (
-            <div>
-                <span>You need to be logged in to create a match</span>
-            </div>
+            <Typography sx={{paddingBottom:2, paddingTop:2}}>
+                You need to be logged in to create a match
+            </Typography>
         );
     }
 
