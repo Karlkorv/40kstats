@@ -260,8 +260,8 @@ export function MatchCreatorView({
                                 <TextField
                                     {...params}
                                     error={userDuplicate}
-                                    label="Select user"
-                                    helperText={userDuplicate ? "You can not have the same username for both players" : ""}
+                                    label="Select player"
+                                    helperText={userDuplicate ? "You can not have the same name for both players" : ""}
                                     onChange={(e) =>
                                         onNameChange(e.target.value, index)
                                     }
