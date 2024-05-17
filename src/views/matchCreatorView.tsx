@@ -379,9 +379,12 @@ export function MatchCreatorView({
                         <FormControl>
                             <InputLabel id="notes">Match Notes:</InputLabel>
                             <OutlinedInput
+                                sx={{width:1000, minHeight: 150}}
                                 value={notes}
                                 label="Match Notes"
                                 type="text"
+                                multiline
+                                rows={4}
                                 onChange={(e) => onNotesChangeACB(e)}
                             />
                         </FormControl>
