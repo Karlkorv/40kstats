@@ -21,7 +21,8 @@ export class LeaderBoardModel {
     @observable usernameExists: boolean = false;
     @observable helpTextOpen: boolean = false;
     @observable confirmDeleteDialogOpen: boolean = false;
-    @observable toggleFilter: boolean = false;
+    @observable userFilter: boolean = false;
+    @observable playerFilter: boolean = false;
 
     @observable gettingMatches: boolean = true
     @observable gettingUser: boolean = true
@@ -446,7 +447,12 @@ export class LeaderBoardModel {
     }
 
     getMatches(): Match[] {
-        return this.matches || []
+        if(this.playerFilter) {
+            let tempVar = this.matches;
+            return tempVar.filter((match) => match.players.includes(this.username || "") === true);
+        } else {
+            return this.matches || []
+        }
     }
 
     @action handleCloseDialog() {
@@ -462,6 +468,12 @@ export class LeaderBoardModel {
     }
 
     @action toggleUserFilter() {
-        this.toggleFilter = !this.toggleFilter;
+        this.userFilter = !this.userFilter;
     }
+
+    @action togglePlayerFilter(){
+        this.playerFilter = !this.playerFilter;
+    }
+
+
 }

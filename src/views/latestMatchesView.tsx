@@ -1,9 +1,10 @@
 import React from "react";
 import { Match } from "../model/match.ts";
 import { User } from "firebase/auth";
-import { Box, Button, styled, TableRow, Tooltip } from "@mui/material";
-import { DataGrid, GridColDef, GridFilterModel } from "@mui/x-data-grid";
+import { Box, Button, ButtonGroup, FormControl, FormControlLabel, styled, Switch, TableRow, Tooltip } from "@mui/material";
+import { DataGrid, GridColDef, GridFilterModel, GridLogicOperator } from "@mui/x-data-grid";
 import dayjs from "dayjs";
+import { DataGridPro } from "@mui/x-data-grid-pro";
 
 const columns: GridColDef[] = [
     {
@@ -50,18 +51,20 @@ export function LastestMatchesView({
     moreMatches,
     totalMatches,
     user,
-    toggleFilter,
+    userFilter,
     toggleUserFilter,
+    togglePlayerFilter
 }: {
     matchClicked: (match: string) => void;
     matches: Match[];
     moreMatches: (amt?: number) => void;
     totalMatches: number;
     user: User | null;
-    toggleFilter : boolean;
+    userFilter : boolean;
     toggleUserFilter: any;
+    togglePlayerFilter : any;
 }) {
-    const userFilter : GridFilterModel = {
+    const userFilterModel : GridFilterModel = {
         items: [
             {id: 1, field: "creator", operator: "equals", value: user?.uid}
         ]
@@ -87,17 +90,29 @@ export function LastestMatchesView({
             creator: match.userID,
         };
     }
-
+    
     return (
         <div>
-            <Box>
-                <Tooltip title={user ? "" : "You need to sign in."}>
-                    <span>
-                        <Button variant="outlined" disabled={!user} onClick={toggleUserFilter}>
-                            Only show my matches.
-                        </Button>
-                    </span>
-                </Tooltip>
+            <Box sx={{paddingBottom:1}}>
+                    <Tooltip title={user ? "" : "You need to sign in."}>
+                        <span>
+                            <FormControlLabel
+                                control={<Switch disabled={!user} onChange={toggleUserFilter}/>}
+                                label={"Only show matches created by me."}
+                                labelPlacement="bottom"
+                            >
+                            </FormControlLabel>
+                                
+                        </span>
+                    </Tooltip>
+                    <Tooltip title={user?.uid ? "" : "You need to select a username."}>
+                        <FormControlLabel
+                            control={<Switch disabled={!user?.uid} onChange={togglePlayerFilter}/>}
+                            label={"Only show matches played by me."}
+                            labelPlacement="bottom"
+                        >
+                        </FormControlLabel>
+                    </Tooltip>
             </Box>
             <DataGrid
                 sx={{
@@ -111,7 +126,10 @@ export function LastestMatchesView({
                 columnVisibilityModel={{
                     creator: false,
                 }}
-                filterModel={toggleFilter ? userFilter : {items : []}}
+                filterModel={
+                    userFilter ? userFilterModel : {items : []}
+                }
+                /* filterModel={playerFilterModel} */
                 disableColumnResize
                 disableColumnMenu
                 disableRowSelectionOnClick
