@@ -282,8 +282,8 @@ export function MatchCreatorView({
                             key={index}
                             id={label}
                             options={FACTIONS_ARRAY}
-                            defaultValue={FACTIONS.ADEPTUS_MECHANICUS}
-                            value={faction_value || FACTIONS.ADEPTUS_MECHANICUS}
+                            defaultValue={FACTIONS.SELECT_FACTION}
+                            value={faction_value || FACTIONS.SELECT_FACTION}
                             renderInput={(params) => (
                                 <TextField {...params} label="Faction" />
                             )}

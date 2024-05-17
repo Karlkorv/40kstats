@@ -29,7 +29,7 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         if (players.some((player) => player === "")) {
             alert("Please fill in all Players");
         }
-        if (factions.some((faction) => faction === "")) {
+        if (factions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "")) {
             alert("Please fill in all Factions");
         }
         if (winners === "") {
@@ -38,7 +38,7 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         if (
             !(
                 players.some((player) => player === "") ||
-                factions.some((faction) => faction === "" || winners === "")
+                factions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "" || winners === "")
             )
         ) {
             model.addMatch(
