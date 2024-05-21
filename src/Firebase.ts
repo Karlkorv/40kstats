@@ -74,7 +74,7 @@ export function loadFromFirebase(model: LeaderBoardModel) {
     });
 }
 
-export function connectToFirebase(model: LeaderBoardModel, watchFunction) {
+export function connectToFirebase(model: LeaderBoardModel, watchFunction: (a: () => void, b: () => void) => void) {
     watchFunction(() => model.matchUnderCreation, () => {
         if (isInvalidMatch(model.matchUnderCreation)) {
             return;
@@ -143,7 +143,7 @@ export function addMatchToFirestore(match: Match) {
 
 }
 
-export function deleteMatchFromFirestore(matchID) {
+export function deleteMatchFromFirestore(matchID: string) {
     getDoc(doc(db, "matches", matchID)).then((doc) => deleteDoc(doc.ref));
 }
 
