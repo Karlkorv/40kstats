@@ -1,13 +1,20 @@
-import { firebaseConfig } from './firebaseConfig.ts';
 import { initializeApp } from 'firebase/app';
 import { Match } from './model/match.ts';
 import { getAuth } from 'firebase/auth';
 import { getDatabase, onDisconnect, onValue, ref } from "firebase/database"
 import { addDoc, setDoc, collection, getDoc, getFirestore, doc, query, orderBy, limit, getDocs, getCountFromServer, deleteDoc, updateDoc, initializeFirestore, writeBatch } from 'firebase/firestore';
 import { LeaderBoardModel } from './model/LeaderboardModel.ts';
-import { runInAction } from 'mobx';
 import { DEFAULT_CREATE_MATCH, MatchCreatorInput } from './model/FormModel.ts';
 // Initialize Firebase
+
+const firebaseConfig = {
+    apiKey: import.meta.env.VITE_API_KEY,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_MSG_SENDER_ID,
+    appId: import.meta.env.VITE_APP_ID
+}
 
 const app = initializeApp(firebaseConfig);
 initializeFirestore(app, {

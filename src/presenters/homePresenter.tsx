@@ -1,19 +1,18 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { LeaderBoardModel } from "../model/LeaderboardModel";
+import { LeaderBoardModel } from "../model/LeaderboardModel.tsx";
 
-const HomeScreen = observer(
-	function HomePresenter({ model }: { model: LeaderBoardModel }) {
-		function createMatchClick(evt) {
-			model.startMatchCreation();
-			window.location.hash = "#/matchCreator"
-		}
+const HomeScreen = observer(function HomePresenter({
+    model,
+}: {
+    model: LeaderBoardModel;
+}) {
+    function createMatchClick() {
+        model.startMatchCreation();
+        window.location.hash = "#/matchCreator";
+    }
 
-		return (
-			<div>
-			</div>
-		);
-	}
-);
+    return <div></div>;
+});
 
-export { HomeScreen }
+export { HomeScreen };
