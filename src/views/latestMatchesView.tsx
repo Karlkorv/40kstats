@@ -1,10 +1,15 @@
 import React from "react";
 import { Match } from "../model/match.ts";
 import { User } from "firebase/auth";
-import { Box, Button, ButtonGroup, FormControl, FormControlLabel, styled, Switch, TableRow, TextField, Tooltip } from "@mui/material";
-import { DataGrid, GridColDef, GridFilterModel, GridLogicOperator } from "@mui/x-data-grid";
+import {
+    Box,
+    FormControlLabel,
+    Switch,
+    TextField,
+    Tooltip,
+} from "@mui/material";
+import { DataGrid, GridColDef, GridFilterModel } from "@mui/x-data-grid";
 import dayjs from "dayjs";
-import { DataGridPro } from "@mui/x-data-grid-pro";
 
 const columns: GridColDef[] = [
     {
@@ -47,9 +52,8 @@ const columns: GridColDef[] = [
         field: "creator",
         headerName: "Creator",
         flex: 1,
-    }
+    },
 ];
-
 
 export function LastestMatchesView({
     matchClicked,
@@ -62,25 +66,25 @@ export function LastestMatchesView({
     toggleUserFilter,
     playerFilter,
     togglePlayerFilter,
-    handleSearchInput
+    handleSearchInput,
 }: {
     matchClicked: (match: string) => void;
     matches: Match[];
     moreMatches: (amt?: number) => void;
     totalMatches: number;
     user: User | null;
-    username : string | null;
-    userFilter : boolean;
+    username: string | null;
+    userFilter: boolean;
     toggleUserFilter: any;
     playerFilter: boolean;
-    togglePlayerFilter : any;
-    handleSearchInput : any;
+    togglePlayerFilter: any;
+    handleSearchInput: any;
 }) {
-    const userFilterModel : GridFilterModel = {
+    const userFilterModel: GridFilterModel = {
         items: [
-            {id: 1, field: "creator", operator: "equals", value: user?.uid}
-        ]
-    }
+            { id: 1, field: "creator", operator: "equals", value: user?.uid },
+        ],
+    };
 
     function moreMatchesACB() {
         moreMatches(10);
@@ -102,34 +106,49 @@ export function LastestMatchesView({
             creator: match.userID,
         };
     }
-    
+
     return (
         <div>
-            <Box sx={{paddingBottom:1, display:"flex", width:"100%"}}>
+            <Box sx={{ paddingBottom: 1, display: "flex", width: "100%" }}>
                 <Tooltip title={user ? "" : "You need to sign in."}>
                     <span>
                         <FormControlLabel
-                            control={<Switch disabled={!user} checked={userFilter} onChange={toggleUserFilter}/>}
+                            control={
+                                <Switch
+                                    disabled={!user}
+                                    checked={userFilter}
+                                    onChange={toggleUserFilter}
+                                />
+                            }
                             label={"Only show matches created by me."}
                             labelPlacement="bottom"
-                        >
-                        </FormControlLabel>
-                            
+                        />
                     </span>
                 </Tooltip>
-                <Tooltip title={username ? "" : "You need to select a username."}>
+                <Tooltip
+                    title={username ? "" : "You need to select a username."}
+                >
                     <span>
                         <FormControlLabel
-                            control={<Switch disabled={!username} checked={playerFilter} onChange={togglePlayerFilter}/>}
+                            control={
+                                <Switch
+                                    disabled={!username}
+                                    checked={playerFilter}
+                                    onChange={togglePlayerFilter}
+                                />
+                            }
                             label={"Only show matches played by me."}
                             labelPlacement="bottom"
-                        >
-                        </FormControlLabel>
+                        />
                     </span>
                 </Tooltip>
-                <Box sx={{textAlign:"right", marginLeft:"auto"}}>
-                    <TextField label="Search players" color="primary" variant="outlined" onInput={handleSearchInput}>
-                    </TextField>
+                <Box sx={{ textAlign: "right", marginLeft: "auto" }}>
+                    <TextField
+                        label="Search players"
+                        color="primary"
+                        variant="outlined"
+                        onInput={handleSearchInput}
+                    ></TextField>
                 </Box>
             </Box>
             <DataGrid
@@ -144,9 +163,7 @@ export function LastestMatchesView({
                 columnVisibilityModel={{
                     creator: false,
                 }}
-                filterModel={
-                    userFilter ? userFilterModel : {items : []}
-                }
+                filterModel={userFilter ? userFilterModel : { items: [] }}
                 /* filterModel={playerFilterModel} */
                 disableColumnResize
                 disableColumnMenu

@@ -48,11 +48,7 @@ const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {
 
     function handleHelpButtonClick() {
         model.handleDialogClick();
-        return (
-            <HelpButtonDialog model={model}>
-
-            </HelpButtonDialog>
-        )
+        return <HelpButtonDialog model={model}></HelpButtonDialog>;
     }
 
     return (
