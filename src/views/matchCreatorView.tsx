@@ -39,16 +39,13 @@ export function MatchCreatorView({
     onPrimaryPointsChange,
     onSecondaryPointsChange,
     handleWinnerChange,
-    handleWinnerFocus,
-    handleWinnerBlur,
     handleNotesChange,
     user,
     handleDateChange,
     usernames,
     userDuplicate,
-    invalidInput
+    invalidInput,
 }) {
-
     function onClickCreateMatchACB(evt) {
         createNewMatch();
     }
@@ -109,14 +106,6 @@ export function MatchCreatorView({
         handleWinnerChange(e);
     }
 
-    function onWinnerFocusACB(e) {
-        handleWinnerFocus(e);
-    }
-
-    function onWinnerBlurACB(e) {
-        handleWinnerBlur(e);
-    }
-
     function onNotesChangeACB(e) {
         handleNotesChange(e);
     }
@@ -130,7 +119,11 @@ export function MatchCreatorView({
                             className="points-button"
                             size="small"
                             variant="outlined"
-                            disabled={isPrimary ? formInputValues[index].p_points <= 0 : formInputValues[index].s_points <= 0}
+                            disabled={
+                                isPrimary
+                                    ? formInputValues[index].p_points <= 0
+                                    : formInputValues[index].s_points <= 0
+                            }
                             onClick={() =>
                                 handlePointsButtonClick(-1, index, isPrimary)
                             }
@@ -251,7 +244,8 @@ export function MatchCreatorView({
 
     function PlayerInput({ objValue, onNameChange, index, onListChange }) {
         const { label, num, type, player_value, faction_value } = objValue;
-        const localUsernameWrongLength : boolean = (player_value.length < 3 || player_value.length > 20)
+        const localUsernameWrongLength: boolean =
+            player_value.length < 3 || player_value.length > 20;
         return (
             <Box className="player-input-group" sx={{ paddingRight: 10 / 8 }}>
                 <Box sx={{ minWidth: 120 }}>
@@ -261,9 +255,18 @@ export function MatchCreatorView({
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    error={userDuplicate || localUsernameWrongLength}
+                                    error={
+                                        userDuplicate ||
+                                        localUsernameWrongLength
+                                    }
                                     label="Select player"
-                                    helperText={userDuplicate ? "You can not have the same name for both players" : localUsernameWrongLength ? "Player name must be between 3 and 20 characters." : ""}
+                                    helperText={
+                                        userDuplicate
+                                            ? "You can not have the same name for both players"
+                                            : localUsernameWrongLength
+                                            ? "Player name must be between 3 and 20 characters."
+                                            : ""
+                                    }
                                     onChange={(e) =>
                                         onNameChange(e.target.value, index)
                                     }
@@ -292,11 +295,21 @@ export function MatchCreatorView({
                             defaultValue={FACTIONS.SELECT_FACTION}
                             value={faction_value || FACTIONS.SELECT_FACTION}
                             renderInput={(params) => (
-                                <TextField 
-                                    {...params} 
-                                    error={faction_value===FACTIONS.SELECT_FACTION || faction_value === ""} 
-                                    helperText={(faction_value===FACTIONS.SELECT_FACTION || faction_value === "") ? "Please select a faction." : ""} 
-                                    label="Faction" 
+                                <TextField
+                                    {...params}
+                                    error={
+                                        faction_value ===
+                                            FACTIONS.SELECT_FACTION ||
+                                        faction_value === ""
+                                    }
+                                    helperText={
+                                        faction_value ===
+                                            FACTIONS.SELECT_FACTION ||
+                                        faction_value === ""
+                                            ? "Please select a faction."
+                                            : ""
+                                    }
+                                    label="Faction"
                                 />
                             )}
                             onChange={(_e, value) => onListChange(value, index)}
@@ -322,7 +335,7 @@ export function MatchCreatorView({
 
     if (!user) {
         return (
-            <Typography sx={{paddingBottom:2, paddingTop:2}}>
+            <Typography sx={{ paddingBottom: 2, paddingTop: 2 }}>
                 You need to be logged in to create a match
             </Typography>
         );
@@ -360,11 +373,9 @@ export function MatchCreatorView({
                             <InputLabel id="winners">Winners:</InputLabel>
                             <Select
                                 value={winners}
-                                error={winners===""}
+                                error={winners === ""}
                                 label="Winners:"
                                 onChange={onWinnerChangeACB}
-                                onFocus={onWinnerFocusACB}
-                                onBlur={(e) => onWinnerBlurACB(e)}
                             >
                                 {formInputValues.map(
                                     ({ num, player_value }) => {
@@ -379,7 +390,11 @@ export function MatchCreatorView({
                                     }
                                 )}
                             </Select>
-                            <FormHelperText sx={{color: "#d32f2f"}}>{(winners==="") ? "Please select a winner." : ""}</FormHelperText>
+                            <FormHelperText sx={{ color: "#d32f2f" }}>
+                                {winners === ""
+                                    ? "Please select a winner."
+                                    : ""}
+                            </FormHelperText>
                         </FormControl>
                     </Box>
 
@@ -387,7 +402,7 @@ export function MatchCreatorView({
                         <FormControl>
                             <InputLabel id="notes">Match Notes:</InputLabel>
                             <OutlinedInput
-                                sx={{width:1000, minHeight: 150}}
+                                sx={{ width: 1000, minHeight: 150 }}
                                 value={notes}
                                 label="Match Notes"
                                 type="text"
@@ -400,7 +415,10 @@ export function MatchCreatorView({
                 </Box>
             </form>
             <ButtonGroup variant="contained">
-                <Button disabled={!connected || invalidInput} onClick={onClickCreateMatchACB}>
+                <Button
+                    disabled={!connected || invalidInput}
+                    onClick={onClickCreateMatchACB}
+                >
                     {connected ? "Create Match" : "Not connected"}
                 </Button>
                 <Button onClick={onClickCancelACB}>Cancel</Button>

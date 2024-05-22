@@ -9,7 +9,8 @@ import {
     FormControl,
     IconButton,
 } from "@mui/material";
-import HelpIcon from "@mui/icons-material/Help";
+import { Help } from "@mui/icons-material/";
+import { User } from "firebase/auth";
 
 export function NavbarView({
     user,
@@ -24,6 +25,19 @@ export function NavbarView({
     handleLogoutButtonClick,
     handleUsernameChange,
     handleHelpButtonClick,
+}: {
+    user: User | null;
+    username: string | null;
+    usernameInput: string;
+    usernameExists: boolean;
+    validUsername: boolean;
+    handleHomeButtonClick: () => void;
+    handleCreateMatchButtonClick: () => void;
+    handleUsernameConfirm: () => void;
+    handleLoginButtonClick: () => void;
+    handleLogoutButtonClick: () => void;
+    handleUsernameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleHelpButtonClick: () => void;
 }) {
     function onHomeButtonClickACB() {
         handleHomeButtonClick();
@@ -56,8 +70,8 @@ export function NavbarView({
         return (
             <div
                 style={{
-                    display:"flex",
-                    alignItems:"center",
+                    display: "flex",
+                    alignItems: "center",
                     paddingLeft: 10,
                     paddingRight: 10,
                     gap: "10px",
@@ -73,7 +87,7 @@ export function NavbarView({
                         variant="filled"
                     />
                     <FormHelperText style={{ color: "white" }}>
-                        {(usernameInput.length < 3) ||usernameInput.length > 20
+                        {usernameInput.length < 3 || usernameInput.length > 20
                             ? "Username must be between 3 and 20 characters long."
                             : usernameExists
                             ? "Username already exists"
@@ -81,7 +95,7 @@ export function NavbarView({
                     </FormHelperText>
                 </FormControl>
                 <Button
-                    sx={{marginTop: "-1px"}}
+                    sx={{ marginTop: "-1px" }}
                     id="username-confirm-button"
                     onClick={onConfirmClick}
                     variant="contained"
@@ -143,7 +157,7 @@ export function NavbarView({
                             </div>
                         </div>
                         <IconButton onClick={() => onHelpButtonClick()}>
-                            <HelpIcon />
+                            <Help />
                         </IconButton>
                         <Button
                             variant="contained"

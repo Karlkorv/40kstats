@@ -4,6 +4,7 @@ import { action, makeObservable, observable, runInAction } from "mobx";
 import { User } from "firebase/auth";
 import { MatchCreatorInput, DEFAULT_CREATE_MATCH } from "./FormModel.ts";
 import { onValue } from "firebase/database";
+import { ReactHTMLElement } from "react";
 
 export class LeaderBoardModel {
     readyToExport: boolean = false;
@@ -23,7 +24,7 @@ export class LeaderBoardModel {
     @observable confirmDeleteDialogOpen: boolean = false;
     @observable userFilter: boolean = false;
     @observable playerFilter: boolean = false;
-    @observable latestMatchesSearchInput : string = ""
+    @observable latestMatchesSearchInput: string = ""
 
     @observable gettingMatches: boolean = true
     @observable gettingUser: boolean = true
@@ -288,7 +289,7 @@ export class LeaderBoardModel {
         this.matchUnderCreation = DEFAULT_CREATE_MATCH;
     }
 
-    @action deleteMatch(id) {
+    @action deleteMatch(id: string) {
         let index = this.matches.findIndex(({ matchID }) => matchID === id);
         let tempVar = this.matches.slice(0, index).concat(this.matches.slice(index + 1));
         deleteMatchFromFirestore(id);
@@ -332,39 +333,27 @@ export class LeaderBoardModel {
         this.matchUnderCreation.formInputValues.splice(formLength - 1, 1);
     }
 
-    @action handlePlayerInputFieldChange(e, index) {
+    @action handlePlayerInputFieldChange(e: string, index: number) {
         let tempVar: MatchCreatorInput = { ...this.matchUnderCreation };
         let inputVal = e;
         tempVar.formInputValues[index].player_value = inputVal;
         this.matchUnderCreation = tempVar;
     }
 
-    @action handleFactionChange(e, index) {
+    @action handleFactionChange(e: string, index: number) {
         let tempVar = { ...this.matchUnderCreation };
         let inputVal = e;
         tempVar.formInputValues[index].faction_value = inputVal;
         this.matchUnderCreation = tempVar;
     }
 
-    /* Not sure if handleFocus and handleBlur should be handled here or in the presenter
-     */
-    @action handleFocus(e) {
-        this.matchUnderCreation.focusedValue = e.target.value;
-    }
-
-    @action handleBlur(e, index) {
-        let tempVar = { ...this.matchUnderCreation };
-        tempVar.formInputValues[index].faction_value = this.matchUnderCreation.focusedValue;
-        this.matchUnderCreation = tempVar;
-    }
-
-    @action handlePrimaryPointsChange(e, index) {
+    @action handlePrimaryPointsChange(e: string, index: number) {
         let tempVar = { ...this.matchUnderCreation };
         tempVar.formInputValues[index].p_points = Number(e);
         this.matchUnderCreation = tempVar;
     }
 
-    @action handleSecondaryPointsChange(e, index) {
+    @action handleSecondaryPointsChange(e: string, index: number) {
         let tempVar = { ...this.matchUnderCreation };
         tempVar.formInputValues[index].s_points = Number(e);
         this.matchUnderCreation = tempVar;
@@ -448,8 +437,8 @@ export class LeaderBoardModel {
     }
 
     getMatches(): Match[] {
-        if(this.latestMatchesSearchInput !== ""){
-            if(this.playerFilter) {
+        if (this.latestMatchesSearchInput !== "") {
+            if (this.playerFilter) {
                 let tempVar = this.matches;
                 return tempVar.filter((match) => match.players.includes(this.username || "") === true && match.players.some((player) => player.toUpperCase().includes(this.latestMatchesSearchInput.toUpperCase())) === true);
             } else {
@@ -457,7 +446,7 @@ export class LeaderBoardModel {
                 return tempVar.filter((match) => match.players.some((player) => player.toUpperCase().includes(this.latestMatchesSearchInput.toUpperCase())) === true);
             }
         } else {
-            if(this.playerFilter) {
+            if (this.playerFilter) {
                 let tempVar = this.matches;
                 return tempVar.filter((match) => match.players.includes(this.username || "") === true && match.players.some((player) => player.toUpperCase().includes(this.latestMatchesSearchInput.toUpperCase())) === true);
             } else {
@@ -482,11 +471,11 @@ export class LeaderBoardModel {
         this.userFilter = !this.userFilter;
     }
 
-    @action togglePlayerFilter(){
+    @action togglePlayerFilter() {
         this.playerFilter = !this.playerFilter;
     }
 
-    @action handleSearchInput(e){
+    @action handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
         this.latestMatchesSearchInput = e.target.value;
     }
 

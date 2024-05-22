@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { LastestMatchesView } from "../views/LatestMatchesView";
-import { LeaderBoardModel } from "../model/LeaderboardModel";
+import { LastestMatchesView } from "../views/latestMatchesView.tsx";
+import { LeaderBoardModel } from "../model/LeaderboardModel.tsx";
 
 const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
     function matchClicked(id: string) {
@@ -16,15 +16,15 @@ const LatestMatches = observer(({ model }: { model: LeaderBoardModel }) => {
         model.getMoreMatches(amt);
     }
 
-    function toggleUserFilter(){
+    function toggleUserFilter() {
         model.toggleUserFilter();
     }
 
-    function togglePlayerFilter(){
+    function togglePlayerFilter() {
         model.togglePlayerFilter();
     }
 
-    function handleSearchInput(e){
+    function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
         model.handleSearchInput(e);
     }
 

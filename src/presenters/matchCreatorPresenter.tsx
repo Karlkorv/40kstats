@@ -1,19 +1,20 @@
 import { observer } from "mobx-react-lite";
 import { Match } from "../model/match.ts";
 import React from "react";
-import { MatchCreatorView } from "../views/matchCreatorView";
+import { MatchCreatorView } from "../views/matchCreatorView.tsx";
 import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
 import { FACTIONS } from "../model/factions.ts";
 
 const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
     const options = Object.values(FACTIONS);
-    const userDuplicate : boolean = (model.matchUnderCreation.formInputValues[0].player_value === model.matchUnderCreation.formInputValues[1].player_value);
-    const usernameWrongLength : boolean = (
-        model.matchUnderCreation.formInputValues[0].player_value.length < 3 || 
+    const userDuplicate: boolean =
+        model.matchUnderCreation.formInputValues[0].player_value ===
+        model.matchUnderCreation.formInputValues[1].player_value;
+    const usernameWrongLength: boolean =
+        model.matchUnderCreation.formInputValues[0].player_value.length < 3 ||
         model.matchUnderCreation.formInputValues[0].player_value.length > 20 ||
-        model.matchUnderCreation.formInputValues[1].player_value.length < 3 || 
-        model.matchUnderCreation.formInputValues[1].player_value.length > 20
-    );
+        model.matchUnderCreation.formInputValues[1].player_value.length < 3 ||
+        model.matchUnderCreation.formInputValues[1].player_value.length > 20;
     const players = model.matchUnderCreation.formInputValues.map(
         ({ player_value }) => player_value
     );
@@ -23,12 +24,16 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
 
     const winners = model.matchUnderCreation.winners;
 
-    const invalidInput : boolean = (
+    const invalidInput: boolean =
         players.some((player) => player === "") ||
-        factions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "" || winners === "") ||
+        factions.some(
+            (faction) =>
+                faction === FACTIONS.SELECT_FACTION ||
+                faction === "" ||
+                winners === ""
+        ) ||
         userDuplicate ||
-        usernameWrongLength
-    )
+        usernameWrongLength;
 
     function createNewMatch() {
         let date = model.matchUnderCreation.date;
@@ -51,14 +56,19 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         if (players.some((player) => player === "")) {
             alert("Please fill in all Players");
         }
-        if (factions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "")) {
+        if (
+            factions.some(
+                (faction) =>
+                    faction === FACTIONS.SELECT_FACTION || faction === ""
+            )
+        ) {
             alert("Please fill in all Factions");
         }
         if (winners === "") {
             alert("Please pick the winner");
         }
-        if (userDuplicate){
-            alert("Please pick unique player names.")
+        if (userDuplicate) {
+            alert("Please pick unique player names.");
         }
         if (!invalidInput) {
             model.addMatch(
@@ -137,17 +147,6 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
         model.handleWinnerChange(e);
     }
 
-    function handleWinnerFocus(e) {
-        model.handleFocus(e);
-        e.target.value = "";
-    }
-
-    function handleWinnerBlur(e) {
-        if (e.target.value === "") {
-            model.handleWinnerBlur(e);
-        }
-    }
-
     function handleNotesChange(e) {
         model.handleNotesChange(e);
     }
@@ -180,14 +179,12 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
                     onPrimaryPointsChange={onPrimaryPointsChange}
                     onSecondaryPointsChange={onSecondaryPointsChange}
                     handleWinnerChange={handleWinnerChange}
-                    handleWinnerFocus={handleWinnerFocus}
-                    handleWinnerBlur={handleWinnerBlur}
                     handleNotesChange={handleNotesChange}
                     handleDateChange={handleDateChange}
                     usernames={model.usernames}
                     userDuplicate={userDuplicate}
                     invalidInput={invalidInput}
-                ></MatchCreatorView>
+                />
             }
         </div>
     );
