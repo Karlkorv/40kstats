@@ -7,6 +7,14 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
   workflow_dispatch:
+env:
+  VITE_API_KEY: ${{secrets.VITE_API_KEY}}
+  VITE_AUTH_DOMAIN: ${{secrets.VITE_AUTH_DOMAIN}}
+  VITE_DATABASE_URL: ${{secrets.VITE_DATABASE_URL}}
+  VITE_PROJECT_ID: ${{secrets.VITE_PROJECT_ID}}
+  VITE_STORAGE_BUCKET: ${{secrets.VITE_STORAGE_BUCKET}}
+  VITE_MSG_SENDER_ID: ${{secrets.VITE_MSG_SENDER_ID}}
+  VITE_APP_ID: ${{secrets.VITE_APP_ID}}
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
