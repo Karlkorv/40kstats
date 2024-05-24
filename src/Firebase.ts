@@ -76,12 +76,14 @@ export function loadFromFirebase(model: LeaderBoardModel) {
 }
 
 export function connectToFirebase(model: LeaderBoardModel, watchFunction: (a: () => void, b: () => void) => void) {
+    const debounceWrite = debounce(() => { saveToFirebase(model) }, 1500)
+
     watchFunction(() => model.matchUnderCreation, () => {
         if (isInvalidMatch(model.matchUnderCreation)) {
             return;
         }
         model.startPersistenceWrite();
-        saveToFirebase(model)
+        debounceWrite();
     });
     auth.onAuthStateChanged((user) => {
         if (!user) {
@@ -220,4 +222,14 @@ export function userExists(username: string) {
     return getDoc(doc(usernameRef, username.toLowerCase())).then((doc) => {
         return doc.exists();
     })
+}
+
+export function debounce(f: () => any, timer: number) {
+    let timeout: NodeJS.Timeout;
+    return function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            f();
+        }, timer)
+    }
 }
