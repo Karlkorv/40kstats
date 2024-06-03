@@ -15,6 +15,7 @@ import {
     OutlinedInput,
     Select,
     TextField,
+    Tooltip,
     Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker/";
@@ -46,7 +47,10 @@ export function MatchCreatorView({
     handleDateChange,
     usernames,
     userDuplicate,
-    invalidInput
+    invalidInput,
+    usernameWrongLength,
+    playerFactions,
+    playerNames
 }) {
 
     function onClickCreateMatchACB(evt) {
@@ -402,12 +406,28 @@ export function MatchCreatorView({
                     </Box>
                 </Box>
             </form>
-            <ButtonGroup variant="contained">
-                <Button disabled={!connected || invalidInput} onClick={onClickCreateMatchACB}>
-                    {connected ? "Create Match" : "Not connected"}
-                </Button>
-                <Button onClick={onClickCancelACB}>Cancel</Button>
-            </ButtonGroup>
+            <Box sx={{paddingTop: 10}}>
+                <ButtonGroup variant="contained">
+                    <Tooltip
+                        title={
+                            !invalidInput ? "" : 
+                                userDuplicate ? "Please choose unique players." : 
+                                    playerNames.some((player) => player === "") ? "Please pick a player name." : 
+                                        usernameWrongLength ? "Player names must be between 3 and 20 characters long." :
+                                            playerFactions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "") ? "Please choose player factions." :
+                                                winners === "" ? "Please pick a winner." : ""
+                            } 
+                        placement="bottom"
+                        >
+                            <span>
+                                <Button disabled={!connected || invalidInput} onClick={onClickCreateMatchACB}>
+                                    {connected ? "Create Match" : "Not connected"}
+                                </Button>
+                            </span>
+                    </Tooltip>
+                    <Button onClick={onClickCancelACB}>Cancel</Button>
+                </ButtonGroup>
+            </Box>
         </div>
     );
 }
