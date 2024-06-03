@@ -406,7 +406,7 @@ export function MatchCreatorView({
                     </Box>
                 </Box>
             </form>
-            <Box sx={{paddingTop: 10}}>
+            <Box>
                 <ButtonGroup variant="contained">
                     <Tooltip
                         title={
