@@ -184,7 +184,10 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
                     usernames={model.usernames}
                     userDuplicate={userDuplicate}
                     invalidInput={invalidInput}
-                />
+                    usernameWrongLength={usernameWrongLength}
+                    playerFactions={factions}
+                    playerNames={players}
+                ></MatchCreatorView>
             }
         </div>
     );

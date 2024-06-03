@@ -15,6 +15,7 @@ import {
     OutlinedInput,
     Select,
     TextField,
+    Tooltip,
     Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker/";
@@ -45,6 +46,9 @@ export function MatchCreatorView({
     usernames,
     userDuplicate,
     invalidInput,
+    usernameWrongLength,
+    playerFactions,
+    playerNames,
 }) {
     function onClickCreateMatchACB(evt) {
         createNewMatch();
@@ -256,12 +260,15 @@ export function MatchCreatorView({
                                 <TextField
                                     {...params}
                                     error={
-                                        userDuplicate ||
-                                        localUsernameWrongLength
+                                        player_value !== "" &&
+                                        (userDuplicate ||
+                                            localUsernameWrongLength)
                                     }
                                     label="Select player"
                                     helperText={
-                                        userDuplicate
+                                        player_value == ""
+                                            ? "Select a player"
+                                            : userDuplicate
                                             ? "You can not have the same name for both players"
                                             : localUsernameWrongLength
                                             ? "Player name must be between 3 and 20 characters."
@@ -299,8 +306,7 @@ export function MatchCreatorView({
                                     {...params}
                                     error={
                                         faction_value ===
-                                            FACTIONS.SELECT_FACTION ||
-                                        faction_value === ""
+                                        FACTIONS.SELECT_FACTION
                                     }
                                     helperText={
                                         faction_value ===
@@ -373,7 +379,6 @@ export function MatchCreatorView({
                             <InputLabel id="winners">Winners:</InputLabel>
                             <Select
                                 value={winners}
-                                error={winners === ""}
                                 label="Winners:"
                                 onChange={onWinnerChangeACB}
                             >
@@ -390,7 +395,7 @@ export function MatchCreatorView({
                                     }
                                 )}
                             </Select>
-                            <FormHelperText sx={{ color: "#d32f2f" }}>
+                            <FormHelperText sx={{ color: "#00000099" }}>
                                 {winners === ""
                                     ? "Please select a winner."
                                     : ""}
@@ -414,15 +419,42 @@ export function MatchCreatorView({
                     </Box>
                 </Box>
             </form>
-            <ButtonGroup variant="contained">
-                <Button
-                    disabled={!connected || invalidInput}
-                    onClick={onClickCreateMatchACB}
-                >
-                    {connected ? "Create Match" : "Not connected"}
-                </Button>
-                <Button onClick={onClickCancelACB}>Cancel</Button>
-            </ButtonGroup>
+            <Box>
+                <ButtonGroup variant="contained">
+                    <Tooltip
+                        title={
+                            !invalidInput
+                                ? ""
+                                : userDuplicate
+                                ? "Please choose unique players."
+                                : playerNames.some((player) => player === "")
+                                ? "Please pick a player name."
+                                : usernameWrongLength
+                                ? "Player names must be between 3 and 20 characters long."
+                                : playerFactions.some(
+                                      (faction) =>
+                                          faction === FACTIONS.SELECT_FACTION ||
+                                          faction === ""
+                                  )
+                                ? "Please choose player factions."
+                                : winners === ""
+                                ? "Please pick a winner."
+                                : ""
+                        }
+                        placement="bottom"
+                    >
+                        <span>
+                            <Button
+                                disabled={!connected || invalidInput}
+                                onClick={onClickCreateMatchACB}
+                            >
+                                {connected ? "Create Match" : "Not connected"}
+                            </Button>
+                        </span>
+                    </Tooltip>
+                    <Button onClick={onClickCancelACB}>Cancel</Button>
+                </ButtonGroup>
+            </Box>
         </div>
     );
 }

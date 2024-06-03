@@ -337,6 +337,9 @@ export class LeaderBoardModel {
         let tempVar: MatchCreatorInput = { ...this.matchUnderCreation };
         let inputVal = e;
         tempVar.formInputValues[index].player_value = inputVal;
+        if(tempVar.formInputValues.every((formInput) => formInput.player_value !== tempVar.winners)) {
+            tempVar.winners = "";
+        }
         this.matchUnderCreation = tempVar;
     }
 
