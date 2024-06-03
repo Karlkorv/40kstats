@@ -261,9 +261,13 @@ export function MatchCreatorView({
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    error={userDuplicate || localUsernameWrongLength}
+                                    error={player_value !== "" && (userDuplicate || localUsernameWrongLength)}
                                     label="Select player"
-                                    helperText={userDuplicate ? "You can not have the same name for both players" : localUsernameWrongLength ? "Player name must be between 3 and 20 characters." : ""}
+                                    helperText={
+                                        player_value == "" ? "Select a player" : 
+                                            userDuplicate ? "You can not have the same name for both players" : 
+                                                localUsernameWrongLength ? "Player name must be between 3 and 20 characters." : ""
+                                    }
                                     onChange={(e) =>
                                         onNameChange(e.target.value, index)
                                     }
@@ -294,7 +298,7 @@ export function MatchCreatorView({
                             renderInput={(params) => (
                                 <TextField 
                                     {...params} 
-                                    error={faction_value===FACTIONS.SELECT_FACTION || faction_value === ""} 
+                                    error={faction_value===FACTIONS.SELECT_FACTION} 
                                     helperText={(faction_value===FACTIONS.SELECT_FACTION || faction_value === "") ? "Please select a faction." : ""} 
                                     label="Faction" 
                                 />
@@ -360,7 +364,6 @@ export function MatchCreatorView({
                             <InputLabel id="winners">Winners:</InputLabel>
                             <Select
                                 value={winners}
-                                error={winners===""}
                                 label="Winners:"
                                 onChange={onWinnerChangeACB}
                                 onFocus={onWinnerFocusACB}
@@ -379,7 +382,7 @@ export function MatchCreatorView({
                                     }
                                 )}
                             </Select>
-                            <FormHelperText sx={{color: "#d32f2f"}}>{(winners==="") ? "Please select a winner." : ""}</FormHelperText>
+                            <FormHelperText sx={{color: "#00000099"}}>{(winners==="") ? "Please select a winner." : ""}</FormHelperText>
                         </FormControl>
                     </Box>
 
