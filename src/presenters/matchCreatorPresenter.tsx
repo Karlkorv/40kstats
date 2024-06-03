@@ -25,7 +25,8 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
 
     const invalidInput : boolean = (
         players.some((player) => player === "") ||
-        factions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "" || winners === "") ||
+        factions.some((faction) => faction === FACTIONS.SELECT_FACTION || faction === "") || 
+        winners === "" ||
         userDuplicate ||
         usernameWrongLength
     )
@@ -187,6 +188,9 @@ const MatchCreator = observer(({ model }: { model: LeaderBoardModel }) => {
                     usernames={model.usernames}
                     userDuplicate={userDuplicate}
                     invalidInput={invalidInput}
+                    usernameWrongLength={usernameWrongLength}
+                    playerFactions={factions}
+                    playerNames={players}
                 ></MatchCreatorView>
             }
         </div>
