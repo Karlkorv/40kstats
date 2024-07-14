@@ -14,6 +14,7 @@ import "./style.css";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorView from "./views/errorView.tsx";
 import { Navbar } from "./presenters/navbarPresenter.tsx";
+import { Tournament } from "./presenters/tournamentPresenter.tsx";
 import {
     Alert,
     CircularProgress,
@@ -36,6 +37,10 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
             {
                 path: "/matchCreator",
                 element: <MatchCreator model={model}></MatchCreator>,
+            },
+            {
+                path: "/tournament",
+                element: <Tournament model={model}></Tournament>,
             },
             // Add route for individual matches
             {
@@ -105,7 +110,7 @@ export const App = observer(({ model }: { model: LeaderBoardModel }) => {
                         </Alert>
                     </Slide>
                     <LatestMatches model={model} />
-                    <HelpButtonDialog model={model}/>
+                    <HelpButtonDialog model={model} />
                 </ErrorBoundary>
             </ThemeProvider>
         </div>
