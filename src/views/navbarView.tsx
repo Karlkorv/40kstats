@@ -19,6 +19,7 @@ export function NavbarView({
     usernameExists,
     validUsername,
     handleHomeButtonClick,
+    handleTournamentClick,
     handleCreateMatchButtonClick,
     handleUsernameConfirm,
     handleLoginButtonClick,
@@ -32,6 +33,7 @@ export function NavbarView({
     usernameExists: boolean;
     validUsername: boolean;
     handleHomeButtonClick: () => void;
+    handleTournamentClick: () => void;
     handleCreateMatchButtonClick: () => void;
     handleUsernameConfirm: () => void;
     handleLoginButtonClick: () => void;
@@ -41,6 +43,10 @@ export function NavbarView({
 }) {
     function onHomeButtonClickACB() {
         handleHomeButtonClick();
+    }
+
+    function onTournamentButtonClick() {
+        handleTournamentClick();
     }
 
     function onCreateMatchButtonClick() {
@@ -168,6 +174,14 @@ export function NavbarView({
                             {(user && "Create Match") ||
                                 (!user && "Sign in to create match")}
                         </Button>
+                        <Button
+                            variant="contained"
+                            size="small"
+                            onClick={() => onTournamentButtonClick()}
+                        >
+                            Tournaments
+                        </Button>
+
                         {renderUsernameCreation()}
                     </div>
                     {!user && (

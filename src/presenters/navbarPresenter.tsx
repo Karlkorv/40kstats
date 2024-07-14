@@ -13,6 +13,10 @@ const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {
         location.hash = "";
     }
 
+    function handleTournamentClick() {
+        location.hash = "#/tournament";
+    }
+
     reaction(
         () => model.usernameInput,
         () => model.checkUsername(model.usernameInput)
@@ -60,6 +64,7 @@ const Navbar = observer(({ model }: { model: LeaderBoardModel }) => {
                 usernameExists={model.usernameExists}
                 validUsername={model.isValidUserName}
                 handleHomeButtonClick={handleHomeButtonClick}
+                handleTournamentClick={handleTournamentClick}
                 handleUsernameConfirm={handleUsernameConfirm}
                 handleCreateMatchButtonClick={handleCreateMatchButtonClick}
                 handleLoginButtonClick={handleLoginButtonClick}
