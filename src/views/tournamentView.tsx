@@ -21,6 +21,7 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
+    SelectChangeEvent,
     TextField,
     Typography,
     Chip,
@@ -32,6 +33,7 @@ import {
     Visibility,
     EmojiEvents,
 } from "@mui/icons-material";
+import { Match as MatchModel } from "../model/match.ts";
 
 export function TournamentView({
     tournaments,
@@ -54,7 +56,7 @@ export function TournamentView({
         name: string;
         status: string;
         startingPositions: string[][];
-        matches: any[];
+        matches: MatchModel[];
     }>;
     createDialogOpen: boolean;
     tournamentName: string;
@@ -67,7 +69,7 @@ export function TournamentView({
     handleEditTournament: (tournamentId: string) => void;
     handleDeleteTournament: (tournamentId: string) => void;
     handleTournamentNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    handleNumPlayersChange: (e: any) => void;
+    handleNumPlayersChange: (e: SelectChangeEvent<number>) => void;
     handlePlayerNameChange: (value: string, index: number) => void;
 }) {
 

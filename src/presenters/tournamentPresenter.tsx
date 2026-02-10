@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
 import { TournamentView } from "../views/tournamentView.tsx";
 import { useState } from "react";
+import { SelectChangeEvent } from "@mui/material";
 
 const Tournament = observer(({ model }: { model: LeaderBoardModel }) => {
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -73,7 +74,7 @@ const Tournament = observer(({ model }: { model: LeaderBoardModel }) => {
         setTournamentName(e.target.value);
     }
 
-    function handleNumPlayersChange(e: any) {
+    function handleNumPlayersChange(e: SelectChangeEvent<number>) {
         setNumPlayers(Number(e.target.value));
     }
 
