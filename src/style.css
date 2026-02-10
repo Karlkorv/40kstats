@@ -191,3 +191,276 @@ div.MuiDataGrid-columnHeader {
 
 div.MuiDataGrid-row {
 }
+
+/* Mobile responsive styles */
+@media screen and (max-width: 768px) {
+    /* Navbar adjustments for mobile */
+    .navbar {
+        flex-direction: column;
+    }
+
+    .MuiToolbar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 8px !important;
+    }
+
+    .left-buttons {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        padding: 0 !important;
+    }
+
+    #titletext {
+        flex-direction: row !important;
+        justify-content: center !important;
+    }
+
+    #titletext img {
+        height: 40px !important;
+        width: 40px !important;
+    }
+
+    #titletext div {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #titletext Typography {
+        font-size: 1.5rem !important;
+    }
+
+    /* Make buttons full width on mobile */
+    .left-buttons button {
+        width: 100%;
+    }
+
+    .login-button,
+    .logout-button {
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    .login-button button,
+    .logout-button button {
+        width: 100%;
+    }
+
+    /* Table adjustments for mobile */
+    #table-scroll {
+        width: 100% !important;
+        max-width: 100vw;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-class {
+        width: 100% !important;
+        overflow-x: auto;
+    }
+
+    /* Data grid mobile adjustments */
+    .MuiDataGrid-root {
+        width: 100% !important;
+        font-size: 0.8rem !important;
+    }
+
+    .MuiDataGrid-columnHeader {
+        padding: 4px !important;
+        min-width: 80px !important;
+    }
+
+    .MuiDataGrid-cell {
+        padding: 4px !important;
+        min-width: 80px !important;
+    }
+
+    /* Match creator mobile adjustments */
+    #matchCreator {
+        padding: 8px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .player-input-group {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100%;
+        padding: 8px !important;
+    }
+
+    .player-input-group > div {
+        flex-direction: column;
+        align-items: stretch !important;
+        width: 100%;
+    }
+
+    .players {
+        flex-direction: column !important;
+        width: 100%;
+    }
+
+    .matchInfo {
+        width: 100%;
+        padding: 8px;
+    }
+
+    .matchInfo .notes {
+        width: 100%;
+    }
+
+    .matchInfo .notes .MuiFormControl-root {
+        width: 100% !important;
+    }
+
+    .matchInfo .notes .MuiOutlinedInput-root {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Points buttons mobile adjustments */
+    .points-box {
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 4px 0;
+    }
+
+    .points-box .MuiOutlinedInput-root {
+        max-width: 80px !important;
+    }
+
+    .points-box .MuiButtonGroup-root {
+        flex-wrap: nowrap;
+    }
+
+    .points-button {
+        font-size: 0.7rem !important;
+        padding: 4px 8px !important;
+    }
+
+    /* Match wrapper mobile adjustments */
+    #match-wrapper {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        overflow-x: auto;
+    }
+
+    #match-wrapper table {
+        font-size: 0.85rem;
+        width: 100%;
+    }
+
+    #match-wrapper table tr td {
+        padding: 4px !important;
+    }
+
+    /* Connection alert mobile position */
+    #connectionAlert {
+        bottom: 2%;
+        right: 2%;
+        left: 2%;
+        font-size: 0.8rem;
+    }
+
+    /* Syncing alert mobile adjustments */
+    #syncingAlert {
+        left: 0 !important;
+        justify-content: center !important;
+        font-size: 0.8rem;
+    }
+
+    /* Match row mobile adjustments */
+    .matchRow {
+        height: auto;
+        min-height: 30px;
+        padding: 4px;
+    }
+
+    /* Username input on mobile */
+    .MuiToolbar .MuiFormControl-root {
+        width: 100%;
+    }
+
+    .MuiToolbar .MuiTextField-root {
+        width: 100% !important;
+    }
+
+    /* Latest matches view filters */
+    .MuiBox-root {
+        flex-wrap: wrap !important;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* Extra small screens - phones in portrait */
+    
+    #titletext Typography:first-of-type {
+        font-size: 1.25rem !important;
+    }
+
+    #titletext Typography:last-of-type {
+        font-size: 0.7rem !important;
+    }
+
+    /* Further reduce data grid size */
+    .MuiDataGrid-root {
+        font-size: 0.7rem !important;
+    }
+
+    .MuiDataGrid-columnHeader {
+        min-width: 60px !important;
+        font-size: 0.7rem !important;
+    }
+
+    .MuiDataGrid-cell {
+        min-width: 60px !important;
+        font-size: 0.7rem !important;
+    }
+
+    /* Compact buttons */
+    button {
+        font-size: 0.75rem !important;
+        padding: 6px 12px !important;
+    }
+
+    /* Compact form inputs */
+    .MuiTextField-root,
+    .MuiOutlinedInput-root {
+        font-size: 0.85rem !important;
+    }
+
+    /* Hide secondary points on very small screens or make them wrap */
+    .player-input-group {
+        gap: 8px;
+    }
+
+    /* Adjust autocomplete dropdown size */
+    .MuiAutocomplete-root {
+        width: 100% !important;
+    }
+
+    .MuiAutocomplete-input {
+        font-size: 0.85rem !important;
+    }
+}
+
+/* Landscape mode on mobile */
+@media screen and (max-width: 900px) and (orientation: landscape) {
+    .MuiToolbar {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+    }
+
+    .left-buttons {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+    }
+
+    .players {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+    }
+}
