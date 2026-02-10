@@ -1,15 +1,9 @@
 import { observer } from "mobx-react-lite";
 import { LeaderBoardModel } from "../model/LeaderboardModel.ts";
 import { TournamentView } from "../views/tournamentView.tsx";
-import { useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
 
 const Tournament = observer(({ model }: { model: LeaderBoardModel }) => {
-    const [createDialogOpen, setCreateDialogOpen] = useState(false);
-    const [tournamentName, setTournamentName] = useState("");
-    const [numPlayers, setNumPlayers] = useState(4);
-    const [playerNames, setPlayerNames] = useState<string[]>([]);
-
     // Placeholder data for demonstration - will be replaced with actual data from model
     const tournaments = [
         {
@@ -35,24 +29,21 @@ const Tournament = observer(({ model }: { model: LeaderBoardModel }) => {
     ];
 
     function handleCreateClick() {
-        setCreateDialogOpen(true);
+        model.openTournamentDialog();
     }
 
     function handleCloseDialog() {
-        setCreateDialogOpen(false);
-        setTournamentName("");
-        setNumPlayers(4);
-        setPlayerNames([]);
+        model.closeTournamentDialog();
     }
 
     function handleCreateTournament() {
         // Placeholder - will be connected to model logic
         console.log("Creating tournament:", {
-            name: tournamentName,
-            numPlayers,
-            playerNames,
+            name: model.tournamentName,
+            numPlayers: model.numPlayers,
+            playerNames: model.playerNames,
         });
-        handleCloseDialog();
+        model.closeTournamentDialog();
     }
 
     function handleViewTournament(tournamentId: string) {
@@ -71,26 +62,24 @@ const Tournament = observer(({ model }: { model: LeaderBoardModel }) => {
     }
 
     function handleTournamentNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setTournamentName(e.target.value);
+        model.setTournamentName(e.target.value);
     }
 
     function handleNumPlayersChange(e: SelectChangeEvent<number>) {
-        setNumPlayers(Number(e.target.value));
+        model.setNumPlayers(Number(e.target.value));
     }
 
     function handlePlayerNameChange(value: string, index: number) {
-        const newNames = [...playerNames];
-        newNames[index] = value;
-        setPlayerNames(newNames);
+        model.setPlayerName(value, index);
     }
 
     return (
         <TournamentView
             tournaments={tournaments}
-            createDialogOpen={createDialogOpen}
-            tournamentName={tournamentName}
-            numPlayers={numPlayers}
-            playerNames={playerNames}
+            createDialogOpen={model.tournamentDialogOpen}
+            tournamentName={model.tournamentName}
+            numPlayers={model.numPlayers}
+            playerNames={model.playerNames}
             handleCreateClick={handleCreateClick}
             handleCloseDialog={handleCloseDialog}
             handleCreateTournament={handleCreateTournament}

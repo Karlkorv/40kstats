@@ -41,6 +41,12 @@ export class LeaderBoardModel {
             oldMatch: null,
         }
 
+    // Tournament state
+    @observable tournamentDialogOpen: boolean = false;
+    @observable tournamentName: string = "";
+    @observable numPlayers: number = 4;
+    @observable playerNames: string[] = [];
+
 
 
 
@@ -476,6 +482,32 @@ export class LeaderBoardModel {
 
     @action togglePlayerFilter() {
         this.playerFilter = !this.playerFilter;
+    }
+
+    // Tournament actions
+    @action openTournamentDialog() {
+        this.tournamentDialogOpen = true;
+    }
+
+    @action closeTournamentDialog() {
+        this.tournamentDialogOpen = false;
+        this.tournamentName = "";
+        this.numPlayers = 4;
+        this.playerNames = [];
+    }
+
+    @action setTournamentName(name: string) {
+        this.tournamentName = name;
+    }
+
+    @action setNumPlayers(num: number) {
+        this.numPlayers = num;
+    }
+
+    @action setPlayerName(name: string, index: number) {
+        const newNames = [...this.playerNames];
+        newNames[index] = name;
+        this.playerNames = newNames;
     }
 
     @action handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {

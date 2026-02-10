@@ -35,6 +35,327 @@ import {
 } from "@mui/icons-material";
 import { Match as MatchModel } from "../model/match.ts";
 
+type Tournament = {
+    id: string;
+    name: string;
+    status: string;
+    startingPositions: string[][];
+    matches: MatchModel[];
+};
+
+type TournamentViewProps = {
+    tournaments: Tournament[];
+    createDialogOpen: boolean;
+    tournamentName: string;
+    numPlayers: number;
+    playerNames: string[];
+    handleCreateClick: () => void;
+    handleCloseDialog: () => void;
+    handleCreateTournament: () => void;
+    handleViewTournament: (tournamentId: string) => void;
+    handleEditTournament: (tournamentId: string) => void;
+    handleDeleteTournament: (tournamentId: string) => void;
+    handleTournamentNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleNumPlayersChange: (e: SelectChangeEvent<number>) => void;
+    handlePlayerNameChange: (value: string, index: number) => void;
+};
+
+const getStatusColor = (status: string) => {
+    switch (status) {
+        case "ONGOING":
+            return "primary";
+        case "FINISHED":
+            return "success";
+        case "STALE":
+            return "warning";
+        case "ABORTED":
+            return "error";
+        default:
+            return "default";
+    }
+};
+
+function TournamentHeader({ handleCreateClick }: { handleCreateClick: () => void }) {
+    return (
+        <Box
+            sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%",
+                marginBottom: 4,
+            }}
+        >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <EmojiEvents sx={{ fontSize: 40, color: "#9c1116" }} />
+                <Typography variant="h3" component="h1">
+                    Tournaments
+                </Typography>
+            </Box>
+            <Button
+                variant="contained"
+                startIcon={<Add />}
+                onClick={handleCreateClick}
+                size="large"
+            >
+                Create New Tournament
+            </Button>
+        </Box>
+    );
+}
+
+function EmptyTournamentsState() {
+    return (
+        <Box
+            sx={{
+                textAlign: "center",
+                padding: 8,
+                width: "100%",
+            }}
+        >
+            <Typography variant="h5" color="text.secondary" gutterBottom>
+                No tournaments yet
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+                Create your first tournament to get started!
+            </Typography>
+        </Box>
+    );
+}
+
+function TournamentCard({
+    tournament,
+    handleViewTournament,
+    handleEditTournament,
+    handleDeleteTournament,
+}: {
+    tournament: Tournament;
+    handleViewTournament: (tournamentId: string) => void;
+    handleEditTournament: (tournamentId: string) => void;
+    handleDeleteTournament: (tournamentId: string) => void;
+}) {
+    return (
+        <Card
+            sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                "&:hover": {
+                    boxShadow: 6,
+                    transform: "translateY(-4px)",
+                    transition: "all 0.3s ease",
+                },
+            }}
+        >
+            <CardContent sx={{ flexGrow: 1 }}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "start",
+                        marginBottom: 2,
+                    }}
+                >
+                    <Typography variant="h6" component="h2" gutterBottom>
+                        {tournament.name}
+                    </Typography>
+                    <Chip
+                        label={tournament.status}
+                        color={getStatusColor(tournament.status)}
+                        size="small"
+                    />
+                </Box>
+                <Typography variant="body2" color="text.secondary">
+                    Players: {tournament.startingPositions.flat().length}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    Matches: {tournament.matches.length}
+                </Typography>
+            </CardContent>
+            <CardActions
+                sx={{
+                    justifyContent: "flex-end",
+                    padding: 2,
+                    paddingTop: 0,
+                }}
+            >
+                <Button
+                    size="small"
+                    startIcon={<Visibility />}
+                    onClick={() => handleViewTournament(tournament.id)}
+                >
+                    View
+                </Button>
+                <Button
+                    size="small"
+                    startIcon={<Edit />}
+                    onClick={() => handleEditTournament(tournament.id)}
+                >
+                    Edit
+                </Button>
+                <IconButton
+                    size="small"
+                    color="error"
+                    onClick={() => handleDeleteTournament(tournament.id)}
+                >
+                    <Delete />
+                </IconButton>
+            </CardActions>
+        </Card>
+    );
+}
+
+function TournamentsGrid({
+    tournaments,
+    handleViewTournament,
+    handleEditTournament,
+    handleDeleteTournament,
+}: {
+    tournaments: Tournament[];
+    handleViewTournament: (tournamentId: string) => void;
+    handleEditTournament: (tournamentId: string) => void;
+    handleDeleteTournament: (tournamentId: string) => void;
+}) {
+    if (tournaments.length === 0) {
+        return <EmptyTournamentsState />;
+    }
+
+    return (
+        <Grid container spacing={3} sx={{ width: "100%" }}>
+            {tournaments.map((tournament) => (
+                <Grid item xs={12} sm={6} md={4} key={tournament.id}>
+                    <TournamentCard
+                        tournament={tournament}
+                        handleViewTournament={handleViewTournament}
+                        handleEditTournament={handleEditTournament}
+                        handleDeleteTournament={handleDeleteTournament}
+                    />
+                </Grid>
+            ))}
+        </Grid>
+    );
+}
+
+function CreateTournamentDialog({
+    open,
+    tournamentName,
+    numPlayers,
+    playerNames,
+    handleCloseDialog,
+    handleCreateTournament,
+    handleTournamentNameChange,
+    handleNumPlayersChange,
+    handlePlayerNameChange,
+}: {
+    open: boolean;
+    tournamentName: string;
+    numPlayers: number;
+    playerNames: string[];
+    handleCloseDialog: () => void;
+    handleCreateTournament: () => void;
+    handleTournamentNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleNumPlayersChange: (e: SelectChangeEvent<number>) => void;
+    handlePlayerNameChange: (value: string, index: number) => void;
+}) {
+    return (
+        <Dialog open={open} onClose={handleCloseDialog} maxWidth="md" fullWidth>
+            <DialogTitle>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <EmojiEvents />
+                    <Typography variant="h6">Create New Tournament</Typography>
+                </Box>
+            </DialogTitle>
+            <DialogContent>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 3,
+                        paddingTop: 2,
+                    }}
+                >
+                    <TextField
+                        fullWidth
+                        label="Tournament Name"
+                        value={tournamentName}
+                        onChange={handleTournamentNameChange}
+                        placeholder="e.g., Summer Championship 2026"
+                        helperText="Enter a descriptive name for your tournament"
+                    />
+
+                    <FormControl fullWidth>
+                        <InputLabel id="num-players-label">
+                            Number of Players
+                        </InputLabel>
+                        <Select
+                            labelId="num-players-label"
+                            value={numPlayers}
+                            label="Number of Players"
+                            onChange={handleNumPlayersChange}
+                        >
+                            <MenuItem value={4}>4 Players</MenuItem>
+                            <MenuItem value={8}>8 Players</MenuItem>
+                            <MenuItem value={16}>16 Players</MenuItem>
+                            <MenuItem value={32}>32 Players</MenuItem>
+                        </Select>
+                    </FormControl>
+
+                    <Box>
+                        <Typography
+                            variant="subtitle2"
+                            gutterBottom
+                            color="text.secondary"
+                        >
+                            Starting Positions (Optional)
+                        </Typography>
+                        <Typography
+                            variant="caption"
+                            display="block"
+                            gutterBottom
+                            color="text.secondary"
+                        >
+                            Add player names to set up brackets. You can also do this
+                            later.
+                        </Typography>
+                        <Grid container spacing={2} sx={{ marginTop: 1 }}>
+                            {Array.from({ length: numPlayers }).map((_, index) => (
+                                <Grid item xs={12} sm={6} key={index}>
+                                    <TextField
+                                        fullWidth
+                                        size="small"
+                                        label={`Player ${index + 1}`}
+                                        value={playerNames[index] || ""}
+                                        onChange={(e) =>
+                                            handlePlayerNameChange(
+                                                e.target.value,
+                                                index
+                                            )
+                                        }
+                                        placeholder={`Player ${index + 1}`}
+                                    />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Box>
+                </Box>
+            </DialogContent>
+            <DialogActions sx={{ padding: 3, paddingTop: 1 }}>
+                <Button onClick={handleCloseDialog} variant="outlined">
+                    Cancel
+                </Button>
+                <Button
+                    onClick={handleCreateTournament}
+                    variant="contained"
+                    disabled={!tournamentName.trim()}
+                    startIcon={<Add />}
+                >
+                    Create Tournament
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+}
+
 export function TournamentView({
     tournaments,
     createDialogOpen,
@@ -50,44 +371,7 @@ export function TournamentView({
     handleTournamentNameChange,
     handleNumPlayersChange,
     handlePlayerNameChange,
-}: {
-    tournaments: Array<{
-        id: string;
-        name: string;
-        status: string;
-        startingPositions: string[][];
-        matches: MatchModel[];
-    }>;
-    createDialogOpen: boolean;
-    tournamentName: string;
-    numPlayers: number;
-    playerNames: string[];
-    handleCreateClick: () => void;
-    handleCloseDialog: () => void;
-    handleCreateTournament: () => void;
-    handleViewTournament: (tournamentId: string) => void;
-    handleEditTournament: (tournamentId: string) => void;
-    handleDeleteTournament: (tournamentId: string) => void;
-    handleTournamentNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    handleNumPlayersChange: (e: SelectChangeEvent<number>) => void;
-    handlePlayerNameChange: (value: string, index: number) => void;
-}) {
-
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case "ONGOING":
-                return "primary";
-            case "FINISHED":
-                return "success";
-            case "STALE":
-                return "warning";
-            case "ABORTED":
-                return "error";
-            default:
-                return "default";
-        }
-    };
-
+}: TournamentViewProps) {
     return (
         <Box
             sx={{
@@ -99,254 +383,26 @@ export function TournamentView({
                 margin: "0 auto",
             }}
         >
-            {/* Header Section */}
-            <Box
-                sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    width: "100%",
-                    marginBottom: 4,
-                }}
-            >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                    <EmojiEvents sx={{ fontSize: 40, color: "#9c1116" }} />
-                    <Typography variant="h3" component="h1">
-                        Tournaments
-                    </Typography>
-                </Box>
-                <Button
-                    variant="contained"
-                    startIcon={<Add />}
-                    onClick={handleCreateClick}
-                    size="large"
-                >
-                    Create New Tournament
-                </Button>
-            </Box>
+            <TournamentHeader handleCreateClick={handleCreateClick} />
+            
+            <TournamentsGrid
+                tournaments={tournaments}
+                handleViewTournament={handleViewTournament}
+                handleEditTournament={handleEditTournament}
+                handleDeleteTournament={handleDeleteTournament}
+            />
 
-            {/* Tournaments Grid */}
-            {tournaments.length === 0 ? (
-                <Box
-                    sx={{
-                        textAlign: "center",
-                        padding: 8,
-                        width: "100%",
-                    }}
-                >
-                    <Typography variant="h5" color="text.secondary" gutterBottom>
-                        No tournaments yet
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary">
-                        Create your first tournament to get started!
-                    </Typography>
-                </Box>
-            ) : (
-                <Grid container spacing={3} sx={{ width: "100%" }}>
-                    {tournaments.map((tournament) => (
-                        <Grid item xs={12} sm={6} md={4} key={tournament.id}>
-                            <Card
-                                sx={{
-                                    height: "100%",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    "&:hover": {
-                                        boxShadow: 6,
-                                        transform: "translateY(-4px)",
-                                        transition: "all 0.3s ease",
-                                    },
-                                }}
-                            >
-                                <CardContent sx={{ flexGrow: 1 }}>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            alignItems: "start",
-                                            marginBottom: 2,
-                                        }}
-                                    >
-                                        <Typography
-                                            variant="h6"
-                                            component="h2"
-                                            gutterBottom
-                                        >
-                                            {tournament.name}
-                                        </Typography>
-                                        <Chip
-                                            label={tournament.status}
-                                            color={getStatusColor(
-                                                tournament.status
-                                            )}
-                                            size="small"
-                                        />
-                                    </Box>
-                                    <Typography
-                                        variant="body2"
-                                        color="text.secondary"
-                                    >
-                                        Players:{" "}
-                                        {tournament.startingPositions.flat()
-                                            .length}
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        color="text.secondary"
-                                    >
-                                        Matches: {tournament.matches.length}
-                                    </Typography>
-                                </CardContent>
-                                <CardActions
-                                    sx={{
-                                        justifyContent: "flex-end",
-                                        padding: 2,
-                                        paddingTop: 0,
-                                    }}
-                                >
-                                    <Button
-                                        size="small"
-                                        startIcon={<Visibility />}
-                                        onClick={() =>
-                                            handleViewTournament(tournament.id)
-                                        }
-                                    >
-                                        View
-                                    </Button>
-                                    <Button
-                                        size="small"
-                                        startIcon={<Edit />}
-                                        onClick={() =>
-                                            handleEditTournament(tournament.id)
-                                        }
-                                    >
-                                        Edit
-                                    </Button>
-                                    <IconButton
-                                        size="small"
-                                        color="error"
-                                        onClick={() =>
-                                            handleDeleteTournament(tournament.id)
-                                        }
-                                    >
-                                        <Delete />
-                                    </IconButton>
-                                </CardActions>
-                            </Card>
-                        </Grid>
-                    ))}
-                </Grid>
-            )}
-
-            {/* Create Tournament Dialog */}
-            <Dialog
+            <CreateTournamentDialog
                 open={createDialogOpen}
-                onClose={handleCloseDialog}
-                maxWidth="md"
-                fullWidth
-            >
-                <DialogTitle>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                        <EmojiEvents />
-                        <Typography variant="h6">
-                            Create New Tournament
-                        </Typography>
-                    </Box>
-                </DialogTitle>
-                <DialogContent>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 3,
-                            paddingTop: 2,
-                        }}
-                    >
-                        {/* Tournament Name */}
-                        <TextField
-                            fullWidth
-                            label="Tournament Name"
-                            value={tournamentName}
-                            onChange={handleTournamentNameChange}
-                            placeholder="e.g., Summer Championship 2026"
-                            helperText="Enter a descriptive name for your tournament"
-                        />
-
-                        {/* Number of Players */}
-                        <FormControl fullWidth>
-                            <InputLabel id="num-players-label">
-                                Number of Players
-                            </InputLabel>
-                            <Select
-                                labelId="num-players-label"
-                                value={numPlayers}
-                                label="Number of Players"
-                                onChange={handleNumPlayersChange}
-                            >
-                                <MenuItem value={4}>4 Players</MenuItem>
-                                <MenuItem value={8}>8 Players</MenuItem>
-                                <MenuItem value={16}>16 Players</MenuItem>
-                                <MenuItem value={32}>32 Players</MenuItem>
-                            </Select>
-                        </FormControl>
-
-                        {/* Player Names Input */}
-                        <Box>
-                            <Typography
-                                variant="subtitle2"
-                                gutterBottom
-                                color="text.secondary"
-                            >
-                                Starting Positions (Optional)
-                            </Typography>
-                            <Typography
-                                variant="caption"
-                                display="block"
-                                gutterBottom
-                                color="text.secondary"
-                            >
-                                Add player names to set up brackets. You can also
-                                do this later.
-                            </Typography>
-                            <Grid container spacing={2} sx={{ marginTop: 1 }}>
-                                {Array.from({ length: numPlayers }).map(
-                                    (_, index) => (
-                                        <Grid item xs={12} sm={6} key={index}>
-                                            <TextField
-                                                fullWidth
-                                                size="small"
-                                                label={`Player ${index + 1}`}
-                                                value={playerNames[index] || ""}
-                                                onChange={(e) =>
-                                                    handlePlayerNameChange(
-                                                        e.target.value,
-                                                        index
-                                                    )
-                                                }
-                                                placeholder={`Player ${
-                                                    index + 1
-                                                }`}
-                                            />
-                                        </Grid>
-                                    )
-                                )}
-                            </Grid>
-                        </Box>
-                    </Box>
-                </DialogContent>
-                <DialogActions sx={{ padding: 3, paddingTop: 1 }}>
-                    <Button onClick={handleCloseDialog} variant="outlined">
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={handleCreateTournament}
-                        variant="contained"
-                        disabled={!tournamentName.trim()}
-                        startIcon={<Add />}
-                    >
-                        Create Tournament
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                tournamentName={tournamentName}
+                numPlayers={numPlayers}
+                playerNames={playerNames}
+                handleCloseDialog={handleCloseDialog}
+                handleCreateTournament={handleCreateTournament}
+                handleTournamentNameChange={handleTournamentNameChange}
+                handleNumPlayersChange={handleNumPlayersChange}
+                handlePlayerNameChange={handlePlayerNameChange}
+            />
         </Box>
     );
 }
