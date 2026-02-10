@@ -502,12 +502,16 @@ export class LeaderBoardModel {
 
     @action setNumPlayers(num: number) {
         this.numPlayers = num;
+        // Reset player names array when number of players changes
+        this.playerNames = Array(num).fill("");
     }
 
     @action setPlayerName(name: string, index: number) {
-        const newNames = [...this.playerNames];
-        newNames[index] = name;
-        this.playerNames = newNames;
+        // Ensure array is large enough
+        if (this.playerNames.length <= index) {
+            this.playerNames = [...this.playerNames, ...Array(index - this.playerNames.length + 1).fill("")];
+        }
+        this.playerNames[index] = name;
     }
 
     @action handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {

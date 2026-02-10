@@ -384,7 +384,7 @@ export function TournamentView({
             }}
         >
             <TournamentHeader handleCreateClick={handleCreateClick} />
-            
+
             <TournamentsGrid
                 tournaments={tournaments}
                 handleViewTournament={handleViewTournament}
