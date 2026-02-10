@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     DoubleEliminationBracket,
     Match,
@@ -33,71 +33,43 @@ import {
     EmojiEvents,
 } from "@mui/icons-material";
 
-export function TournamentView() {
-    const [createDialogOpen, setCreateDialogOpen] = useState(false);
-    const [tournamentName, setTournamentName] = useState("");
-    const [numPlayers, setNumPlayers] = useState(4);
-    const [playerNames, setPlayerNames] = useState<string[]>([]);
-
-    // Placeholder data for demonstration - will be replaced with actual data from presenter
-    const tournaments = [
-        {
-            id: "1",
-            name: "Summer Championship 2026",
-            status: "ONGOING",
-            startingPositions: [
-                ["Player 1", "Player 2"],
-                ["Player 3", "Player 4"],
-            ],
-            matches: [],
-        },
-        {
-            id: "2",
-            name: "Winter League",
-            status: "FINISHED",
-            startingPositions: [
-                ["Player A", "Player B"],
-                ["Player C", "Player D"],
-            ],
-            matches: [],
-        },
-    ];
-
-    const handleCreateClick = () => {
-        setCreateDialogOpen(true);
-    };
-
-    const handleCloseDialog = () => {
-        setCreateDialogOpen(false);
-        setTournamentName("");
-        setNumPlayers(4);
-        setPlayerNames([]);
-    };
-
-    const handleCreateTournament = () => {
-        // Placeholder - will be connected to presenter logic
-        console.log("Creating tournament:", {
-            name: tournamentName,
-            numPlayers,
-            playerNames,
-        });
-        handleCloseDialog();
-    };
-
-    const handleViewTournament = (tournamentId: string) => {
-        // Placeholder - will be connected to presenter logic
-        console.log("View tournament:", tournamentId);
-    };
-
-    const handleEditTournament = (tournamentId: string) => {
-        // Placeholder - will be connected to presenter logic
-        console.log("Edit tournament:", tournamentId);
-    };
-
-    const handleDeleteTournament = (tournamentId: string) => {
-        // Placeholder - will be connected to presenter logic
-        console.log("Delete tournament:", tournamentId);
-    };
+export function TournamentView({
+    tournaments,
+    createDialogOpen,
+    tournamentName,
+    numPlayers,
+    playerNames,
+    handleCreateClick,
+    handleCloseDialog,
+    handleCreateTournament,
+    handleViewTournament,
+    handleEditTournament,
+    handleDeleteTournament,
+    handleTournamentNameChange,
+    handleNumPlayersChange,
+    handlePlayerNameChange,
+}: {
+    tournaments: Array<{
+        id: string;
+        name: string;
+        status: string;
+        startingPositions: string[][];
+        matches: any[];
+    }>;
+    createDialogOpen: boolean;
+    tournamentName: string;
+    numPlayers: number;
+    playerNames: string[];
+    handleCreateClick: () => void;
+    handleCloseDialog: () => void;
+    handleCreateTournament: () => void;
+    handleViewTournament: (tournamentId: string) => void;
+    handleEditTournament: (tournamentId: string) => void;
+    handleDeleteTournament: (tournamentId: string) => void;
+    handleTournamentNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleNumPlayersChange: (e: any) => void;
+    handlePlayerNameChange: (value: string, index: number) => void;
+}) {
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -292,7 +264,7 @@ export function TournamentView() {
                             fullWidth
                             label="Tournament Name"
                             value={tournamentName}
-                            onChange={(e) => setTournamentName(e.target.value)}
+                            onChange={handleTournamentNameChange}
                             placeholder="e.g., Summer Championship 2026"
                             helperText="Enter a descriptive name for your tournament"
                         />
@@ -306,9 +278,7 @@ export function TournamentView() {
                                 labelId="num-players-label"
                                 value={numPlayers}
                                 label="Number of Players"
-                                onChange={(e) =>
-                                    setNumPlayers(Number(e.target.value))
-                                }
+                                onChange={handleNumPlayersChange}
                             >
                                 <MenuItem value={4}>4 Players</MenuItem>
                                 <MenuItem value={8}>8 Players</MenuItem>
@@ -344,14 +314,12 @@ export function TournamentView() {
                                                 size="small"
                                                 label={`Player ${index + 1}`}
                                                 value={playerNames[index] || ""}
-                                                onChange={(e) => {
-                                                    const newNames = [
-                                                        ...playerNames,
-                                                    ];
-                                                    newNames[index] =
-                                                        e.target.value;
-                                                    setPlayerNames(newNames);
-                                                }}
+                                                onChange={(e) =>
+                                                    handlePlayerNameChange(
+                                                        e.target.value,
+                                                        index
+                                                    )
+                                                }
                                                 placeholder={`Player ${
                                                     index + 1
                                                 }`}
